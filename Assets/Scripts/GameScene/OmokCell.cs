@@ -22,7 +22,7 @@ public class OmokCell : MonoBehaviour
         set { }
     }
 
-    public Sprite spriteType(MarkerType markerType = MarkerType.None)
+    public Sprite SpriteType(MarkerType markerType = MarkerType.None)
     {
          switch (markerType)
         {

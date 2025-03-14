@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour, IPointerClickHandler
 {
-    public enum playerType{None,PlaceMark,Black, White}
+    public enum playerType{None,Black, White}
     public GameObject[] omokButtons;
     public playerType[,] omokBoard;
     
@@ -50,8 +50,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void CheckOmok(int row, int col)
     {
         (int,int) center = (row,col);
+        //directions[0]: 가로  directions[1]: 세로 directions[2]: 대각선 directions[3]: 반대 대각선
         (int,int)[] directions = new (int,int)[]{(0,1),(1,0),(1,1),(-1,1)};
-        
+        for (int i = 0; i < 5; i++)
+        {
+            
+        }
     }
     
     void CheckDoubleThreeFour(int row, int col)
@@ -73,10 +77,13 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     }
     void SetTurn(playerType player, int index)
     {
+        selectedCell = null;
+        
         switch (player)
         {
             case playerType.Black:
                 if (omokBoard[index / 15, index % 15] != playerType.None) return;
+                //Debug.Log($"{player}, {index}, {omokBoard[index / 15, index % 15]}");
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
@@ -84,6 +91,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 break;
             case playerType.White:
                 if (omokBoard[index / 15, index % 15] != playerType.None) return;
+               // Debug.Log($"{player}, {index}, {omokBoard[index / 15, index % 15]}");
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
@@ -96,28 +104,30 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         
-        //Debug.Log("OnPointerClick" + name);
         if (PointerEventData.InputButton.Left == eventData.button)
         {
-            var Cell = eventData.pointerCurrentRaycast.gameObject;
-            var previousCellSelected = selectedCell;
-            selectedCell = Cell;
+            var cell = eventData.pointerCurrentRaycast.gameObject;
+            var previousCellSelected = selectedCell != null ? selectedCell : cell;
             
-            Debug.Log(previousCellSelected.name + ", " + selectedCell.name);
             
-            if (previousCellSelected != null && previousCellSelected == selectedCell)
+            //눌렀던 셀을 한번더 누르면 바둑알을 놓는다
+            if (cell.GetComponent<OmokCell>().GetMarkerType == OmokCell.MarkerType.PlaceMark)
+            {
+                SetTurn(turn,cell.GetComponent<OmokCell>().index);
+            }
+            //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
+            if(cell.GetComponent<OmokCell>().GetMarkerType != OmokCell.MarkerType.PlaceMark)
             {
                 
-                SetTurn(turn,Cell.GetComponent<OmokCell>().index);
-            }
-            else
-            {
-                if (selectedCell != null)
+                if (cell.GetComponent<OmokCell>().GetMarkerType == OmokCell.MarkerType.None)
                 {
                     previousCellSelected.GetComponent<OmokCell>().PlaceMark(turncounter);
+                                   
+                    cell.GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.PlaceMark);
+                    selectedCell = cell;
                 }
+                
                
-                selectedCell.GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.PlaceMark);
             }
             
             
