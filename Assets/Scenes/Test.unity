@@ -9735,6 +9735,9 @@ MonoBehaviour:
   omokButtons: []
   omokPrefab: {fileID: 1583893661}
   turn: 0
+  cellImage: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  selectedCell: {fileID: 0}
+  selectedImage: {fileID: 21300000, guid: d006edfd04c5b3a478e375d540184078, type: 3}
 --- !u!114 &1334267054
 MonoBehaviour:
   m_ObjectHideFlags: 0
