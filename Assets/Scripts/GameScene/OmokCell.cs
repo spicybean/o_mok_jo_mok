@@ -22,6 +22,20 @@ public class OmokCell : MonoBehaviour
         set { }
     }
 
+    public Sprite spriteType(MarkerType markerType = MarkerType.None)
+    {
+         switch (markerType)
+        {
+            case MarkerType.PlaceMark:
+                return _selectedSprite;
+            case MarkerType.Black:
+                return _blackStone;
+            case MarkerType.White:
+                return _whiteStone;
+            
+        }
+         return null;
+    }
     public MarkerType GetMarkerType{
         get
         {
@@ -49,9 +63,9 @@ public class OmokCell : MonoBehaviour
         placedTurn = turn;
     }
     
-    public void PlaceMark(MarkerType playeMarkerTypeType, int turn)
+    public void PlaceMark(int turn, MarkerType playerMarkerTypeType = MarkerType.None)
     {
-        switch (playeMarkerTypeType)
+        switch (playerMarkerTypeType)
         {
             case MarkerType.Black:
                 this.GetComponent<Image>().sprite = _blackStone;

@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         {
             var OmokObejct = Instantiate(omokPrefab, transform);
             omokButtons[i] = OmokObejct;
+            omokButtons[i].name = "OmokCell" + i;
             omokButtons[i].GetComponent<OmokCell>().initCell(i);
             omokBoard[i / 15, i % 15] = playerType.None;
 
@@ -78,14 +79,14 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 if (omokBoard[index / 15, index % 15] != playerType.None) return;
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
-                omokButtons[index].GetComponent<OmokCell>().PlaceMark(OmokCell.MarkerType.Black,turncounter);
+                omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 break;
             case playerType.White:
                 if (omokBoard[index / 15, index % 15] != playerType.None) return;
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
-                omokButtons[index].GetComponent<OmokCell>().PlaceMark(OmokCell.MarkerType.White,turncounter);
+                omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 break;
         }
@@ -98,17 +99,25 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         //Debug.Log("OnPointerClick" + name);
         if (PointerEventData.InputButton.Left == eventData.button)
         {
-            var Cell = eventData.pointerCurrentRaycast.gameObject.GetComponent<OmokCell>();
-            var previousCellSelected = selectedCell == null ? 
-                Cell.gameObject : selectedCell;
-            selectedCell = Cell.gameObject;
-            if (previousCellSelected.GetComponent<Image>().sprite == selectedCell.GetComponent<Image>().sprite)
+            var Cell = eventData.pointerCurrentRaycast.gameObject;
+            var previousCellSelected = selectedCell;
+            selectedCell = Cell;
+            
+            Debug.Log(previousCellSelected.name + ", " + selectedCell.name);
+            
+            if (previousCellSelected != null && previousCellSelected == selectedCell)
             {
-                SetTurn(turn,Cell.index);
+                
+                SetTurn(turn,Cell.GetComponent<OmokCell>().index);
             }
             else
             {
-                selectedCell.GetComponent<OmokCell>().PlaceMark(OmokCell.MarkerType.PlaceMark,turncounter);
+                if (selectedCell != null)
+                {
+                    previousCellSelected.GetComponent<OmokCell>().PlaceMark(turncounter);
+                }
+               
+                selectedCell.GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.PlaceMark);
             }
             
             
