@@ -91,6 +91,13 @@ public class MainScenePanelController : MonoBehaviour
     {
         PanelControl(7);
     }
+    
+    // Store - 300 Coin Button
+    public void OnClickGetCoinButton()
+    {
+        PanelControl(8);
+    }
+    
 
     // 셋팅 버튼
     public void OnClickSettingButton()
