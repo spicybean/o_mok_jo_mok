@@ -86,10 +86,6 @@ public class RanjuRule : MonoBehaviour
                     return false;
                 }
             }
-            else
-            {
-                break;
-            }
             
         }
         for (int i = 1; i < 4; i++)

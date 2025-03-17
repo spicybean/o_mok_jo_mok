@@ -47,43 +47,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     {
         
     }
-    void CheckOmok(int row, int col)
-    {
-        (int,int) center = (row,col);
-        //directions[0]: 가로  directions[1]: 세로 directions[2]: 대각선 directions[3]: 반대 대각선
-        (int,int)[] directions = new (int,int)[]{(0,1),(1,0),(1,1),(-1,1)};
-        int verticalcount_Black = 0;
-        int verticalcount_White = 0;
-        int horizontalcount_Black = 0;
-        int horizontalcount_White = 0;
-        int diagonalcount_Black = 0;
-        int diagonalcount_White = 0;
-        int antidiagonalcount_Black = 0;
-        int antidiagonalcount_White = 0;
-        
-        for (int i = 0; i < 4; i++)
-        {
-            
-        }
-    }
-    
-    void CheckDoubleThreeFour(int row, int col)
-    {
-        (int,int)[] directions = new (int,int)[]{(0,1),(1,0),(1,1),(-1,1)};
-        
-        //row >= 0 && row <= Fullindexsize/ 7
-        //row count 4 from center to every direction
-        //col >= 0 && col <= Fullindexsize % 7
-        //col count 4 from center to every direction
-        //만약 가로,세로,대각선중 중심에 돌을 두었을시 오목이 되면 적용 안됨
-        //중심을 기준으로 3칸씩 총 6칸 사이에 흰돌이 없으면 4.4 3.3 적용 아니면 괜찮
-        //단, 그 중심점에 두었을때 오목이 된다면 무시 가능
-        //단, 각 
-        //3.3일때
-        
-        //3.4일때
-        //4.4일때
-    }
+   
     void SetTurn(playerType player, int index)
     {
         selectedCell = null;
