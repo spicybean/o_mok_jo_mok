@@ -1615,7 +1615,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 903886172}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1753249102}
+        m_TargetAssemblyTypeName: MainScenePanelController, Assembly-CSharp
+        m_MethodName: OnClickReplayButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &903886172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1964,7 +1976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickMainScenePanelBackButton
+      value: OnClickGamePlaySingleAndMultySceneButton
       objectReference: {fileID: 0}
     - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1992,7 +2004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickMainScenePanelBackButton
+      value: OnClickGamePlaySingleAndMultySceneButton
       objectReference: {fileID: 0}
     - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
