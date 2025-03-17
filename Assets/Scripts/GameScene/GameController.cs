@@ -52,7 +52,16 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         (int,int) center = (row,col);
         //directions[0]: 가로  directions[1]: 세로 directions[2]: 대각선 directions[3]: 반대 대각선
         (int,int)[] directions = new (int,int)[]{(0,1),(1,0),(1,1),(-1,1)};
-        for (int i = 0; i < 5; i++)
+        int verticalcount_Black = 0;
+        int verticalcount_White = 0;
+        int horizontalcount_Black = 0;
+        int horizontalcount_White = 0;
+        int diagonalcount_Black = 0;
+        int diagonalcount_White = 0;
+        int antidiagonalcount_Black = 0;
+        int antidiagonalcount_White = 0;
+        
+        for (int i = 0; i < 4; i++)
         {
             
         }
