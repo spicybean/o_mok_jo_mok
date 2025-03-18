@@ -12,7 +12,7 @@ public class RanjuRule : MonoBehaviour
     public Sprite XMarker;
     public int[] Line = new int[9];
     
-    private string[] patternedFour = new string[] { "01110,011010,010110" };
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -28,57 +28,29 @@ public class RanjuRule : MonoBehaviour
             markers[i/15,i%15] = obj.GetComponent<OmokCell>().GetMarkerType;
         }
 
-        // for (int i = 0; i < objects.Length; i++)
-        // {
-        //     if (objects[i].GetComponent<OmokCell>().GetMarkerType == OmokCell.MarkerType.None)
-        //     {
-        //         if (CheckDoubleThree(i))
-        //         {
-        //             objects[i].GetComponent<Image>().sprite = XMarker;
-        //             objects[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-        //         }
-        //     }
-        // }
-        
-        Debug.Log(CheckThree(42,(0,1)));
-    }
-
-    bool CheckThree(int index, (int, int) direction)
-    {
-        string[] patternedThree = new string[] { "01110","011010","010110" };
-        string pattern = "";
-        for (int i = -4; i < 5; i++)
+        for (int i = 0; i < objects.Length; i++)
         {
-            for (int j = i; j < i+6; j++)
+            if (objects[i].GetComponent<OmokCell>().GetMarkerType == OmokCell.MarkerType.None)
             {
-                if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
-                {
-                    pattern += j==0 ? '1' : 
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
-                        '0' : 
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "-1";
+                 if (CheckDoubleThree(i))
+                 {
+                     objects[i].GetComponent<Image>().sprite = XMarker;
+                     objects[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
                 }
-                
-            }
-            Debug.Log(pattern);
-            for (int k = 0; k < patternedThree.Length; k++)
-            {
-                if (pattern.Contains(patternedThree[k]))
-                {
-                    return true;
-                }
-                Debug.Log(patternedThree[k].Equals(pattern));
-            }
 
-            pattern = "";
+                if (CheckDoubleFour(i))
+                {
+                    objects[i].GetComponent<Image>().sprite = XMarker;
+                    objects[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                }
+            }
         }
-        return false;
-    }
-    bool CheckOpenFour(int index, (int,int) direction)
-    {
-        string[] patternedFour = new string[] { "01110,011010,010110" };
-       
-        return false;
+
+       // CheckFour(217,(1,0));
+       // CheckFour(217,(1,1));
+       // CheckFour(217,(0,1));
+       // CheckFour(217,(1,-1));
+
     }
     bool CheckOutOfIndex(int row, int col)
     {
@@ -89,172 +61,116 @@ public class RanjuRule : MonoBehaviour
 
         return false;
     }
-    
-      
-    bool CheckDoubleFour(int index)
-    {
-        //directions[0]: 가로  directions[1]: 세로 directions[2]: 대각선 directions[3]: 반대 대각선
-        (int, int)[] dir = { (0, 1), (1, 0), (1, 1), (1, -1) };
-        (int,int) center = (index/15,index%15);
-        int[] addedLines = new int[4]{0,0,0,0};
-        int fourTrue = 0;
-        
-        for (int i = 0; i < 5; i++)
-        {
-            
-            //가로 카운트
-            if (CheckOutOfIndex(center.Item1 + dir[0].Item1 * i,center.Item2 + dir[0].Item2 * i) &&
-                (markers[center.Item1 + (dir[0].Item1 * i), center.Item2 + (dir[0].Item2 * i)] ==
-                OmokCell.MarkerType.Black))
-            {
-                addedLines[0]++;
-            }
-            if (CheckOutOfIndex(center.Item1 - dir[0].Item1 * i,center.Item2 - dir[0].Item2 * i) &&
-                markers[center.Item1 - (dir[0].Item1 * i), center.Item2 - (dir[0].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[0]++;
-            }
-            //세로 카운트
-            if (CheckOutOfIndex(center.Item1 + dir[1].Item1 * i,center.Item2 + dir[1].Item2 * i)&&
-                markers[center.Item1 + (dir[1].Item1 * i), center.Item2 + (dir[1].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[1]++;
-            }
-            if (CheckOutOfIndex(center.Item1 - dir[1].Item1 * i,center.Item2 - dir[1].Item2 * i)&&
-                markers[center.Item1 - (dir[1].Item1 * i), center.Item2 - (dir[1].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[1]++;
-            }
-            //대각선카운트
-            if (CheckOutOfIndex(center.Item1 + dir[2].Item1 * i,center.Item2 + dir[2].Item2 * i)&&
-                markers[center.Item1 + (dir[2].Item1 * i), center.Item2 + (dir[2].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[2]++;
-            }
-            if (CheckOutOfIndex(center.Item1 - dir[2].Item1 * i,center.Item2 - dir[2].Item2 * i)&&
-                markers[center.Item1 - (dir[2].Item1 * i), center.Item2 - (dir[2].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[2]++;
-            }
-            //반대각선카운트
-            if (CheckOutOfIndex(center.Item1 + dir[3].Item1 * i,center.Item2 + dir[3].Item2 * i)&&
-                markers[center.Item1 + (dir[3].Item1 * i), center.Item2 + (dir[3].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[3]++;
-            }
-            if (CheckOutOfIndex(center.Item1 - dir[3].Item1 * i,center.Item2 - dir[3].Item2 * i)&&
-                markers[center.Item1 - (dir[3].Item1 * i), center.Item2 - (dir[3].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[3]++;
-            }
-        }
 
-        for (int i = 0; i < 4; i++)
-        {
-            
-            if (addedLines[i] >= 3)
-            {
-                fourTrue++;
-            }
-            
-        }
-        Debug.Log($"vertical: {addedLines[0]}, horizontal: {addedLines[1]}, " +
-                  $"diagonal: {addedLines[2]} anti-diagonal: {addedLines[3]} four true: {fourTrue} objectsname{objects[index].name}");
-
-        if (fourTrue >= 2)
-        {
-            return true;
-        }
-        return false;
-    }
+   
     bool CheckDoubleThree(int index)
     {
-        //directions[0]: 가로  directions[1]: 세로 directions[2]: 대각선 directions[3]: 반대 대각선
-        (int, int)[] dir = { (0, 1), (1, 0), (1, 1), (1, -1) };
-        (int,int) center = (index/15,index%15);
-        int[] addedLines = new int[4]{0,0,0,0};
-        int fourTrue = 0;
-        
-        for (int i = 0; i < 4; i++)
+        (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
+        int CountOpenThree = 0;
+        for (int i = 0; i < directions.Length; i++)
         {
-            
-            //가로 카운트
-            if (!CheckOutOfIndex(center.Item1 + dir[0].Item1 * i,center.Item2 + dir[0].Item2 * i) &&
-                (markers[center.Item1 + (dir[0].Item1 * i), center.Item2 + (dir[0].Item2 * i)] ==
-                OmokCell.MarkerType.Black))
+            if (CheckThree(index, directions[i]))
             {
-                addedLines[0]++;
-            }
-            if (!CheckOutOfIndex(center.Item1 - dir[0].Item1 * i,center.Item2 - dir[0].Item2 * i) &&
-                markers[center.Item1 - (dir[0].Item1 * i), center.Item2 - (dir[0].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[0]++;
-            }
-            //세로 카운트
-            if (!CheckOutOfIndex(center.Item1 + dir[1].Item1 * i,center.Item2 + dir[1].Item2 * i)&&
-                markers[center.Item1 + (dir[1].Item1 * i), center.Item2 + (dir[1].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[1]++;
-            }
-            if (!CheckOutOfIndex(center.Item1 - dir[1].Item1 * i,center.Item2 - dir[1].Item2 * i)&&
-                markers[center.Item1 - (dir[1].Item1 * i), center.Item2 - (dir[1].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[1]++;
-            }
-            //대각선카운트
-            if (!CheckOutOfIndex(center.Item1 + dir[2].Item1 * i,center.Item2 + dir[2].Item2 * i)&&
-                markers[center.Item1 + (dir[2].Item1 * i), center.Item2 + (dir[2].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[2]++;
-            }
-            if (!CheckOutOfIndex(center.Item1 - dir[2].Item1 * i,center.Item2 - dir[2].Item2 * i)&&
-                markers[center.Item1 - (dir[2].Item1 * i), center.Item2 - (dir[2].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[2]++;
-            }
-            //반대각선카운트
-            if (!CheckOutOfIndex(center.Item1 + dir[3].Item1 * i,center.Item2 + dir[3].Item2 * i)&&
-                markers[center.Item1 + (dir[3].Item1 * i), center.Item2 + (dir[3].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[3]++;
-            }
-            if (!CheckOutOfIndex(center.Item1 - dir[3].Item1 * i,center.Item2 - dir[3].Item2 * i)&&
-                markers[center.Item1 - (dir[3].Item1 * i), center.Item2 - (dir[3].Item2 * i)] ==
-                OmokCell.MarkerType.Black)
-            {
-                addedLines[3]++;
-            }
-        }
-
-        for (int i = 0; i < 4; i++)
-        {
-            
-            if (addedLines[i] >= 2)
-            {
-                fourTrue++;
+                CountOpenThree++;
             }
             
         }
-        
-        if (fourTrue >= 2)
+
+        if (CountOpenThree >= 2)
         {
             return true;
         }
         return false;
     }
+    bool CheckThree(int index, (int, int) direction)
+    {
+        string[] patternedThree = new string[] { "01110","011010","010110" };
+        string pattern = "";
+        for (int i = -4; i < 1; i++)
+        {
+            for (int j = i; j < i+6; j++)
+            {
+                if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
+                {
+                    pattern += j==0 ? '1' : 
+                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
+                        '0' : 
+                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                }
+                
+            }
+           
+            for (int k = 0; k < patternedThree.Length; k++)
+            {
+                if (pattern.Contains(patternedThree[k]))
+                {
+                    return true;
+                }
+            }
+
+            pattern = "";
+        }
+        return false;
+    }
+    bool CheckDoubleFour(int index)
+    {
+        (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (1, -1)};
+        int CountFour = 0;
+        for (int i = 0; i < directions.Length; i++)
+        {
+            if (CheckFour(index, directions[i]) == 1)
+            {
+                CountFour++;
+            }
+            else if (CheckFour(index, directions[i]) > 1)
+            {
+                return true;
+            }
+        }
+
+        if (CountFour >= 2)
+        {
+            return true;
+        }
+        return false;
+    }
+    int CheckFour(int index, (int,int) direction)
+    {
+        string[] patternedFour = new string[] { "01111","11110","11011","10111","11101" };
+        string pattern = "";
+        int checkFour = 0;
+        for (int i = -4; i < 1; i++)
+        {
+            for (int j = i; j < i+5; j++)
+            {
+                if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
+                {
+                    pattern += j==0 ? '1' : 
+                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
+                            '0' : 
+                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                }
+                
+            }
+           
+            for (int k = 0; k < patternedFour.Length; k++)
+            {
+                if (pattern.Equals(patternedFour[k]))
+                {
+                    checkFour++;
+                    Debug.Log($"{direction}, {index}: {pattern}");
+                }
+            }
+            
+            pattern = "";
+        }
+        Debug.Log(checkFour);
+        return checkFour;
+    }
+  
+    
+      
+   
     // Update is called once per frame
     void Update()
     {
