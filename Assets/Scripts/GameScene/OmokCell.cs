@@ -12,6 +12,7 @@ public class OmokCell : MonoBehaviour
     [SerializeField] private Sprite _selectedSprite;
     [SerializeField] private MarkerType _markerType;
     [SerializeField] private Color _selectedColor;
+    
     public int index;
     public int placedTurn;
 
@@ -56,6 +57,7 @@ public class OmokCell : MonoBehaviour
         placedTurn = 0;
         _markerType = MarkerType.None;
         _selectedColor = new Color(1, 1, 1, 1);
+        
     }
     public void SetTurn(int turn)
     {
