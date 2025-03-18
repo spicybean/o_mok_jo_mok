@@ -47,7 +47,7 @@ public class RankPanelController : MonoBehaviour
        
         if (pointObjects.Count >= rankSystem.GetRequiredPoints())
         {
-            Debug.Log(pointObjects.Count);
+            
             ClearPoints();
             rankSystem.RankUp();
         }

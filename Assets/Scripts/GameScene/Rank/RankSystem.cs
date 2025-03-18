@@ -36,7 +36,7 @@ public class RankSystem : MonoBehaviour
         // 티어가 1일때 
         if (omockTier == 1)
         {
-            //Debug.Log("You are already the highest rank.");
+            
             return;
         }
 
@@ -62,7 +62,7 @@ public class RankSystem : MonoBehaviour
     {
         if (omockTier == 18)
         {
-           // Debug.Log("You are already the lowest rank.");
+          
             return;
         }
 
