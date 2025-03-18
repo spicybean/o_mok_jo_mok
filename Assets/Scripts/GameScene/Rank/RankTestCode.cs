@@ -5,10 +5,12 @@ using UnityEngine;
 public class RankTestCode : MonoBehaviour
 {
     RankSystem rankSystem;
+     public RankPanelController rankPanelController;
 
     public void Start()
     {
        rankSystem = GetComponent<RankSystem>();
+       
     }
 
     void Update()
@@ -16,12 +18,15 @@ public class RankTestCode : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             rankSystem.AddPoints(1);
-            Debug.Log($"CurrentPoints: {rankSystem.currentPoint}");
+            rankPanelController.GetPointsUI();
+           // Debug.Log($"CurrentPoints: {rankSystem.currentPoint}");
+
         }
         else if(Input.GetKeyDown(KeyCode.D))
         {
             rankSystem.LosePoints(1);
-            Debug.Log($"CurrentPoints: {rankSystem.currentPoint}");
+            rankPanelController.LosePointsUI();
+           // Debug.Log($"CurrentPoints: {rankSystem.currentPoint}");
         }
     }
 }

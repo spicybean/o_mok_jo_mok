@@ -7,11 +7,13 @@ public class RankSystem : MonoBehaviour
     public  int omockTier = 18;
     public int currentPoint = 0;
 
-    private int GetRequiredPoints()
+    
+
+    public int GetRequiredPoints()
     {
         if (omockTier >= 10) return 3;
         else if (omockTier >= 5) return 5;
-        else return 10;
+        else return 7;
         
     }
 
@@ -24,26 +26,23 @@ public class RankSystem : MonoBehaviour
         else 
         {
             currentPoint += points;
-            if (currentPoint >= GetRequiredPoints())
-            {
-                RankUp();
-            }
+           
         }
         
     }
 
     public void RankUp()
     {
+        // 티어가 1일때 
         if (omockTier == 1)
         {
-            Debug.Log("You are already the highest rank.");
+            //Debug.Log("You are already the highest rank.");
             return;
         }
 
         omockTier--;
         currentPoint = 0;
-        Debug.Log($"RankUp! {omockTier}");
-        Debug.Log($"RequiredPoints: {GetRequiredPoints()}");
+    
     }
 
     public void LosePoints(int points)
@@ -55,10 +54,7 @@ public class RankSystem : MonoBehaviour
         else
         {
             currentPoint -= points;
-            if (currentPoint < 0)
-            {
-                RankDown();
-            }
+            
         }
     }
 
@@ -66,13 +62,12 @@ public class RankSystem : MonoBehaviour
     {
         if (omockTier == 18)
         {
-            Debug.Log("You are already the lowest rank.");
+           // Debug.Log("You are already the lowest rank.");
             return;
         }
 
         omockTier++;
         currentPoint = GetRequiredPoints() - 1;
-        Debug.Log($"RankDown! {omockTier}");
-        Debug.Log($"RequiredPoints: {GetRequiredPoints()}");
+     
     }
 }
