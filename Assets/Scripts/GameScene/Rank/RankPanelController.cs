@@ -35,7 +35,7 @@ public class RankPanelController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Á¡¼ö ¾ò´Â ÇÔ¼ö
+    
     public void GetPointsUI()
     {
         
@@ -53,7 +53,7 @@ public class RankPanelController : MonoBehaviour
         }
     }
 
-    // Á¡¼ö ÇÁ¸®ÆÕ »èÁ¦ ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     public void ClearPoints()
     {
         foreach (GameObject point in pointObjects)
@@ -87,7 +87,7 @@ public class RankPanelController : MonoBehaviour
 
     }
 
-    // Á¡¼ö ¾÷µ¥ÀÌÆ® ÇÏ´Â ÇÔ¼ö
+   
     public void UpdateUI()
     {
         rankText.text = $"Rank: {rankSystem.omockTier}";
