@@ -11,47 +11,22 @@ public class RanjuRule : MonoBehaviour
 
     public Sprite XMarker;
     public int[] Line = new int[9];
-    
-    
-    // Start is called before the first frame update
-    void Start()
+
+    public bool RanJu(int index, OmokCell.MarkerType marker)
     {
-        var totalcells = 15 * 15;
-        
-        objects = new GameObject[totalcells];
-       
-        markers = new OmokCell.MarkerType[15,15];
-        for (var i = 0; i < totalcells; i++)
+        if (CheckDoubleThree(index))
         {
-            var obj = transform.GetChild(i).gameObject;
-            objects[i] = obj;
-            markers[i/15,i%15] = obj.GetComponent<OmokCell>().GetMarkerType;
+            return true;
         }
 
-        for (int i = 0; i < objects.Length; i++)
+        if (CheckDoubleFour(index))
         {
-            if (objects[i].GetComponent<OmokCell>().GetMarkerType == OmokCell.MarkerType.None)
-            {
-                 if (CheckDoubleThree(i))
-                 {
-                     objects[i].GetComponent<Image>().sprite = XMarker;
-                     objects[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                }
-
-                if (CheckDoubleFour(i))
-                {
-                    objects[i].GetComponent<Image>().sprite = XMarker;
-                    objects[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                }
-            }
+            return true;
         }
 
-       // CheckFour(217,(1,0));
-       // CheckFour(217,(1,1));
-       // CheckFour(217,(0,1));
-       // CheckFour(217,(1,-1));
-
+        return false;
     }
+    
     bool CheckOutOfIndex(int row, int col)
     {
         if (row < 0 || row > 14 || col < 0 || col > 14)
@@ -99,7 +74,6 @@ public class RanjuRule : MonoBehaviour
                 }
                 
             }
-           
             for (int k = 0; k < patternedThree.Length; k++)
             {
                 if (pattern.Contains(patternedThree[k]))
@@ -127,7 +101,6 @@ public class RanjuRule : MonoBehaviour
                 return true;
             }
         }
-
         if (CountFour >= 2)
         {
             return true;
@@ -150,9 +123,7 @@ public class RanjuRule : MonoBehaviour
                             '0' : 
                             markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
                 }
-                
             }
-           
             for (int k = 0; k < patternedFour.Length; k++)
             {
                 if (pattern.Equals(patternedFour[k]))
@@ -167,13 +138,72 @@ public class RanjuRule : MonoBehaviour
         Debug.Log(checkFour);
         return checkFour;
     }
-  
-    
-      
-   
-    // Update is called once per frame
-    void Update()
+    bool CheckFiveInAllDirections(int index, OmokCell.MarkerType marker)
     {
-        
+        (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
+        for (int i = 0; i < directions.Length; i++)
+        {
+            if (CheckFive(index, directions[i],marker))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    bool CheckFive(int index, (int, int) direction, OmokCell.MarkerType marker)
+    {
+        string[] patternedFive = new string[] { "0111110","0111112","2111110","2111112" };
+        string pattern = "";
+        for (int i = -5; i < 1; i++)
+        {
+            for (int j = i; j < i+6; j++)
+            {
+                if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
+                {
+                    pattern += markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
+                            '0' : 
+                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
+                }
+                
+            }
+            //Debug.Log($"{direction}, {index}: {pattern}");
+            for (int k = 0; k < patternedFive.Length; k++)
+            {
+                if (pattern.Equals(patternedFive[k]))
+                {
+                    return true;
+                }
+            }
+            
+            pattern = "";
+        }
+
+        return false;
+    }
+
+    bool CheckMoreThanFive(int index, (int, int) direction)
+    {
+        string patternedSix = "111111";
+        string pattern = "";
+        for (int i = -4; i < 1; i++)
+        {
+            for (int j = i; j < i+5; j++)
+            {
+                if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
+                {
+                    pattern += j==0 ? '1' : 
+                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
+                            '0' : 
+                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                }
+            }
+            if (pattern.Equals(patternedSix))
+            {
+                return true;
+            }
+            
+            pattern = "";
+        }
+        return false;
     }
 }

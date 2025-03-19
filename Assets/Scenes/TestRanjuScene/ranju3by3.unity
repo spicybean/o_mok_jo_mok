@@ -3593,8 +3593,16 @@ PrefabInstance:
       value: OmokCell (200)
       objectReference: {fileID: 0}
     - target: {fileID: 8592028770411341499, guid: 004214539f33e214284710b97dcbe37a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 588e2c27e16547d498c3fcf4f0aebdcf, type: 3}
+    - target: {fileID: 8592028770411341499, guid: 004214539f33e214284710b97dcbe37a, type: 3}
       propertyPath: m_Color.a
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8898543175812999641, guid: 004214539f33e214284710b97dcbe37a, type: 3}
+      propertyPath: _markerType
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5305,8 +5313,16 @@ PrefabInstance:
       value: OmokCell (216)
       objectReference: {fileID: 0}
     - target: {fileID: 8592028770411341499, guid: 004214539f33e214284710b97dcbe37a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4eda19e5c4b512649b8bb2ad07cfa7d1, type: 3}
+    - target: {fileID: 8592028770411341499, guid: 004214539f33e214284710b97dcbe37a, type: 3}
       propertyPath: m_Color.a
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8898543175812999641, guid: 004214539f33e214284710b97dcbe37a, type: 3}
+      propertyPath: _markerType
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

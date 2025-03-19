@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class OmokCell : MonoBehaviour
 {
-    public enum MarkerType{None,PlaceMark,Black,White}
+    public enum MarkerType{None,PlaceMark,Black,White,Forbidden}
     [SerializeField] private Sprite _blackStone;
     [SerializeField] private Sprite _whiteStone;
     [SerializeField] private Sprite _selectedSprite;
+    [SerializeField] private Sprite _ForbiddenSprite;
     [SerializeField] private MarkerType _markerType;
     [SerializeField] private Color _selectedColor;
     
@@ -32,6 +33,8 @@ public class OmokCell : MonoBehaviour
                 return _blackStone;
             case MarkerType.White:
                 return _whiteStone;
+            case MarkerType.Forbidden:
+                return _ForbiddenSprite;
             
         }
          return null;

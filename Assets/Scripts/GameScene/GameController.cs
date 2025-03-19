@@ -73,16 +73,17 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    void RanjuRule()
+    {
+        
+    }
    
     public void OnPointerClick(PointerEventData eventData)
     {
-        
         if (PointerEventData.InputButton.Left == eventData.button)
         {
             var cell = eventData.pointerCurrentRaycast.gameObject;
             var previousCellSelected = selectedCell != null ? selectedCell : cell;
-            
-            
             //눌렀던 셀을 한번더 누르면 바둑알을 놓는다
             if (cell.GetComponent<OmokCell>().GetMarkerType == OmokCell.MarkerType.PlaceMark)
             {
@@ -91,7 +92,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
             if(cell.GetComponent<OmokCell>().GetMarkerType != OmokCell.MarkerType.PlaceMark)
             {
-                
                 if (cell.GetComponent<OmokCell>().GetMarkerType == OmokCell.MarkerType.None)
                 {
                     previousCellSelected.GetComponent<OmokCell>().PlaceMark(turncounter);
@@ -99,11 +99,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                     cell.GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.PlaceMark);
                     selectedCell = cell;
                 }
-                
-               
             }
-            
-            
         }
     }
 }
