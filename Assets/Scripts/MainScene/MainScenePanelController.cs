@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainScenePanelController : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class MainScenePanelController : MonoBehaviour
         panels[0].SetActive(true);
     }
 
+    
     #region PanelControl
 
     public void PanelControl(int panelIndex)
@@ -79,6 +81,18 @@ public class MainScenePanelController : MonoBehaviour
     {
         PanelControl(5);
     }
+
+    public void OnClickReplayButton()
+    {
+        // Replay Scene 넘어가기
+        SceneManager.LoadScene("ReplayScene");
+    }
+
+    public void OnClickGamePlaySingleAndMultySceneButton()
+    {
+        // Game Scene 넘어가기
+        SceneManager.LoadScene("GameScene");
+    }
     
     // 랭킹 버튼
     public void OnClickRankingButton()
@@ -91,6 +105,13 @@ public class MainScenePanelController : MonoBehaviour
     {
         PanelControl(7);
     }
+    
+    // Store - 300 Coin Button
+    public void OnClickGetCoinButton()
+    {
+        PanelControl(8);
+    }
+    
 
     // 셋팅 버튼
     public void OnClickSettingButton()
