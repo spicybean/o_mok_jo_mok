@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,21 +10,69 @@ public class RanjuRule : MonoBehaviour
     public GameObject[] objects;
     public OmokCell.MarkerType[,] markers;
 
-    public Sprite XMarker;
-    public int[] Line = new int[9];
+    void Start()
+    {
+        StartRule();
+         for (int i = 0; i < objects.Length; i++)
+         {
+             if (objects[i].GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.None)
+             {
+                 if (CheckDoubleFour(i))
+                 {
+                     objects[i].GetComponent<Image>().sprite = objects[i].GetComponent<OmokCell>().SpriteType(OmokCell.MarkerType.Forbidden);
+                     objects[i].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+                 }
+             }
+         }
+        
+         string temp = "01111";
+         Debug.Log(temp.Contains("1111"));
+        
+    }
+    
 
-    public bool RanJu(int index, OmokCell.MarkerType marker)
+    public void StartRule()
+    {
+        //렌주룰용 보드 초기화
+        var totalcells = 15 * 15;
+        
+        objects = new GameObject[totalcells];
+        
+        markers = new OmokCell.MarkerType[15,15];
+        UpdateBoardState();
+    }
+    public void UpdateBoardState()
+    {
+        //보드 업데이트
+        this.objects = objects;
+        for (var i = 0; i < this.objects.Length; i++)
+        {
+            var obj = transform.GetChild(i).gameObject;
+            objects[i] = obj;
+            markers[i/15,i%15] = objects[i].GetComponent<OmokCell>().My_MarkerType;
+            
+        }
+        
+    }
+    public bool RanJu(int index)
     {
         if (CheckDoubleThree(index))
         {
+            Debug.Log("RanjuThree");
             return true;
         }
 
         if (CheckDoubleFour(index))
         {
+            Debug.Log("RanjuFour");
             return true;
         }
 
+        if (CheckJangMok(index))
+        {
+            Debug.Log("RanjuJang");
+            return true;
+        }
         return false;
     }
     
@@ -69,14 +118,16 @@ public class RanjuRule : MonoBehaviour
                 {
                     pattern += j==0 ? '1' : 
                         markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
-                        '0' : 
+                            '0' : 
+                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.PlaceMark ? 
+                            '0' :
                         markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
                 }
                 
             }
             for (int k = 0; k < patternedThree.Length; k++)
             {
-                if (pattern.Contains(patternedThree[k]))
+                if (pattern.Equals(patternedThree[k]))
                 {
                     return true;
                 }
@@ -112,6 +163,7 @@ public class RanjuRule : MonoBehaviour
         string[] patternedFour = new string[] { "01111","11110","11011","10111","11101" };
         string pattern = "";
         int checkFour = 0;
+        int checkOpenFour = 0;
         for (int i = -4; i < 1; i++)
         {
             for (int j = i; j < i+5; j++)
@@ -121,24 +173,38 @@ public class RanjuRule : MonoBehaviour
                     pattern += j==0 ? '1' : 
                         markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
                             '0' : 
-                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.PlaceMark ? 
+                                '0' :
+                                markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
                 }
             }
             for (int k = 0; k < patternedFour.Length; k++)
             {
-                if (pattern.Equals(patternedFour[k]))
+                if (pattern.Equals("01111") || pattern.Equals("11110"))
+                {
+                    checkOpenFour++;
+                }
+                if (pattern.Contains(patternedFour[k]))
                 {
                     checkFour++;
-                    Debug.Log($"{direction}, {index}: {pattern}");
+                }
+                if (pattern.Equals("11111"))
+                {
+                    return 0;
                 }
             }
+
             
             pattern = "";
         }
-        Debug.Log(checkFour);
+
+        if (checkOpenFour >= 2)
+        {
+            return 1;
+        }
         return checkFour;
     }
-    bool CheckFiveInAllDirections(int index, OmokCell.MarkerType marker)
+    public bool CheckFiveInAllDirections(int index, OmokCell.MarkerType marker)
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
         for (int i = 0; i < directions.Length; i++)
@@ -160,9 +226,12 @@ public class RanjuRule : MonoBehaviour
             {
                 if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
                 {
-                    pattern += markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
+                    pattern += j==0 ? '1' : 
+                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
                             '0' : 
-                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
+                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.PlaceMark ? 
+                                '0' :
+                                markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
                 }
                 
             }
@@ -181,6 +250,18 @@ public class RanjuRule : MonoBehaviour
         return false;
     }
 
+    bool CheckJangMok(int index)
+    {
+        (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
+        for (int i = 0; i < directions.Length; i++)
+        {
+            if (CheckMoreThanFive(index, directions[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     bool CheckMoreThanFive(int index, (int, int) direction)
     {
         string patternedSix = "111111";
@@ -194,7 +275,9 @@ public class RanjuRule : MonoBehaviour
                     pattern += j==0 ? '1' : 
                         markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
                             '0' : 
-                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.PlaceMark ? 
+                                '0' :
+                                markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
                 }
             }
             if (pattern.Equals(patternedSix))

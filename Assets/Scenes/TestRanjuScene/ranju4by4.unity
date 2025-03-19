@@ -18529,12 +18529,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1494811027}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f596ab1522741f7478b5d6d805bcc207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   omokButtons: []
+  ranjuRule: {fileID: 0}
   omokPrefab: {fileID: 4224315161120724941, guid: 004214539f33e214284710b97dcbe37a, type: 3}
   selectedCell: {fileID: 0}
   turn: 0

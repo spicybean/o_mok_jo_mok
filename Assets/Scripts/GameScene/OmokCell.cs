@@ -39,12 +39,9 @@ public class OmokCell : MonoBehaviour
         }
          return null;
     }
-    public MarkerType GetMarkerType{
-        get
-        {
-            return _markerType;
-        }
-        
+    public MarkerType My_MarkerType{
+        get => _markerType;
+        set => _markerType = value;
     }
     private delegate void OnStoneCellClicked(int index);
     private OnStoneCellClicked _onStoneCellClicked;
