@@ -66,18 +66,19 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 if (ranjuRule.RanJu(i))
                 {
                     omokButtons[i].GetComponent<Image>().sprite = omokButtons[i].GetComponent<OmokCell>().SpriteType(OmokCell.MarkerType.Forbidden);
-                    omokButtons[i].GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    omokButtons[i].GetComponent<Image>().color = new Color(1, 1, 1,1);
                     omokButtons[i].GetComponent<OmokCell>().My_MarkerType = OmokCell.MarkerType.Forbidden;
                 }
                 else
                 {
                     omokButtons[i].GetComponent<Image>().sprite = omokButtons[i].GetComponent<OmokCell>().SpriteType();
-                    omokButtons[i].GetComponent<Image>().color = new Color32(0, 0, 0, 0);
+                    omokButtons[i].GetComponent<Image>().color = new Color(0, 0, 0, 0);
                     omokButtons[i].GetComponent<OmokCell>().My_MarkerType = OmokCell.MarkerType.None;
                 }
             }
         }
         ranjuRule.UpdateBoardState();
+        
     }
     
     void SetTurn(playerType player, int index)
@@ -101,10 +102,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
-                
                 break;
         }
-
+        SetForbiddenCell();
         SetForbiddenCell();
     }
 
@@ -120,6 +120,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             if (cell.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.PlaceMark)
             {
                 SetTurn(turn,cell.GetComponent<OmokCell>().index);
+                if (ranjuRule.CheckFiveInAllDirections(cell.GetComponent<OmokCell>().index))
+                {
+                    
+                }
             }
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
             if(cell.GetComponent<OmokCell>().My_MarkerType != OmokCell.MarkerType.PlaceMark)

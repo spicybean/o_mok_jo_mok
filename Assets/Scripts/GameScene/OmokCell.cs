@@ -91,6 +91,11 @@ public class OmokCell : MonoBehaviour
                 GetComponent<Image>().color = new Color(0, 0, 0, 0f);
                 _markerType = MarkerType.None;
                 break;
+            case MarkerType.Forbidden:
+                this.GetComponent<Image>().sprite = _ForbiddenSprite;
+                GetComponent<Image>().color = _selectedColor;
+                _markerType = MarkerType.Forbidden;
+                break;
                 
         }
     }
