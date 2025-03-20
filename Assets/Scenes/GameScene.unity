@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 168106113}
   - component: {fileID: 168106116}
   - component: {fileID: 168106115}
+  - component: {fileID: 168106117}
   m_Layer: 5
   m_Name: '[Area] Board'
   m_TagString: Untagged
@@ -490,6 +491,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   omokButtons: []
+  ranjuRule: {fileID: 0}
+  rankPanelController: {fileID: 0}
   omokPrefab: {fileID: 4224315161120724941, guid: 004214539f33e214284710b97dcbe37a, type: 3}
   selectedCell: {fileID: 0}
   turn: 0
@@ -517,6 +520,19 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &168106117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168106111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751f8b7123dec34478d6d4157468eae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objects: []
 --- !u!1 &571586628
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,6 +965,7 @@ GameObject:
   - component: {fileID: 836664016}
   - component: {fileID: 836664015}
   - component: {fileID: 836664014}
+  - component: {fileID: 836664018}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1040,6 +1057,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &836664018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836664013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 060ef878673ff304d8774101b29aa5fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  giveUpPanel: {fileID: 1907360528}
 --- !u!1 &895254249
 GameObject:
   m_ObjectHideFlags: 0
@@ -1294,7 +1324,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1069626479}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 836664018}
+        m_TargetAssemblyTypeName: GameScenePanelController, Assembly-CSharp
+        m_MethodName: OnClickGiveUpPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1069626479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2134,7 +2176,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1506021022}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 836664018}
+        m_TargetAssemblyTypeName: GameScenePanelController, Assembly-CSharp
+        m_MethodName: OnClickGiveUpButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1506021022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2426,7 +2480,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1621864711}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 836664018}
+        m_TargetAssemblyTypeName: GameScenePanelController, Assembly-CSharp
+        m_MethodName: OnClickCancelButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1621864711
 MonoBehaviour:
   m_ObjectHideFlags: 0
