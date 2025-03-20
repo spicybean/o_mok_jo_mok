@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class RankSystem : MonoBehaviour
 {
-    public  int omockTier = 18;
+    //PlayerPref 저장용
+    //사용자 정보
+    //제일 낮은 등급 18등급
+    public int omockTier = 18;
+    //현재 승점
     public int currentPoint = 0;
-
+    
     
 
     public int GetRequiredPoints()
@@ -17,7 +21,7 @@ public class RankSystem : MonoBehaviour
         
     }
 
-    public void AddPoints(int points)
+    public void AddPoints()
     {
         if(omockTier == 1)
         {
@@ -25,15 +29,14 @@ public class RankSystem : MonoBehaviour
         }
         else 
         {
-            currentPoint += points;
-           
+            currentPoint ++;
         }
         
     }
 
     public void RankUp()
     {
-        // Ƽ� 1�϶� 
+       
         if (omockTier == 1)
         {
             
@@ -45,7 +48,7 @@ public class RankSystem : MonoBehaviour
     
     }
 
-    public void LosePoints(int points)
+    public void LosePoints()
     {
         if(omockTier == 18 && currentPoint ==0)
         {
@@ -53,7 +56,7 @@ public class RankSystem : MonoBehaviour
         }
         else
         {
-            currentPoint -= points;
+            currentPoint --;
             
         }
     }

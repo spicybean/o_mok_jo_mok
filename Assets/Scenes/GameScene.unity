@@ -492,6 +492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   omokButtons: []
   ranjuRule: {fileID: 0}
+  rankPanelController: {fileID: 0}
   omokPrefab: {fileID: 4224315161120724941, guid: 004214539f33e214284710b97dcbe37a, type: 3}
   selectedCell: {fileID: 0}
   turn: 0

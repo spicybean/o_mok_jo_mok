@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RankPanelController : MonoBehaviour
@@ -33,6 +34,7 @@ public class RankPanelController : MonoBehaviour
     public void HideRankPanel()
     {
         gameObject.SetActive(false);
+        SceneManager.LoadScene("MainScene");
     }
 
     
@@ -53,7 +55,7 @@ public class RankPanelController : MonoBehaviour
         }
     }
 
-    // ���� ������ ���� �Լ�
+    
     public void ClearPoints()
     {
         foreach (GameObject point in pointObjects)
