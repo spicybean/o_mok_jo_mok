@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.UI;
 using System.IO;
+using UnityEngine.UI;
 
 //GameData(UserAccount)
 public class UserAccountData
@@ -10,6 +12,13 @@ public class UserAccountData
     public string username;
     public string nickname;
     public string password;
+    public int usertier;
+    public int points;
+    public int totalmatch;
+    public int winmatch;
+    public int losematch;
+    public int tiematch;
+    public Image image;
     //etc...
 }
 

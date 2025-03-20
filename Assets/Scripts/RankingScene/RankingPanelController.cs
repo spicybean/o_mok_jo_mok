@@ -13,24 +13,23 @@ public class RankingPanelController : MonoBehaviour
     public GameObject rankBoxPrefab;
     public Transform rankBoxParent;
 
-
+    UserAccountData userAccountData;
 
     private void Start()
     {
-        rank = 1;
-        tier = 18;
-        point = 0;
-        userName = "Player";
-        winRate = 0.0f;
-
+        tier = userAccountData.usertier;
+        point = userAccountData.points;
+        userName = userAccountData.username;
+        winRate = (float)userAccountData.winmatch  / (float)userAccountData.totalmatch;
         CreateRankingTable();
     }
 
     private void CreateRankingTable()
     {
-         
+        //유저수 만큼 랭킹박스 생성
+
 
     }
 
-    
+
 }

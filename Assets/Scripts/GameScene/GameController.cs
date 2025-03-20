@@ -15,7 +15,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public RanjuRule ranjuRule;
     
     public RankPanelController rankPanelController;
-    
+    public RankSystem rankSystem;
+
     public GameObject omokPrefab;
     private int totalomokCells = 15 * 15;
     private int turncounter = 0;
@@ -110,19 +111,20 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         SetForbiddenCell();
     }
 
-    // void WinLose(GameObject player)
-    // {
-    //     if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
-    //     {
-    //         rankPanelController.ShowRankPanel();
-    //         rankPanelController.rankSystem.AddPoints();
-    //     }
-    //     else
-    //     {
-    //         rankPanelController.ShowRankPanel();
-    //         rankPanelController.rankSystem.LosePoints();
-    //     }
-    // }
+     void WinLose(GameObject player)
+     {
+         if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
+         {
+            rankPanelController.ShowRankPanel();
+            rankSystem.AddPoints();   
+            rankPanelController.rankSystem.AddPoints();
+         }
+        else
+         {
+             rankPanelController.ShowRankPanel();
+             rankPanelController.rankSystem.LosePoints();
+         }
+     }
     
    
     public void OnPointerClick(PointerEventData eventData)
