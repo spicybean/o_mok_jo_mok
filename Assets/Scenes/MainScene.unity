@@ -1959,61 +1959,13 @@ PrefabInstance:
       value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1753249102}
-    - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickGamePlaySingleAndMultySceneButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainScenePanelController, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1753249102}
     - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickGamePlaySingleAndMultySceneButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainScenePanelController, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4072639425447951839, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1753249102}
     - target: {fileID: 5273735526584799043, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2118,6 +2070,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -250
       objectReference: {fileID: 0}
+    - target: {fileID: 8751116303414743526, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1753249102}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3016,6 +2972,7 @@ GameObject:
   - component: {fileID: 1753249100}
   - component: {fileID: 1753249099}
   - component: {fileID: 1753249098}
+  - component: {fileID: 1753249103}
   - component: {fileID: 1753249102}
   m_Layer: 5
   m_Name: Canvas
@@ -3138,6 +3095,21 @@ MonoBehaviour:
   - {fileID: 58346773}
   - {fileID: 1875932419}
   - {fileID: 1016205114972884780}
+--- !u!114 &1753249103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753249097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ce8d01d6768a24684121eec6580378, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCoinText: {fileID: 1094886311}
+  gameplayCoinText: {fileID: 1966877595}
+  currentCoin: 0
 --- !u!1001 &1858390934
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3631,6 +3603,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920507642}
   m_CullTransparentMesh: 1
+--- !u!114 &1966877595 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4383306308835935639, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
+  m_PrefabInstance: {fileID: 1113828128}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2014060678
 GameObject:
   m_ObjectHideFlags: 0
