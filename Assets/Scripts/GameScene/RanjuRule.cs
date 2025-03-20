@@ -25,7 +25,6 @@ public class RanjuRule : MonoBehaviour
     public void UpdateBoardState()
     {
         //보드 업데이트
-        this.objects = objects;
         for (var i = 0; i < this.objects.Length; i++)
         {
             var obj = transform.GetChild(i).gameObject;
