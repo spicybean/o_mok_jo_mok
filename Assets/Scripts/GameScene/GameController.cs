@@ -110,19 +110,19 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         SetForbiddenCell();
     }
 
-    void WinLose(GameObject player)
-    {
-        if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
-        {
-            rankPanelController.ShowRankPanel();
-            rankPanelController.rankSystem.AddPoints();
-        }
-        else
-        {
-            rankPanelController.ShowRankPanel();
-            rankPanelController.rankSystem.LosePoints();
-        }
-    }
+    // void WinLose(GameObject player)
+    // {
+    //     if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
+    //     {
+    //         rankPanelController.ShowRankPanel();
+    //         rankPanelController.rankSystem.AddPoints();
+    //     }
+    //     else
+    //     {
+    //         rankPanelController.ShowRankPanel();
+    //         rankPanelController.rankSystem.LosePoints();
+    //     }
+    // }
     
    
     public void OnPointerClick(PointerEventData eventData)
@@ -137,7 +137,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 SetTurn(turn,cell.GetComponent<OmokCell>().index);
                 if (ranjuRule.CheckFiveInAllDirections(cell.GetComponent<OmokCell>().index))
                 {
-                    WinLose(cell);
+                    //승패 알려주는 코드
+                    //WinLose(cell);
                 }
             }
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
