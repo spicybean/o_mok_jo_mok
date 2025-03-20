@@ -18,8 +18,8 @@ public class ReplayData
 {
     public string playerName;
     public string enemyName;
-    public int playerLevel;
-    public int enemyLevel;
+    public int playerTier;
+    public int enemyTier;
     public int[,,] gamePlayData;
     public DateTime datetime;
     public bool bIsPlayerWin;
