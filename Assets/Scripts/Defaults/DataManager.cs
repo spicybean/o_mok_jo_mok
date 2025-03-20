@@ -74,12 +74,15 @@ public class DataManager : MonoBehaviour
     /// <summary>
     /// 세이브 파일 저장 경로 : %appdata%/localLow/DefaultCompany/O_mok_jo_mok/saveData{슬롯번호}.json
     /// </summary>
+    
+    //리플레이 데이터의 경로를 파일명에 따라 동기화 함
     private void RefreshReplaySavePath()
     {
         replayPath = dataPath + "/replayData"+ currentReplaySlotNum + ".json";
     }
     
-    public bool CheckReplaySave()
+    //리플레이 데이터가 ReplayPath에 존재하는지 확인
+    public bool CheckReplayData()
     {
         RefreshReplaySavePath();
         if (File.Exists(replayPath))
@@ -91,6 +94,8 @@ public class DataManager : MonoBehaviour
             return false;
         }
     }
+    
+    //리플레이 데이터를 저장함
     public void SaveReplayData()
     {
         string data = JsonUtility.ToJson(currentReplay);
@@ -98,6 +103,7 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(replayPath, data);
     }
 
+    //리플레이 데이터를 불러옴
     public ReplayData LoadReplayData()
     {
         RefreshReplaySavePath();
@@ -105,6 +111,7 @@ public class DataManager : MonoBehaviour
         return JsonUtility.FromJson<ReplayData>(data);
     }
 
+    //리플레이관련 저장 정보를 DataManager에서 초기화 함
     public void ClearReplayData()
     {
         currentReplaySlotNum = -1;

@@ -15,7 +15,7 @@ public class ReplayManager : MonoBehaviour
         for (int i = 1; i <= _maxSaveCount; i++)
         {
             DataManager.instance.currentReplaySlotNum = i;
-            if (DataManager.instance.CheckReplaySave())
+            if (DataManager.instance.CheckReplayData())
             {
                 gameDataList[i] = DataManager.instance.LoadReplayData();
             }
@@ -33,7 +33,7 @@ public class ReplayManager : MonoBehaviour
         //슬롯 버튼의 이름에서 Slot번호를 추출하여 DataManager에 전달.
         DataManager.instance.currentReplaySlotNum =
             int.Parse(EventSystem.current.currentSelectedGameObject.name.Split(' ')[2]);
-        if (DataManager.instance.CheckReplaySave())
+        if (DataManager.instance.CheckReplayData())
         {
             DataManager.instance.LoadReplayData();
         }
