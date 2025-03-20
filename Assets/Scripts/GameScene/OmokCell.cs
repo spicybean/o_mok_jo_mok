@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class OmokCell : MonoBehaviour
 {
-    public enum MarkerType{None,PlaceMark,Black,White}
+    public enum MarkerType{None,PlaceMark,Black,White,Forbidden}
     [SerializeField] private Sprite _blackStone;
     [SerializeField] private Sprite _whiteStone;
     [SerializeField] private Sprite _selectedSprite;
+    [SerializeField] private Sprite _ForbiddenSprite;
     [SerializeField] private MarkerType _markerType;
     [SerializeField] private Color _selectedColor;
+    
     public int index;
     public int placedTurn;
 
@@ -31,16 +33,15 @@ public class OmokCell : MonoBehaviour
                 return _blackStone;
             case MarkerType.White:
                 return _whiteStone;
+            case MarkerType.Forbidden:
+                return _ForbiddenSprite;
             
         }
          return null;
     }
-    public MarkerType GetMarkerType{
-        get
-        {
-            return _markerType;
-        }
-        
+    public MarkerType My_MarkerType{
+        get => _markerType;
+        set => _markerType = value;
     }
     private delegate void OnStoneCellClicked(int index);
     private OnStoneCellClicked _onStoneCellClicked;
@@ -56,6 +57,7 @@ public class OmokCell : MonoBehaviour
         placedTurn = 0;
         _markerType = MarkerType.None;
         _selectedColor = new Color(1, 1, 1, 1);
+        
     }
     public void SetTurn(int turn)
     {
@@ -88,6 +90,11 @@ public class OmokCell : MonoBehaviour
                 this.GetComponent<Image>().sprite = null;
                 GetComponent<Image>().color = new Color(0, 0, 0, 0f);
                 _markerType = MarkerType.None;
+                break;
+            case MarkerType.Forbidden:
+                this.GetComponent<Image>().sprite = _ForbiddenSprite;
+                GetComponent<Image>().color = _selectedColor;
+                _markerType = MarkerType.Forbidden;
                 break;
                 
         }

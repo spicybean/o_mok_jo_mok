@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RankPanelController : MonoBehaviour
@@ -33,9 +34,10 @@ public class RankPanelController : MonoBehaviour
     public void HideRankPanel()
     {
         gameObject.SetActive(false);
+        SceneManager.LoadScene("MainScene");
     }
 
-    // 점수 얻는 함수
+    
     public void GetPointsUI()
     {
         
@@ -53,7 +55,7 @@ public class RankPanelController : MonoBehaviour
         }
     }
 
-    // 점수 프리팹 삭제 함수
+    
     public void ClearPoints()
     {
         foreach (GameObject point in pointObjects)
@@ -87,7 +89,7 @@ public class RankPanelController : MonoBehaviour
 
     }
 
-    // 점수 업데이트 하는 함수
+   
     public void UpdateUI()
     {
         rankText.text = $"Rank: {rankSystem.omockTier}";

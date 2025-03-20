@@ -91,7 +91,8 @@ MonoBehaviour:
   _blackStone: {fileID: 21300000, guid: 588e2c27e16547d498c3fcf4f0aebdcf, type: 3}
   _whiteStone: {fileID: 21300000, guid: 4eda19e5c4b512649b8bb2ad07cfa7d1, type: 3}
   _selectedSprite: {fileID: 21300000, guid: d006edfd04c5b3a478e375d540184078, type: 3}
-  _playerType: 0
+  _ForbiddenSprite: {fileID: 21300000, guid: ee90ed9cf2d67b644be4effbd4640bd9, type: 3}
+  _markerType: 0
   _selectedColor: {r: 1, g: 1, b: 1, a: 1}
   index: 0
   placedTurn: 0
