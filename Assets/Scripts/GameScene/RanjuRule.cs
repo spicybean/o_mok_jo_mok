@@ -9,7 +9,7 @@ public class RanjuRule : MonoBehaviour
 {
     public GameObject[] objects;
     public OmokCell.MarkerType[,] markers;
-
+    
     
     
     public void StartRule()
@@ -181,25 +181,25 @@ public class RanjuRule : MonoBehaviour
         }
         return checkFour;
     }
-    public bool CheckFiveInAllDirections(int index)
+    public bool CheckFiveInAllDirections(int index,OmokCell.MarkerType marker)
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
         for (int i = 0; i < directions.Length; i++)
         {
-            if (CheckFive(index, directions[i]))
+            if (CheckFive(index, directions[i], marker))
             {
                 return true;
             }
         }
         return false;
     }
-    bool CheckFive(int index, (int, int) direction )
+    bool CheckFive(int index, (int, int) direction, OmokCell.MarkerType marker )
     {
         string[] patternedFive = new string[] { "0111110","0111112","2111110","2111112" };
         string pattern = "";
         for (int i = -5; i < 1; i++)
         {
-            for (int j = i; j < i+6; j++)
+            for (int j = i; j < i+7; j++)
             {
                 if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
                 {
@@ -208,7 +208,7 @@ public class RanjuRule : MonoBehaviour
                             '0' : 
                             markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.PlaceMark ? 
                                 '0' :
-                                markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                                markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
                 }
                 
             }

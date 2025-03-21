@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class RankPanelController : MonoBehaviour
 {
-    public RankSystem rankSystem;
+    public RankSystem rankSystem = new RankSystem();
     public GameObject pointPrefab;
     public Transform pointBox;
     public List<GameObject> pointObjects = new List<GameObject>();
@@ -14,11 +14,16 @@ public class RankPanelController : MonoBehaviour
     public TextMeshProUGUI rankText;
     public TextMeshProUGUI currentPointText;
     public TextMeshProUGUI leftToRankUPText;
+    public TextMeshProUGUI VictoryText;
 
-
+    private string winMessage = $"게임에서 승리했습니다\n {1}포인트를 받았습니다";
+    private string loseMessage = $"게임에서 패배했습니다\n {1}포인트를 잃었습니다";
+    private string DrawMessage = "비겼습니다.";
     private void Start()
     {
+        rankSystem = new RankSystem();
         UpdateUI();
+        
     }
 
     private void Update()
@@ -44,6 +49,7 @@ public class RankPanelController : MonoBehaviour
         if (pointObjects.Count <= rankSystem.currentPoint)
         {
             GameObject newPoint = Instantiate(pointPrefab, pointBox);
+            VictoryText.text = winMessage;
             pointObjects.Add(newPoint);
         }
        
@@ -86,9 +92,14 @@ public class RankPanelController : MonoBehaviour
                 pointObjects.Add(newPoint);
             }
         }
+        VictoryText.text = loseMessage;
 
     }
 
+    public void DrawPointsUI()
+    {
+        VictoryText.text = DrawMessage;
+    }
    
     public void UpdateUI()
     {
