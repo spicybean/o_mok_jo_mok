@@ -58,8 +58,7 @@ public class RankingPanelController : MonoBehaviour
             rankBox.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = userList[i].points.ToString();
             rankBox.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = userList[i].GetWinRate().ToString();
             rankBox.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = userList[i].username;
-            rankBox.transform.GetChild(4).GetComponent<Image>().sprite = userList[i].image.sprite;
-            Debug.Log("유저정보 : " + userList[i].usertier + " " + userList[i].points + " " + userList[i].GetWinRate() + " " + userList[i].username + " " + userList[i].image.sprite.name);
+            Debug.Log("유저정보 : " + userList[i].usertier + " " + userList[i].points + " " + userList[i].GetWinRate() + " " + userList[i].username + " " );
         }
 
        
