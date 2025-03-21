@@ -19,8 +19,27 @@ public class UserAccountData
     public int losematch;
     public int tiematch;
     public Image image;
+
+    public UserAccountData(string _username, int _usertier, int _points, int _totalmatch, int _winmatch, int _losematch, int _tiematch, Image _image)
+    {
+        username = _username;
+        usertier = _usertier;
+        points = _points;
+        totalmatch = _totalmatch;
+        winmatch = _winmatch;
+        losematch = _losematch;
+        tiematch = _tiematch;
+        image = _image;
+    }
+
+    public float GetWinRate()
+    {
+        return totalmatch>0? (float) winmatch + tiematch * 0.5f / (float)totalmatch : 0;
+    }   
     //etc...
 }
+
+
 
 //GameData(ReplayMode)
 public class ReplayData
