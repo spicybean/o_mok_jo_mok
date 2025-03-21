@@ -3,30 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class RankingPanelController : MonoBehaviour
 {
-    /*
-    private int rank;
-    private int tier;
-    private int point;
-    private string userName;
-    private float winRate;
-    */
+    [SerializeField] private GameObject rankingPanel;
     public GameObject rankBoxPrefab;
     public Transform rankBoxParent;
     private List<UserAccountData> userList = new List<UserAccountData>();
    
 
-
     private void Start()
     {
-        userList = UserAccountData.GetUserAccountData();
+        //userList = UserAccountData.GetUserAccountData();
+        userList = DataManager.instance.userAccountList;
         Debug.Log("유저리스트 : " + userList.Count);
         CreateRankingTable();
     }
 
-
+    // lsit sort
     private void CreateRankingTable()
     {
 
@@ -34,7 +29,7 @@ public class RankingPanelController : MonoBehaviour
         {
             if (b.usertier != a.usertier)
             {
-                return b.usertier.CompareTo(a.usertier);
+                return a.usertier.CompareTo(b.usertier);
                
             }
             else if (b.points != a.points)
@@ -53,21 +48,22 @@ public class RankingPanelController : MonoBehaviour
         for (int i = 0; i < userList.Count; i++)
         {
             GameObject rankBox = Instantiate(rankBoxPrefab, rankBoxParent);
+
+            int rank = i + 1;
+
             rankBox.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = userList[i].usertier.ToString();
             rankBox.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = userList[i].points.ToString();
             rankBox.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = userList[i].GetWinRate().ToString();
             rankBox.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = userList[i].username;
+            rankBox.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = rank.ToString();
             Debug.Log("유저정보 : " + userList[i].usertier + " " + userList[i].points + " " + userList[i].GetWinRate() + " " + userList[i].username + " " );
         }
 
-       
-        //티어 먼저 앞으로 보내고 
-        //포인트로 정렬
-        //승률 보고
-        //랭킹박스에 정보 넣기
-        //랭킹박스에 순위 넣기
+    }
 
-
+    public void OnClickBackToMainSceneButton()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
 
