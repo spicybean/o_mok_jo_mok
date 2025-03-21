@@ -15,15 +15,14 @@ public class RankingPanelController : MonoBehaviour
     */
     public GameObject rankBoxPrefab;
     public Transform rankBoxParent;
-
-    UserAccountData userAccountData;
-
     private List<UserAccountData> userList = new List<UserAccountData>();
+   
 
 
     private void Start()
     {
-       
+        userList = UserAccountData.GetUserAccountData();
+        Debug.Log("유저리스트 : " + userList.Count);
         CreateRankingTable();
     }
 
