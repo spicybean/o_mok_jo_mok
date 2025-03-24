@@ -61,9 +61,10 @@ public class ReplayData
 {
     public string playerName;
     public string enemyName;
+    public string starterName;
     public int playerTier;
     public int enemyTier;
-    public int[,,] gamePlayData;
+    public OmokCell[] gamePlayData;
     public DateTime datetime;
     public bool bIsPlayerWin;
 }

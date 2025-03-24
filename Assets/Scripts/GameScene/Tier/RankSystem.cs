@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RankSystem : MonoBehaviour
+public class RankSystem
 {
     //PlayerPref 저장용
     //사용자 정보
@@ -10,8 +10,11 @@ public class RankSystem : MonoBehaviour
     public int omockTier = 18;
     //현재 승점
     public int currentPoint = 0;
-    
-    
+
+    public RankSystem()
+    {
+        ;
+    }
 
     public int GetRequiredPoints()
     {
