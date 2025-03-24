@@ -6,8 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class MainScenePanelController : MonoBehaviour
 {
+    // private CoinController coinController;
     [SerializeField] private GameObject[] panels;
-    
+
+    private void Awake()
+    {
+        // coinController = FindObjectOfType<CoinController>();
+    }
+
     private void Start()
     {
         CloseButton();
@@ -80,16 +86,20 @@ public class MainScenePanelController : MonoBehaviour
     public void OnClickGamePlayButton()
     {
         PanelControl(5);
+        CoinController.Instance.GamePlayCoinChanged();
     }
 
     public void OnClickReplayButton()
     {
+        CoinController.Instance.CoinTextChanged(-100);
         // Replay Scene 넘어가기
         SceneManager.LoadScene("ReplayScene");
     }
 
     public void OnClickGamePlaySingleAndMultySceneButton()
     {
+        CoinController.Instance.CoinTextChanged(-100);
+        CoinController.Instance.GamePlayCoinChanged();
         // Game Scene 넘어가기
         SceneManager.LoadScene("GameScene");
     }
@@ -110,6 +120,7 @@ public class MainScenePanelController : MonoBehaviour
     public void OnClickGetCoinButton()
     {
         PanelControl(8);
+        CoinController.Instance.CoinTextChanged(300);
     }
     
 
