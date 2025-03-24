@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,6 +19,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
                     _instance = obj.AddComponent<T>();
                 }
             }
+
             return _instance;
         }
     }
@@ -33,6 +30,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
         {
             _instance = this as T;
             DontDestroyOnLoad(gameObject);
+
             // 씬 전환시 호출되는 액션 메서드 할당
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -40,6 +38,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
         {
             Destroy(gameObject);
         }
+
     }
 
     protected abstract void OnSceneLoaded(Scene scene, LoadSceneMode mode);
