@@ -2802,6 +2802,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataPath: 
+  replayPath: 
+  accountPath: 
   currentReplaySlotNum: 0
 --- !u!4 &1470493442
 Transform:
