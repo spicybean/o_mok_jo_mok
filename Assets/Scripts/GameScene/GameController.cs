@@ -147,7 +147,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 RemoveForbiddenCells();
                 if (gameState == GameState.Single)
                 {
-                    (int, int) aiBestMove = AIController.AIBestMove(omokBoard, turn);
+                    (int, int) aiBestMove = AIController.AIBestMove(omokBoard, turn, index);
                     SetTurn(turn, aiBestMove.Item1 * 15 + aiBestMove.Item2);
                 }
                 break;
