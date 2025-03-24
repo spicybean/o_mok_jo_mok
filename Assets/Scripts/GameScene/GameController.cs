@@ -19,9 +19,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public GameState gameState;
     public RanjuRule ranjuRule;
     
+
     
     public RankPanelController rankPanelController;
     public GameObject[] omokButtons;
+
     public GameObject omokPrefab;
     public GameObject selectedCell;
     
@@ -191,6 +193,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         
     }
 
+
     void WinLose(GameObject player)
     {
         if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
@@ -207,6 +210,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         }
         
     }
+
     
    
     public void OnPointerClick(PointerEventData eventData)
@@ -236,3 +240,5 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         }
     }
 }
+
+
