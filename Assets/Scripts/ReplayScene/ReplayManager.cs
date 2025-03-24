@@ -36,6 +36,7 @@ public class ReplayManager : MonoBehaviour
         if (DataManager.instance.CheckReplayData())
         {
             DataManager.instance.LoadReplayData();
+            
         }
         else
         {

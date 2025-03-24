@@ -20,8 +20,8 @@ public class ReplayData
     public string enemyName;
     public int playerTier;
     public int enemyTier;
-    public int[,,] gamePlayData;
-    public DateTime datetime;
+    public int[] gamePlayData;
+    public DateTime dateTime;
     public bool bIsPlayerWin;
 }
 public class DataManager : MonoBehaviour
@@ -72,7 +72,7 @@ public class DataManager : MonoBehaviour
     #region Replay Save Load Functions
 
     /// <summary>
-    /// 세이브 파일 저장 경로 : %appdata%/localLow/DefaultCompany/O_mok_jo_mok/saveData{슬롯번호}.json
+    /// 세이브 파일 저장 경로 : %appdata%/localLow/DefaultCompany/O_mok_jo_mok/replayData{슬롯번호}.json
     /// </summary>
     
     //리플레이 데이터의 경로를 파일명에 따라 동기화 함
