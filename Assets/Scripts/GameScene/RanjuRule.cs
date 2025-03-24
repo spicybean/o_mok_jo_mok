@@ -5,31 +5,31 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RanjuRule : MonoBehaviour
+public class RanjuRule
 {
-    public GameObject[] objects;
-    public OmokCell.MarkerType[,] markers;
-    
-    
-    
-    public void StartRule()
+   
+    public GameController.playerType[,] Board;
+
+    public RanjuRule( GameController.playerType[,] board)
+    {
+        
+        this.Board = board;
+        StartRule(board);
+    }
+    private void StartRule(GameController.playerType[,] board)
     {
         //렌주룰용 보드 초기화
-        var totalcells = 15 * 15;
-        
-        objects = new GameObject[totalcells];
-        
-        markers = new OmokCell.MarkerType[15,15];
-        UpdateBoardState();
+        UpdateBoardState(board);
     }
-    public void UpdateBoardState()
+    public void UpdateBoardState(GameController.playerType[,] board)
     {
         //보드 업데이트
-        for (var i = 0; i < this.objects.Length; i++)
+        for (var i = 0; i < board.GetLength(0); i++)
         {
-            var obj = transform.GetChild(i).gameObject;
-            objects[i] = obj;
-            markers[i/15,i%15] = objects[i].GetComponent<OmokCell>().My_MarkerType;
+            for (var j = 0; j < board.GetLength(1); j++)
+            {
+                Board[i/15,i%15] = board[i, j];
+            }
             
         }
         
@@ -52,6 +52,7 @@ public class RanjuRule : MonoBehaviour
         if (CheckJangMok(index))
         {
             Debug.Log("RanjuJang");
+            
             return true;
         }
         return false;
@@ -98,9 +99,9 @@ public class RanjuRule : MonoBehaviour
                 if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
                 {
                     pattern += j==0 ? '1' : 
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
                         '0' : 
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.Black? "1" : "2";
                 }
                 
             }
@@ -150,9 +151,9 @@ public class RanjuRule : MonoBehaviour
                 if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
                 {
                     pattern += j==0 ? '1' : 
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
                         '0'  :
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.Black? "1" : "2";
                 }
             }
             for (int k = 0; k < patternedFour.Length; k++)
@@ -181,7 +182,9 @@ public class RanjuRule : MonoBehaviour
         }
         return checkFour;
     }
-    public bool CheckFiveInAllDirections(int index,OmokCell.MarkerType marker)
+
+    
+    public bool CheckFiveInAllDirections(int index,GameController.playerType marker)
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
         for (int i = 0; i < directions.Length; i++)
@@ -193,9 +196,12 @@ public class RanjuRule : MonoBehaviour
         }
         return false;
     }
-    bool CheckFive(int index, (int, int) direction, OmokCell.MarkerType marker )
+    bool CheckFive(int index, (int, int) direction, GameController.playerType marker )
     {
-        string[] patternedFive = new string[] { "0111110","0111112","2111110","2111112" };
+        string[] patternedFive = new string[] { "0111110","2111110","2111112","1111120",
+                                                "0211111","0011111","1111100","2211111",
+                                                "1111122","1111102","2011111" };
+        
         string pattern = "";
         for (int i = -5; i < 1; i++)
         {
@@ -204,11 +210,8 @@ public class RanjuRule : MonoBehaviour
                 if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
                 {
                     pattern += j==0 ? '1' : 
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
-                            '0' : 
-                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.PlaceMark ? 
-                                '0' :
-                                markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
+                            '0' : Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
                 }
                 
             }
@@ -245,16 +248,14 @@ public class RanjuRule : MonoBehaviour
         string pattern = "";
         for (int i = -4; i < 1; i++)
         {
-            for (int j = i; j < i+5; j++)
+            for (int j = i; j < i+6; j++)
             {
                 if (!CheckOutOfIndex(index / 15 + j * direction.Item1, index % 15 + j * direction.Item2))
                 {
                     pattern += j==0 ? '1' : 
-                        markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.None ?
-                            '0' : 
-                            markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.PlaceMark ? 
-                                '0' :
-                                markers[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == OmokCell.MarkerType.Black? "1" : "2";
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
+                            '0' :
+                            Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.Black? "1" : "2";
                 }
             }
             if (pattern.Equals(patternedSix))
@@ -264,6 +265,28 @@ public class RanjuRule : MonoBehaviour
             
             pattern = "";
         }
+        return false;
+    }
+
+    public bool IsDraw()
+    {
+        int maxIndex = Board.GetLength(0) * Board.GetLength(1);
+        int cellCount = 0;
+        for (int i = 0; i < Board.GetLength(0); i++)
+        {
+            for (int j = 0; j < Board.GetLength(1); j++)
+            {
+                if (Board[i, j] == GameController.playerType.None)
+                {
+                    return false;
+                }
+                else
+                {
+                    cellCount++;
+                }
+            }
+        }
+        
         return false;
     }
 }

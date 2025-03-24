@@ -14,8 +14,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public playerType[,] omokBoard;
     public playerType turn;
     
+    public enum GameState{Single, Double, Multi}
+    
+    public GameState gameState;
     public RanjuRule ranjuRule;
-    ReplayData replayData = new ReplayData();
+    
     
     public RankPanelController rankPanelController;
     public GameObject[] omokButtons;
@@ -25,24 +28,36 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public DateTime startTime;
     private int totalomokCells = 15 * 15;
     private int turncounter = 0;
+
+    public int playerLife = 3;
+    public int enemyLife = 3;
     
     // Start is called before the first frame update
     void Start()
     {
-        replayData.gamePlayData = new OmokCell[totalomokCells];
+        DataManager.instance.currentReplay.gamePlayData = new OmokCell[totalomokCells];
         startTime = DateTime.Now;
         SetOmokBoard();
-        ranjuRule = gameObject.GetComponent<RanjuRule>();
-        ranjuRule.StartRule();
-        turn = playerType.Black;
+        ranjuRule = new RanjuRule(omokBoard);
         
+        turn = playerType.Black;
+        gameState = GameState.Single;
     }
-
     void SelectStone()
     {
         //TODO: 돌 색 고르기
-        
     }
+
+    // public void Update()
+    // {
+    //     for (int i = 0; i < omokButtons.Length; i++)
+    //     {
+    //         if (ranjuRule.Board[i/15,i%15] == playerType.Black)
+    //         {
+    //             Debug.Log($"{i/15},{i%15} black");
+    //         }
+    //     }
+    // }
     void SetOmokBoard()
     {
         omokButtons = new GameObject[totalomokCells];
@@ -60,7 +75,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     public void RemoveForbiddenCells()
     {
-        ranjuRule.UpdateBoardState();
+        ranjuRule.UpdateBoardState(omokBoard);
         for (int i = 0; i < omokButtons.Length; i++)
         {
             if (omokButtons[i].GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Forbidden)
@@ -71,11 +86,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 
             }
         }
-        ranjuRule.UpdateBoardState();
+        ranjuRule.UpdateBoardState(omokBoard);
     }
     public void SetForbiddenCell()
     {
-        ranjuRule.UpdateBoardState();
+        ranjuRule.UpdateBoardState(omokBoard);
         for (int i = 0; i < omokButtons.Length; i++)
         {
             if (omokButtons[i].GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.None)
@@ -105,7 +120,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 }
             }
         }
-        ranjuRule.UpdateBoardState();
+        ranjuRule.UpdateBoardState(omokBoard);
         
     }
     
@@ -124,10 +139,15 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 //현재 셀에 현재 턴 바둑알 둔다
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
-                replayData.gamePlayData[turncounter] = omokButtons[index].GetComponent<OmokCell>();
+                DataManager.instance.currentReplay.gamePlayData[turncounter] = omokButtons[index].GetComponent<OmokCell>();
                 //턴 변경
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 RemoveForbiddenCells();
+                if (gameState == GameState.Single)
+                {
+                    (int, int) aiBestMove = AIController.AIBestMove(omokBoard, turn);
+                    SetTurn(turn, aiBestMove.Item1 * 15 + aiBestMove.Item2);
+                }
                 break;
             case playerType.White:
                 if (omokBoard[index / 15, index % 15] != playerType.None) return;
@@ -135,14 +155,14 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
-                replayData.gamePlayData[turncounter] = omokButtons[index].GetComponent<OmokCell>();
+                DataManager.instance.currentReplay.gamePlayData[turncounter] = omokButtons[index].GetComponent<OmokCell>();
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 SetForbiddenCell();
                 SetForbiddenCell();
                 break;
         }
         
-        if (ranjuRule.CheckFiveInAllDirections(index,omokButtons[index].GetComponent<OmokCell>().My_MarkerType))
+        if (ranjuRule.CheckFiveInAllDirections(index,omokBoard[index / 15, index % 15]))
         {
             
             
