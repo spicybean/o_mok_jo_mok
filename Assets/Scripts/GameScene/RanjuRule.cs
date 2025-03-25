@@ -15,7 +15,6 @@ public class RanjuRule
     {
         
         this.Board = board;
-        StartRule(board);
         Xrange = Board.GetLength(0);
         Yrange = Board.GetLength(1) ;
     }
@@ -36,6 +35,21 @@ public class RanjuRule
             
         }
         
+    }
+
+    public bool CheckWin(GameController.playerType player)
+    {
+        for (var i = 0; i < Board.GetLength(0); i++)
+        {
+            for (var j = 0; j < Board.GetLength(1); j++)
+            {
+                if (CheckFiveInAllDirections(i * 15 + j, player))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     public bool RanJu(int index)
     {
@@ -70,8 +84,7 @@ public class RanjuRule
 
         return false;
     }
-
-   
+    
     bool CheckDoubleThree(int index)
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
@@ -91,7 +104,7 @@ public class RanjuRule
         }
         return false;
     }
-    bool CheckThree(int index, (int, int) direction)
+    bool CheckThree(int index, (int, int) direction, GameController.playerType marker = GameController.playerType.Black)
     {
         string[] patternedThree = new string[] { "01110","011010","010110" };
         string pattern = "";
@@ -104,7 +117,7 @@ public class RanjuRule
                     pattern += j==0 ? '1' : 
                         Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
                         '0' : 
-                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.Black? "1" : "2";
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
                 }
                 
             }
@@ -120,17 +133,17 @@ public class RanjuRule
         }
         return false;
     }
-    bool CheckDoubleFour(int index)
+    bool CheckDoubleFour(int index, GameController.playerType marker = GameController.playerType.Black)
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (1, -1)};
         int CountFour = 0;
         for (int i = 0; i < directions.Length; i++)
         {
-            if (CheckFour(index, directions[i]) == 1)
+            if (CheckFour(index, directions[i],marker) == 1)
             {
                 CountFour++;
             }
-            else if (CheckFour(index, directions[i]) > 1)
+            else if (CheckFour(index, directions[i],marker) > 1)
             {
                 return true;
             }
@@ -141,7 +154,7 @@ public class RanjuRule
         }
         return false;
     }
-    int CheckFour(int index, (int,int) direction)
+    int CheckFour(int index, (int,int) direction,GameController.playerType marker)
     {
         string[] patternedFour = new string[] { "01111","11110","11011","10111","11101" };
         string pattern = "";
@@ -156,7 +169,7 @@ public class RanjuRule
                     pattern += j==0 ? '1' : 
                         Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
                         '0'  :
-                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.Black? "1" : "2";
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
                 }
             }
             for (int k = 0; k < patternedFour.Length; k++)
@@ -186,6 +199,34 @@ public class RanjuRule
         return checkFour;
     }
 
+    public bool CheckFourInAllDirections(int index, GameController.playerType marker)
+    {
+        (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (1, -1)};
+        
+        for (int i = 0; i < directions.Length; i++)
+        {
+            
+            if (CheckFour(index, directions[i], marker) != 0)  
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public bool CheckThreeInAllDirections(int index, GameController.playerType marker)
+    { 
+        (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (1, -1)};
+        for (int i = 0; i < directions.Length; i++)
+        {
+            if (CheckThree(index, directions[i], marker))
+            {
+                return true;
+            }
+        }
+        return false;
+        
+    }
     
     public bool CheckFiveInAllDirections(int index,GameController.playerType marker)
     {
@@ -215,8 +256,7 @@ public class RanjuRule
             {
                 if (!CheckOutOfIndex(Y + j * direction.Item1, X + j * direction.Item2))
                 {
-                    pattern += j==0 ? '1' : 
-                        Board[Y + j * direction.Item1,X + j * direction.Item2] == GameController.playerType.None ?
+                    pattern += Board[Y + j * direction.Item1,X + j * direction.Item2] == GameController.playerType.None ?
                             '0' : Board[Y + j * direction.Item1,X + j * direction.Item2] == marker? "1" : "2";
                 }
                 
