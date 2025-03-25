@@ -72,7 +72,7 @@ public class ReplayData
     public string starterName;
     public int playerTier;
     public int enemyTier;
-    public OmokCell[] gamePlayData;
+    public int[] gamePlayData;
     public DateTime datetime;
 }
 

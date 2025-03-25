@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-        DataManager.instance.currentReplay.gamePlayData = new OmokCell[totalomokCells];
+        DataManager.instance.currentReplay.gamePlayData = new int[totalomokCells];
         DataManager.instance.currentReplay.datetime = DateTime.Now;
         SetOmokBoard();
         ranjuRule = new RanjuRule(omokBoard);
@@ -210,7 +210,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         ReplayData tempReplayData = DataManager.instance.currentReplay;
         for (int i = Static._maxSaveCount; i >= 1; i--)
         {
-            Debug.Log("i : " + i);
             DataManager.instance.currentReplaySlotNum = i;
             if (DataManager.instance.CheckReplayData())
             {
@@ -224,7 +223,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 {
                     for (int j = i; j >= 1; j--)
                     {
-                        Debug.Log("j : " + i);
                         DataManager.instance.currentReplaySlotNum = j;
                         // 1번 슬롯의 기존 세이브 지우고 새로운 세이브 추가
                         if (j == 1)
