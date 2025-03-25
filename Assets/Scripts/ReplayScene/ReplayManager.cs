@@ -2,26 +2,65 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ReplayManager : MonoBehaviour
 {
-    [SerializeField] private static int _maxSaveCount = 10;
-    ReplayData[] gameDataList = new ReplayData[_maxSaveCount];
+    [SerializeField] private ReplayScenePanelController replayScenePanelController;
+    [SerializeField] private GameObject playerInform;
+    [SerializeField] private GameObject enemyInform;
+    [SerializeField] private GameObject slotArray;
+    [SerializeField] private GameObject slotPrefab;
+    
+    ReplayData[] replayDataList = new ReplayData[Static._maxSaveCount];//리플레이가 모두 저장된 배열
+    private ReplayData currentReplayData;                       //리플레이 할 데이터 저장 변수
+    
     void Start()
     {
-        for (int i = 1; i <= _maxSaveCount; i++)
+        for (int i = 1; i <= Static._maxSaveCount; i++)
         {
+            GameObject slot = Instantiate(slotPrefab, slotArray.transform);
+            slot.name = "[Button] Replay " + i;
             DataManager.instance.currentReplaySlotNum = i;
             if (DataManager.instance.CheckReplayData())
             {
-                gameDataList[i] = DataManager.instance.LoadReplayData();
+                slot.GetComponent<Button>().onClick.AddListener(() => OnSlotClicked());
+                replayDataList[i-1] = DataManager.instance.LoadReplayData();
+                slot.transform.GetChild(0).GetComponent<TMP_Text>().text =
+                    replayDataList[i - 1].datetime.ToString("yyyy/MM/dd HH:mm:ss");
+                slot.transform.GetChild(1).GetComponent<TMP_Text>().text =
+                    replayDataList[i - 1].playerTier + " " + replayDataList[i - 1].playerName;
+                slot.transform.GetChild(2).GetComponent<TMP_Text>().text =
+                    replayDataList[i - 1].enemyTier + " " +replayDataList[i - 1].enemyName;
+                if (replayDataList[i - 1].winLoseType == WinLoseType.Win)
+                {
+                    slot.transform.GetChild(3).GetComponent<Image>().sprite = 
+                        Resources.Load<Sprite>("Images/Win_Icon");
+                    slot.transform.GetChild(4).GetComponent<Image>().sprite =
+                        Resources.Load<Sprite>("Images/Lose_Icon");
+                }
+                else if (replayDataList[i - 1].winLoseType == WinLoseType.Lose)
+                {
+                    slot.transform.GetChild(3).GetComponent<Image>().sprite = 
+                        Resources.Load<Sprite>("Images/Lose_Icon");
+                    slot.transform.GetChild(4).GetComponent<Image>().sprite =
+                        Resources.Load<Sprite>("Images/Win_Icon");
+                }
+                else
+                {
+                    slot.transform.GetChild(3).GetComponent<Image>().sprite = 
+                        Resources.Load<Sprite>("Images/Draw_Icon");
+                    slot.transform.GetChild(4).GetComponent<Image>().sprite =
+                        Resources.Load<Sprite>("Images/Draw_Icon");
+                }
             }
             else
             {
-                Debug.Log("비어있음");
+                slot.transform.GetChild(5).gameObject.SetActive(true);
             }
         }
 
@@ -35,14 +74,33 @@ public class ReplayManager : MonoBehaviour
             int.Parse(EventSystem.current.currentSelectedGameObject.name.Split(' ')[2]);
         if (DataManager.instance.CheckReplayData())
         {
-            DataManager.instance.LoadReplayData();
-            
+            currentReplayData = replayDataList[DataManager.instance.currentReplaySlotNum-1];
+            replayScenePanelController.OnClickReplaySceneButton();
+            playerInform.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = 
+                currentReplayData.playerImage;
+            enemyInform.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = 
+                currentReplayData.enemyImage;
+            playerInform.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = 
+                currentReplayData.playerTier + " " + currentReplayData.playerName;
+            enemyInform.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = 
+                currentReplayData.enemyTier + " " + currentReplayData.enemyName;
         }
-        else
-        {
-            //디버깅용 코드(원래는 세이브 데이터가 없으면 클릭되지 않음)
-            DataManager.instance.currentReplay = new ReplayData();
-            DataManager.instance.SaveReplayData();
-        }
+    }
+
+    public void OnClickedFirstButton()
+    {
+        
+    }
+    public void OnClickedEndButton()
+    {
+        
+    }
+    public void OnClickedBeforeButton()
+    {
+        
+    }
+    public void OnClickedNextButton()
+    {
+        
     }
 }

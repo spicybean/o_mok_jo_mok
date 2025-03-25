@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         DataManager.instance.currentReplay.gamePlayData = new OmokCell[totalomokCells];
-        startTime = DateTime.Now;
+        DataManager.instance.currentReplay.datetime = DateTime.Now;
         SetOmokBoard();
         ranjuRule = new RanjuRule(omokBoard);
         
@@ -145,11 +145,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 //턴 변경
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 RemoveForbiddenCells();
-                if (gameState == GameState.Single)
+                /*if (gameState == GameState.Single)
                 {
                     (int, int) aiBestMove = AIController.AIBestMove(omokBoard, turn);
                     SetTurn(turn, aiBestMove.Item1 * 15 + aiBestMove.Item2);
-                }
+                }*/
                 break;
             case playerType.White:
                 if (omokBoard[index / 15, index % 15] != playerType.None) return;
@@ -166,12 +166,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         
         if (ranjuRule.CheckFiveInAllDirections(index,omokBoard[index / 15, index % 15]))
         {
-            
-            
-            DataManager.instance.SaveReplayData();
             //승패 알려주는 코드
             //대국이 끝남
-            WinLose(omokButtons[index]);
+            DataManager.instance.currentReplay.winLoseType = WinLose(omokButtons[index]);
+            SaveReplay();
         }
         else if (turncounter >= totalomokCells - 10)
         {
@@ -189,26 +187,87 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 rankPanelController.ShowRankPanel();
                 rankPanelController.DrawPointsUI();
             }
+
+            DataManager.instance.currentReplay.winLoseType =  WinLoseType.Draw;
+            SaveReplay();
         }
-        
+    }
+
+    private void SaveReplay()
+    {
+        //저장 부분
+        ReplayData tempReplayData = DataManager.instance.currentReplay;
+        for (int i = Static._maxSaveCount; i >= 1; i--)
+        {
+            Debug.Log("i : " + i);
+            DataManager.instance.currentReplaySlotNum = i;
+            if (DataManager.instance.CheckReplayData())
+            {
+                //최대갯수 도달 시 가장 오래된 세이브 파일 삭제
+                if (i == Static._maxSaveCount)
+                {
+                    DataManager.instance.DeleteReplayData();
+                }
+                //최신순 정렬
+                else
+                {
+                    for (int j = i; j >= 1; j--)
+                    {
+                        Debug.Log("j : " + i);
+                        DataManager.instance.currentReplaySlotNum = j;
+                        // 1번 슬롯의 기존 세이브 지우고 새로운 세이브 추가
+                        if (j == 1)
+                        {
+                            DataManager.instance.DeleteReplayData();
+                            DataManager.instance.currentReplay = tempReplayData;
+                            DataManager.instance.currentReplaySlotNum = 1;
+                            DataManager.instance.SaveReplayData();
+                            break;
+                        }
+                        //파일명 다음슬롯으로 이름 변경
+                        else
+                        {
+                            DataManager.instance.currentReplaySlotNum = j - 1;
+                            DataManager.instance.LoadReplayData();
+                            DataManager.instance.currentReplaySlotNum = j;
+                            DataManager.instance.SaveReplayData();   
+                        }
+                    }
+                }
+                break;
+            }
+            else
+            {
+                if (i == 1)
+                {
+                    DataManager.instance.SaveReplayData();
+                    break;
+                }
+            }
+        }
     }
 
 
-    void WinLose(GameObject player)
+    WinLoseType WinLose(GameObject player)
     {
         if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.GetPointsUI();
             rankPanelController.rankSystem.AddPoints();
+            return WinLoseType.Win;
         }
         else if(player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.White)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.LosePointsUI();
             rankPanelController.rankSystem.LosePoints();
+            return WinLoseType.Lose;
         }
-        
+        else
+        {
+            return WinLoseType.Draw;
+        }
     }
 
     

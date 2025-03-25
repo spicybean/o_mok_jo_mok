@@ -54,20 +54,28 @@ public class UserAccountData
     //etc...
 }
 
-
+public enum WinLoseType
+{
+    Win,
+    Lose,
+    Draw
+}
 
 //GameData(ReplayMode)
 public class ReplayData
 {
+    public WinLoseType winLoseType;
     public string playerName;
     public string enemyName;
+    public Sprite playerImage;
+    public Sprite enemyImage;
     public string starterName;
     public int playerTier;
     public int enemyTier;
     public OmokCell[] gamePlayData;
     public DateTime datetime;
-    public bool bIsPlayerWin;
 }
+
 public class DataManager : MonoBehaviour
 {
     //Singleton(모든 씬에서 접근 가능)
@@ -137,6 +145,7 @@ public class DataManager : MonoBehaviour
     private void RefreshReplaySavePath()
     {
         replayPath = dataPath + "/replayData"+ currentReplaySlotNum + ".json";
+        //Debug.Log(replayPath);
     }
     
     //리플레이 데이터가 ReplayPath에 존재하는지 확인
@@ -174,6 +183,11 @@ public class DataManager : MonoBehaviour
     {
         currentReplaySlotNum = -1;
         currentReplay = null ; 
+    }
+
+    public void DeleteReplayData()
+    {
+        File.Delete(replayPath);
     }
     #endregion
 }
