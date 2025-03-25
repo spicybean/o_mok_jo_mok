@@ -6,119 +6,113 @@ using UnityEngine;
 public static class AIController
 {
     
-    public static (int,int) AIBestMove(GameController.playerType[,] board, GameController.playerType aiType, int playerIndex)
+    public static (int,int) AIBestMove(GameController.playerType[,] board, GameController.playerType aiType)
     {
         RanjuRule ranjuRule = new RanjuRule(board);
-        float value = float.MinValue;
-        float beta = float.MaxValue;
-        (int,int) currentPlayerMove = (playerIndex/15, playerIndex%15);
-        int XrangeLeft = currentPlayerMove.Item2 - 2 >= 0 ? currentPlayerMove.Item2 - 2 : 0;
-        int XrangeRight = currentPlayerMove.Item2 + 2 <= 14 ? currentPlayerMove.Item2 + 2 : 14;
-        int YrangeTop = currentPlayerMove.Item1 - 2 >= 0 ? currentPlayerMove.Item1 - 2 : 0;
-        int YrangeBottom = currentPlayerMove.Item1 + 2 <= 14 ? currentPlayerMove.Item1 + 2 : 14;
-        (int,int) bestMove = (0,0);
-        //minMax alphabetaStart
-        float prevValue = value;
-        for (int i = YrangeTop; i < YrangeBottom; i++)
+        
+        float maxValue = float.MinValue;
+        (int,int) bestMove =(0,0);
+        for (int i = 0; i < board.GetLength(0); i++)
         {
-            for (int j = XrangeLeft; j < XrangeRight; j++)
+            for (int j = 0; j < board.GetLength(1); j++)
             {
                 if (board[i, j] == GameController.playerType.None)
                 {
                     board[i, j] = aiType;
-                    value = Math.Max(value, AlphaBetaMove(value, beta,0,(i,j),ranjuRule,board,aiType,playerIndex,false));
-                    board[i, j] = GameController.playerType.None;
-                    if (value >= prevValue)
+                    float value = MinMaxMove(board, 0, false, aiType);
+                    board[i,j] = GameController.playerType.None;
+                    if (value > maxValue)
                     {
+                        maxValue = value;
                         bestMove = (i, j);
-                        prevValue = value;
                     }
                 }
-              
-            } 
+            }
         }
+        
+        
         return bestMove;
     }
 
-    private static float AlphaBetaMove(float alpha, float beta,int depth,(int,int) index,RanjuRule ranju, GameController.playerType[,] board, GameController.playerType aiType,int playerIndex , bool Maximizing)
+    private static float MinMaxMove(GameController.playerType[,] board, int depth, bool Maximizing, GameController.playerType aiType)
     {
-        ranju.UpdateBoardState(board);
-        GameController.playerType playerType = aiType == GameController.playerType.Black ? GameController.playerType.Black : GameController.playerType.White;
-        (int,int) currentPlayerMove = (playerIndex/15, playerIndex%15);
-        int XrangeLeft = currentPlayerMove.Item2 - 2 >= 0 ? currentPlayerMove.Item2 - 2 : 0;
-        int XrangeRight = currentPlayerMove.Item2 + 2 <= 14 ? currentPlayerMove.Item2 + 2 : 14;
-        int YrangeTop = currentPlayerMove.Item1 - 2 >= 0 ? currentPlayerMove.Item1 - 2 : 0;
-        int YrangeBottom = currentPlayerMove.Item1 + 2 <= 14 ? currentPlayerMove.Item1 + 2 : 14;
-        if (ranju.CheckFiveInAllDirections(index.Item1 * board.GetLength(0)+index.Item2, aiType))
+        GameController.playerType[,] boardClone = board;
+        
+        GameController.playerType playerType = aiType != GameController.playerType.Black ? GameController.playerType.Black : GameController.playerType.White;
+
+        //ai가 이겼을때
+        if (CheckWin(board,aiType))
+        {
+            return 10 - depth;
+        }
+        
+        //player가 이겼을때
+        if (CheckWin(board,playerType))
         {
             return -10 + depth;
         }
-
-        if (ranju.CheckFiveInAllDirections(index.Item1 * board.GetLength(0)+index.Item2, playerType))
-        {
-            return  10 - depth;
-        }
-        if (ranju.IsDraw())
+        if (depth == 6)
         {
             return 0;
         }
 
-        
         if (Maximizing)
         {
-            float value = float.MinValue;
-            for (int i = YrangeTop; i < YrangeBottom; i++)
+            float maxValue = float.MinValue;
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                for (int j = XrangeLeft; j < XrangeRight; j++)
+                for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (board[i, j] != GameController.playerType.None) continue;
-                    
-                    board[i, j] = aiType;
-                    value =  Mathf.Max(value,AlphaBetaMove(alpha, beta, depth+1
-                        ,(i,j),ranju ,board,aiType,playerIndex ,false));
-                    board[i, j] = GameController.playerType.None;
-                    alpha = Mathf.Max(alpha,value);
-                    if (alpha >= beta)
+                    if (board[i, j] == GameController.playerType.None)
                     {
-                        break;
+                        board[i, j] = aiType;
+                        float value = MinMaxMove(board, depth + 1, false, aiType);
+                        board[i,j] = GameController.playerType.None;
+                        maxValue = Mathf.Max(maxValue, value);
                     }
                 }
-                if (alpha >= beta)
-                {
-                    break;
-                }
             }
-            return value;
+            return maxValue;
         }
         else
         {
-            float value = float.MaxValue;
-            for (int i = YrangeTop; i < YrangeBottom; i++)
+            float minValue = float.MaxValue;
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                for (int j = XrangeLeft; j < XrangeRight; j++)
+                for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (board[i, j] != GameController.playerType.None) continue;
-                    
-                    board[i, j] = playerType;
-                    value = Mathf.Min(value,AlphaBetaMove( alpha, beta,depth +1 
-                        ,(i,j),ranju,board, aiType,playerIndex ,true)) ;
-                    board[i, j] = GameController.playerType.None;
-                    beta = Mathf.Min(beta,value);
-                    if (beta <= alpha)
+                    if (board[i, j] == GameController.playerType.None)
                     {
-                        break;
+                        board[i, j] = playerType;
+                        float value = MinMaxMove(board, depth + 1, true, aiType);
+                        board[i,j] = GameController.playerType.None;
+                        minValue = Mathf.Min(minValue, value);
                     }
                 }
-                if (beta <= alpha)
-                {
-                    break;
-                }
             }
-            return value;
+            return minValue;
         }
         
-        
-        
     }
-    
+
+    private static bool CheckWin(GameController.playerType[,] board, GameController.playerType player)
+    {
+        RanjuRule ranjuRule = new RanjuRule(board);
+        if (ranjuRule.CheckWin(player))
+        {
+            return true;
+        }
+        return false;
+    }
+    private static bool isTied(int rowMin, int rowMax, int colMin, int colMax, GameController.playerType[,] board)
+    {
+        for (int i = rowMin; i <= rowMax; i++)
+        {
+            for (int j = colMin; j <= colMax; j++)
+            {
+                if (board[i, j] == GameController.playerType.None) return false;
+            }
+        }
+        return true;
+    }
 }
