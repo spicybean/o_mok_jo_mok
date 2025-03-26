@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 
 public class GameController : MonoBehaviour, IPointerClickHandler
@@ -38,17 +38,31 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         DataManager.instance.currentReplay.gamePlayData = new int[totalomokCells];
-        DataManager.instance.currentReplay.datetime = DateTime.Now;
+        Array.Fill(DataManager.instance.currentReplay.gamePlayData, -1);
+        DataManager.instance.currentReplay.dateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
         SetOmokBoard();
         ranjuRule = new RanjuRule(omokBoard);
         
         turn = playerType.Black;
         gameState = GameState.Single;
+        if (gameState == GameState.Single)
+        {
+            // ToDo
+            //playerName, playerTier, enemyTier, playerprofile, enemyprofile 연동 
+            DataManager.instance.currentReplay.enemyName = "AI봇";
+        }
+        else if (gameState == GameState.Double)
+        {
+            // ToDo
+            // playerTier, enemyTier, playerprofile, enemyprofile 연동 
+            DataManager.instance.currentReplay.playerName = "플레이어 1";
+            DataManager.instance.currentReplay.enemyName = "플레이어 2";
+        }
     }
 
     void Update()
     {
-        if (gameState == GameState.Single)
+        /*if (gameState == GameState.Single)
         {
             if (turn == playerType.White)
             {
@@ -56,7 +70,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 SetTurn(turn, aiBestMove.Item1 * 15 + aiBestMove.Item2);
             }
             
-        }
+        }*/
     }
     void SelectStone()
     {
@@ -154,7 +168,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 //현재 셀에 현재 턴 바둑알 둔다
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
-                DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
+                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                 //턴 변경
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 RemoveForbiddenCells();
@@ -166,7 +180,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
-                DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
+                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 SetForbiddenCell();
                 SetForbiddenCell();
@@ -217,29 +231,27 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 if (i == Static._maxSaveCount)
                 {
                     DataManager.instance.DeleteReplayData();
+                    continue;
                 }
                 //최신순 정렬
                 else
                 {
                     for (int j = i; j >= 1; j--)
                     {
+                        //파일명 다음슬롯으로 이름 변경
                         DataManager.instance.currentReplaySlotNum = j;
+                        DataManager.instance.LoadReplayData();
+                        DataManager.instance.currentReplaySlotNum = j + 1;
+                        DataManager.instance.SaveReplayData();
+                        
                         // 1번 슬롯의 기존 세이브 지우고 새로운 세이브 추가
                         if (j == 1)
                         {
+                            DataManager.instance.currentReplaySlotNum = j;
                             DataManager.instance.DeleteReplayData();
                             DataManager.instance.currentReplay = tempReplayData;
-                            DataManager.instance.currentReplaySlotNum = 1;
                             DataManager.instance.SaveReplayData();
                             break;
-                        }
-                        //파일명 다음슬롯으로 이름 변경
-                        else
-                        {
-                            DataManager.instance.currentReplaySlotNum = j - 1;
-                            DataManager.instance.LoadReplayData();
-                            DataManager.instance.currentReplaySlotNum = j;
-                            DataManager.instance.SaveReplayData();   
                         }
                     }
                 }

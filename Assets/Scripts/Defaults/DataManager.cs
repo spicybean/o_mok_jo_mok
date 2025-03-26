@@ -73,7 +73,7 @@ public class ReplayData
     public int playerTier;
     public int enemyTier;
     public int[] gamePlayData;
-    public DateTime datetime;
+    public string dateTime;
 }
 
 public class DataManager : MonoBehaviour
@@ -145,7 +145,6 @@ public class DataManager : MonoBehaviour
     private void RefreshReplaySavePath()
     {
         replayPath = dataPath + "/replayData"+ currentReplaySlotNum + ".json";
-        //Debug.Log(replayPath);
     }
     
     //리플레이 데이터가 ReplayPath에 존재하는지 확인
@@ -175,7 +174,8 @@ public class DataManager : MonoBehaviour
     {
         RefreshReplaySavePath();
         string data = File.ReadAllText(replayPath);
-        return JsonUtility.FromJson<ReplayData>(data);
+        currentReplay = JsonUtility.FromJson<ReplayData>(data);
+        return currentReplay;
     }
 
     //리플레이관련 저장 정보를 DataManager에서 초기화 함
@@ -187,6 +187,7 @@ public class DataManager : MonoBehaviour
 
     public void DeleteReplayData()
     {
+        RefreshReplaySavePath();
         File.Delete(replayPath);
     }
     #endregion
