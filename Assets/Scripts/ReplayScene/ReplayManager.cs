@@ -175,7 +175,6 @@ public class ReplayManager : MonoBehaviour
         for (turnCounter = 0; turnCounter <= lastTurnCounter; turnCounter++)
         {
             PlaceOmok(currentReplayData.gamePlayData[turnCounter]);
-            Debug.Log(turnCounter);
             if (turnCounter == lastTurnCounter) break;
         }
     }
@@ -190,6 +189,5 @@ public class ReplayManager : MonoBehaviour
         if (lastTurnCounter == turnCounter) return;
         turnCounter++;
         PlaceOmok(currentReplayData.gamePlayData[turnCounter]);
-        Debug.Log(turnCounter);
     }
 }
