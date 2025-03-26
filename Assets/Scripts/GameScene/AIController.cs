@@ -264,60 +264,88 @@ public static class AIController
 {
     private const int TIME_LIMIT_MS = 10000;
     // 평가 함수: 점수를 계산하여 게임 상태를 평가
-    public static int Evaluate(GameController.playerType[,] board, GameController.playerType player)
+ public static int Evaluate(GameController.playerType[,] board, GameController.playerType player)
+{
+    int score = 0;
+
+    RanjuRule ruleChecker = new RanjuRule(board);
+
+    // 승리 조건에 대한 점수
+    if (ruleChecker.CheckWin(GameController.playerType.Black)) 
+        score += player == GameController.playerType.Black ? 1000 : -1000;
+
+    if (ruleChecker.CheckWin(GameController.playerType.White)) 
+        score += player == GameController.playerType.White ? 1000 : -1000;
+
+    // 상대방 돌을 막는 점수 계산
+    GameController.playerType opponent = player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
+    var directions = new (int, int)[]
     {
-        
-        int score = 0;
+        (-1, 0), (1, 0), (0, -1), (0, 1), // 상하좌우
+        (-1, -1), (-1, 1), (1, -1), (1, 1) // 대각선
+    };
 
-        RanjuRule ruleChecker = new RanjuRule(board);
-
-        // 승리 조건에 대한 점수
-        if (ruleChecker.CheckWin(GameController.playerType.Black)) 
-            score += player == GameController.playerType.Black ? 1000 : -1000;
-
-        if (ruleChecker.CheckWin(GameController.playerType.White)) 
-            score += player == GameController.playerType.White ? 1000 : -1000;
-
-        // 특정 바둑알 개수에 가중치 부여
-        var directions = new (int, int)[]
+    for (int i = 0; i < board.GetLength(0); i++)
+    {
+        for (int j = 0; j < board.GetLength(1); j++)
         {
-            (-1, 0), (1, 0), (0, -1), (0, 1), // 상하좌우
-            (-1, -1), (-1, 1), (1, -1), (1, 1) // 대각선
-        };
-
-        for (int i = 0; i < board.GetLength(0); i++)
-        {
-            for (int j = 0; j < board.GetLength(1); j++)
+            if (board[i, j] == player || board[i, j] == opponent)
             {
-                if (board[i, j] == player)
+                foreach (var direction in directions)
                 {
-                    foreach (var direction in directions)
+                    int connectedCount = 1;
+                    bool openStart = false; // 연결 시작이 열려 있는지 확인
+                    bool openEnd = false;  // 연결 끝이 열려 있는지 확인
+
+                    int ni = i + direction.Item1;
+                    int nj = j + direction.Item2;
+
+                    // 연결된 상대방 돌 개수 계산
+                    while (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
+                           && board[ni, nj] == opponent)
                     {
-                        int connectedCount = 1;
-                        int ni = i + direction.Item1;
-                        int nj = j + direction.Item2;
+                        connectedCount++;
+                        ni += direction.Item1;
+                        nj += direction.Item2;
+                    }
 
-                        // 같은 플레이어의 돌 개수 계산
-                        while (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1) 
-                               && board[ni, nj] == player)
-                        {
-                            connectedCount++;
-                            ni += direction.Item1;
-                            nj += direction.Item2;
-                        }
+                    // 연결 시작이 비어 있는지 확인
+                    int si = i - direction.Item1;
+                    int sj = j - direction.Item2;
+                    if (si >= 0 && si < board.GetLength(0) && sj >= 0 && sj < board.GetLength(1)
+                        && board[si, sj] == GameController.playerType.None)
+                    {
+                        openStart = true;
+                    }
 
-                        // 가중치 부여: 연결된 돌이 많을수록 높은 점수
-                        if (connectedCount == 2) score += 10;  // 2개 연결
-                        else if (connectedCount == 3) score += 50; // 3개 연결
-                        else if (connectedCount == 4) score += 200; // 4개 연결
-                        else if (connectedCount >= 5) score += 1000; // 5개 이상 연결 (승리 상황)
+                    // 연결 끝이 비어 있는지 확인
+                    if (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
+                        && board[ni, nj] == GameController.playerType.None)
+                    {
+                        openEnd = true;
+                    }
+
+                    // 상대방 돌이 4개 연결되어 있고 열려 있는 경우 (막아야 하는 경우)
+                    if (connectedCount == 4 && (openStart || openEnd))
+                    {
+                        score += 800; // 높은 점수로 막기를 우선시
+                    }
+
+                    // 가중치 부여: 플레이어의 돌 점수
+                    if (board[i, j] == player)
+                    {
+                        if (connectedCount == 2) score += 10;
+                        else if (connectedCount == 3) score += 50;
+                        else if (connectedCount == 4) score += 200;
+                        else if (connectedCount >= 5) score += 1000;
                     }
                 }
             }
         }
-
-        return score;
     }
+
+    return score;
+}
 
     // Alpha-Beta Pruning 알고리즘
     public static (int, int) AIBestMove(GameController.playerType[,] board, GameController.playerType player, int maxDepth)
