@@ -264,7 +264,7 @@ public static class AIController
 {
     private const int TIME_LIMIT_MS = 10000;
     // 평가 함수: 점수를 계산하여 게임 상태를 평가
- public static int Evaluate(GameController.playerType[,] board, GameController.playerType player)
+public static int Evaluate(GameController.playerType[,] board, GameController.playerType player)
 {
     int score = 0;
 
