@@ -54,20 +54,28 @@ public class UserAccountData
     //etc...
 }
 
-
+public enum WinLoseType
+{
+    Win,
+    Lose,
+    Draw
+}
 
 //GameData(ReplayMode)
 public class ReplayData
 {
+    public WinLoseType winLoseType;
     public string playerName;
     public string enemyName;
+    public Sprite playerImage;
+    public Sprite enemyImage;
     public string starterName;
     public int playerTier;
     public int enemyTier;
     public int[] gamePlayData;
-    public DateTime datetime;
-    public bool bIsPlayerWin;
+    public string dateTime;
 }
+
 public class DataManager : MonoBehaviour
 {
     //Singleton(모든 씬에서 접근 가능)
@@ -166,7 +174,8 @@ public class DataManager : MonoBehaviour
     {
         RefreshReplaySavePath();
         string data = File.ReadAllText(replayPath);
-        return JsonUtility.FromJson<ReplayData>(data);
+        currentReplay = JsonUtility.FromJson<ReplayData>(data);
+        return currentReplay;
     }
 
     //리플레이관련 저장 정보를 DataManager에서 초기화 함
@@ -174,6 +183,12 @@ public class DataManager : MonoBehaviour
     {
         currentReplaySlotNum = -1;
         currentReplay = null ; 
+    }
+
+    public void DeleteReplayData()
+    {
+        RefreshReplaySavePath();
+        File.Delete(replayPath);
     }
     #endregion
 }
