@@ -18,22 +18,10 @@ public class RanjuRule
         Xrange = Board.GetLength(0);
         Yrange = Board.GetLength(1) ;
     }
-    private void StartRule(GameController.playerType[,] board)
-    {
-        //렌주룰용 보드 초기화
-        UpdateBoardState(board);
-    }
+    
     public void UpdateBoardState(GameController.playerType[,] board)
     {
-        //보드 업데이트
-        for (var i = 0; i < board.GetLength(0); i++)
-        {
-            for (var j = 0; j < board.GetLength(1); j++)
-            {
-                Board[i/15,i%15] = board[i, j];
-            }
-            
-        }
+        Board = board;
         
     }
 
@@ -108,6 +96,7 @@ public class RanjuRule
     {
         string[] patternedThree = new string[] { "01110","011010","010110" };
         string pattern = "";
+        
         for (int i = -4; i < 1; i++)
         {
             for (int j = i; j < i+6; j++)
@@ -232,8 +221,7 @@ public class RanjuRule
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (1, -1)};
         for (int i = 0; i < directions.Length; i++)
-        {
-            if (CheckFive(index, directions[i], marker))
+        { if (CheckFive(index, directions[i], marker))
             {
                 return true;
             }

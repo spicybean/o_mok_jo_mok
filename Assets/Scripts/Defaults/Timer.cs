@@ -32,7 +32,7 @@ public class Timer : MonoBehaviour
         if(_isPaused) return;
         if (timerType == TimerType.Decrease)
         {
-            currentTime -= timeLimit/ Time.deltaTime;
+            currentTime -=  Time.deltaTime;
             if (currentTime <= 0)
             {
                 OnTimerEndDelegate?.Invoke();

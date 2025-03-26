@@ -48,14 +48,20 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
-        if (gameState == GameState.Single)
+        // Single 플레이 모드에서 AI의 턴 처리
+        if (gameState == GameState.Single && turn == playerType.White)
         {
-            if (turn == playerType.White)
-            {
-                (int, int) aiBestMove = AIController.AIBestMove(omokBoard, turn);
-                SetTurn(turn, aiBestMove.Item1 * 15 + aiBestMove.Item2);
-            }
-            
+            AIPlayTurn();
+        }
+    }
+
+    void AIPlayTurn()
+    {
+        // AI 최적 수 계산
+        (int x, int y) aiMove = AIController.AIBestMove(omokBoard, playerType.White, 3); // 깊이 3
+        if (aiMove != (-1, -1)) // 유효한 수가 있으면
+        {
+            SetTurn(playerType.White, aiMove.x * 15 + aiMove.y);
         }
     }
     void SelectStone()
@@ -63,15 +69,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         //TODO: 돌 색 고르기
     }
 
-    // public void Update()
-    // {
-    //     for (int i = 0; i < omokButtons.Length; i++)
-    //     {
-    //         if (ranjuRule.Board[i/15,i%15] == playerType.Black)
-    //         {
-    //             Debug.Log($"{i/15},{i%15} black");
-    //         }
-    //     }
+   
     // }
     void SetOmokBoard()
     {
@@ -155,8 +153,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 //현재 셀에 현재 턴 바둑알 둔다
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
                 DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
-                //턴 변경
+                
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
+                
                 RemoveForbiddenCells();
                 
                 break;
@@ -167,24 +166,17 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
                 DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
+                
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 SetForbiddenCell();
                 SetForbiddenCell();
                 break;
         }
-
+        ranjuRule.UpdateBoardState(omokBoard);
         
         
-        if (ranjuRule.CheckFiveInAllDirections(index,omokBoard[index / 15, index % 15]))
-        {
-            
-            
-            DataManager.instance.SaveReplayData();
-            //승패 알려주는 코드
-            //대국이 끝남
-            WinLose(omokButtons[index]);
-        }
-        else if (turncounter >= totalomokCells - 10)
+        
+        if (turncounter >= totalomokCells - 10)
         {
             int count = 0;
             for (int i = 0; i < omokButtons.Length; i++)
