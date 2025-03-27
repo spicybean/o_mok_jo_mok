@@ -3,11 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class MainScenePanelController : MonoBehaviour
 {
     // private CoinController coinController;
     [SerializeField] private GameObject[] panels;
+
+    //InputFields
+    public TMP_InputField usernameInputField;
+    public TMP_InputField passwordInputField;
+    public TMP_InputField emailInputField;
 
     private void Awake()
     {
@@ -76,6 +83,13 @@ public class MainScenePanelController : MonoBehaviour
     // Signup Panel - Login Button
     public void OnClickSignupLoginButton()
     {
+        DataManager.instance.userAccountList = DataManager.instance.LoadAccountsData();
+        UserAccountData userAccountData = new UserAccountData();
+        userAccountData.usertier = 18;
+        userAccountData.username = usernameInputField.text;
+        userAccountData.password = passwordInputField.text;
+        userAccountData.email = emailInputField.text;
+        DataManager.instance.userAccountList.Add(userAccountData);
         DataManager.instance.SaveAccountsData();
         Debug.Log(DataManager.instance.userAccountList.Count);
         CloseButton();

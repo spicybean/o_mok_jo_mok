@@ -8,10 +8,11 @@ using UnityEngine.UI;
 using UnityEditor;
 
 //GameData(UserAccount)
+[Serializable]
 public class UserAccountData
 {
     public string username;
-    public string nickname;
+    public string email;
     public string password;
     public int usertier;
     public int points;
@@ -21,33 +22,9 @@ public class UserAccountData
     public int tiematch;
     public Image image;
 
-    /*
-    public static List<UserAccountData> GetUserAccountData()
-    {
-        return new List<UserAccountData>()
-        {
-            new UserAccountData("user1", 18, 2, 10, 5, 3, 2),
-            new UserAccountData("user2", 17, 0, 20, 10, 5, 5),
-            new UserAccountData("user3", 5, 4, 30, 15, 10, 5),
-            new UserAccountData("user4", 3, 5, 40, 20, 15, 5),
-        };
-        
-    }
-    */
-    //public UserAccountData() { }
 
-    public UserAccountData(string _username, int _usertier, int _points, int _totalmatch, int _winmatch, int _losematch, int _tiematch, string _nickname, string _password)
-    {
-        username = _username;
-        usertier = _usertier;
-        points = _points;
-        totalmatch = _totalmatch;
-        winmatch = _winmatch;
-        losematch = _losematch;
-        tiematch = _tiematch;
-        
-    }
-
+    
+    // ranking panel 로 보내기
     public float GetWinRate()
     {
         if (totalmatch <= 0) return 0;
@@ -116,6 +93,7 @@ public class DataManager : MonoBehaviour
         {
             AccountsSavePath();
             string data = JsonUtility.ToJson(new UserAccountListWrapper { accounts = userAccountList }, true);
+           Debug.Log(data);
             File.WriteAllText(accountPath, data);
         }
         catch (Exception e)
