@@ -16,8 +16,9 @@ public class RankingPanelController : MonoBehaviour
     private void Start()
     {
         //userList = UserAccountData.GetUserAccountData();
+        DataManager.instance.userAccountList = DataManager.instance.LoadAccountsData();
         userList = DataManager.instance.userAccountList;
-        Debug.Log("유저리스트 : " + userList.Count);
+        //Debug.Log("유저리스트 : " + userList.Count);
         CreateRankingTable();
     }
 
@@ -51,12 +52,12 @@ public class RankingPanelController : MonoBehaviour
 
             int rank = i + 1;
 
-            rankBox.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = userList[i].usertier.ToString();
+            rankBox.transform.GetChild(0).GetComponent<TMP_Text>().text = userList[i].usertier.ToString();
             rankBox.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = userList[i].points.ToString();
             rankBox.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = userList[i].GetWinRate().ToString();
             rankBox.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = userList[i].username;
             rankBox.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = rank.ToString();
-            Debug.Log("유저정보 : " + userList[i].usertier + " " + userList[i].points + " " + userList[i].GetWinRate() + " " + userList[i].username + " " );
+            //Debug.Log("유저정보 : " + userList[i].usertier + " " + userList[i].points + " " + userList[i].GetWinRate() + " " + userList[i].username + " " );
         }
 
     }
