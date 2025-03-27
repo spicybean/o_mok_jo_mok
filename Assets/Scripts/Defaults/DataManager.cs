@@ -8,10 +8,11 @@ using UnityEngine.UI;
 using UnityEditor;
 
 //GameData(UserAccount)
+[Serializable]
 public class UserAccountData
 {
     public string username;
-    public string nickname;
+    public string email;
     public string password;
     public int usertier;
     public int points;
@@ -21,31 +22,9 @@ public class UserAccountData
     public int tiematch;
     public Image image;
 
-    public static List<UserAccountData> GetUserAccountData()
-    {
-        return new List<UserAccountData>()
-        {
-            new UserAccountData("user1", 18, 2, 10, 5, 3, 2),
-            new UserAccountData("user2", 17, 0, 20, 10, 5, 5),
-            new UserAccountData("user3", 5, 4, 30, 15, 10, 5),
-            new UserAccountData("user4", 3, 5, 40, 20, 15, 5),
-        };
-        
-    }
-    public UserAccountData() { }
 
-    public UserAccountData(string _username, int _usertier, int _points, int _totalmatch, int _winmatch, int _losematch, int _tiematch)
-    {
-        username = _username;
-        usertier = _usertier;
-        points = _points;
-        totalmatch = _totalmatch;
-        winmatch = _winmatch;
-        losematch = _losematch;
-        tiematch = _tiematch;
-        
-    }
-
+    
+    // ranking panel 로 보내기
     public float GetWinRate()
     {
         if (totalmatch <= 0) return 0;
@@ -110,37 +89,66 @@ public class DataManager : MonoBehaviour
         dataPath = Application.persistentDataPath;
        
     }
-    
+
     #region Account Save Load Functions
     /// <summary>
     /// 세이브 파일 저장 경로 : %appdata%/localLow/DefaultCompany/O_mok_jo_mok/userAccount.json
     /// </summary>
+   
     public void SaveAccountsData()
     {
-        string data = JsonUtility.ToJson(userAccountList);
-        RefreshReplaySavePath();
-        File.WriteAllText(accountPath, data);
+        try
+        {
+            AccountsSavePath();
+            string data = JsonUtility.ToJson(new UserAccountListWrapper { accounts = userAccountList }, true);
+           Debug.Log(data);
+            File.WriteAllText(accountPath, data);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Failed to save account data: " + e.Message);
+        }
     }
 
-    public UserAccountData LoadAccountsData()
+    [Serializable]
+    public class UserAccountListWrapper
     {
-        
-        string data = File.ReadAllText(accountPath);
-        return JsonUtility.FromJson<UserAccountData>(data);
+        public List<UserAccountData> accounts;
+    }
+
+    public List<UserAccountData> LoadAccountsData()
+    {
+        AccountsSavePath();
+        if (!File.Exists(accountPath))
+        {
+            Debug.LogWarning("Account data file not found. Creating a new one.");
+            return new List<UserAccountData>();
+        }
+        try
+        {
+            string data = File.ReadAllText(accountPath);
+            UserAccountListWrapper loadedData = JsonUtility.FromJson<UserAccountListWrapper>(data);
+            return loadedData?.accounts ?? new List<UserAccountData>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Failed to load account data: " + e.Message);
+            return new List<UserAccountData>();
+        }
     }
 
     public void AccountsSavePath()
     {
-        accountPath = dataPath + "/userAccount"+userAccountList+".json";
+        accountPath = Path.Combine(dataPath, "userAccount.json");
     }
     #endregion
-    
+
     #region Replay Save Load Functions
 
     /// <summary>
     /// 세이브 파일 저장 경로 : %appdata%/localLow/DefaultCompany/O_mok_jo_mok/saveData{슬롯번호}.json
     /// </summary>
-    
+
     //리플레이 데이터의 경로를 파일명에 따라 동기화 함
     private void RefreshReplaySavePath()
     {
