@@ -240,8 +240,10 @@ public class RanjuRule
             {
                 if (!CheckOutOfIndex(Y + j * direction.Item1, X + j * direction.Item2))
                 {
-                    pattern += Board[Y + j * direction.Item1,X + j * direction.Item2] == GameController.playerType.None ?
-                            '0' : Board[Y + j * direction.Item1,X + j * direction.Item2] == marker? "1" : "2";
+                    pattern +=  
+                        Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
+                            '0'  :
+                            Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
                 }
                 
             }

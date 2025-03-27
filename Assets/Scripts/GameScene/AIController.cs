@@ -31,17 +31,20 @@ public static class AIController
         public double WinRate => Simulations > 0 ? (double)Wins / Simulations : 0;
     }
 
+    private static int timeScale = 10000;
     // MCTS를 통한 최적 수 계산
     public static (int, int) AIBestMoveMCTS(GameController.playerType[,] board, GameController.playerType player,(int x,int y) currentMove ,int maxIterations)
     {
         Node root = new Node(board, currentMove, null);
-
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
         for (int i = 0; i < maxIterations; i++)
         {
             Node selectedNode = Select(root); // 노드 선택
             Node expandedNode = Expand(selectedNode, player); // 노드 확장
-            double result = Simulate(expandedNode, player); // 시뮬레이션 수행
+            double result = Simulate(expandedNode, player == GameController.playerType.White ? GameController.playerType.Black : GameController.playerType.White); // 시뮬레이션 수행
             Backpropagate(expandedNode, result, player); // 결과를 역전파
+            
         }
 
         // 가장 높은 승리 확률을 가진 자식 노드 선택
@@ -73,7 +76,7 @@ public static class AIController
 
     private static Node Expand(Node node, GameController.playerType player)
     {
-        List<(int x, int y)> possibleMoves = GetPossibleMoves(node.BoardState, node.Move);
+        List<(int x, int y)> possibleMoves = GetPossibleMoves(node.BoardState,player ,node.Move);
 
         foreach (var move in possibleMoves)
         {
@@ -89,24 +92,28 @@ public static class AIController
     private static double Simulate(Node node, GameController.playerType player)
     {
         GameController.playerType currentPlayer = player;
-        
+        var prevMove = node.Move;
         var board = CopyBoard(node.BoardState);
         while (true)
         {
+            
             double winRate = 0;
-            List<(int x, int y)> moves = GetPossibleMoves(board, node.Move);
+            List<(int x, int y)> moves = GetPossibleMoves(board,currentPlayer ,prevMove);
             if (moves.Count == 0) break; // 게임 종료 조건
             
             var randomMove = moves[new Random().Next(moves.Count)];
+            prevMove = randomMove;
             board[randomMove.x, randomMove.y] = currentPlayer;
+            if(new RanjuRule(board).RanJu(randomMove.x * board.GetLength(0) + randomMove.y,currentPlayer)) return player == currentPlayer ?  1 :  -1;
+            if (new RanjuRule(board).CheckWin(currentPlayer)) return player == currentPlayer ?  1 :  -1;
             
             currentPlayer = currentPlayer == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
         }
-
+        
+        if(new RanjuRule(board).CheckWin(currentPlayer)) return player == currentPlayer ?  1 : -1;
         // 승리 여부 반환 (예: 1: 승리, 0: 무승부, -1: 패배)
         
-        if (new RanjuRule(board).CheckWin(player)) return 1;
-        if (new RanjuRule(board).CheckWin(currentPlayer)) return -1;
+        
         return 0;
     }
 
@@ -144,25 +151,41 @@ public static class AIController
         return bestNode;
     }
 
-    private static List<(int, int)> GetPossibleMoves(GameController.playerType[,] board, (int x,int y) currentMove)
+    private static List<(int, int)> GetPossibleMoves(GameController.playerType[,] board,GameController.playerType player ,(int x,int y) currentMove)
     {
         var moves = new List<(int, int)>();
+        var defensiveMoves =new List<(int, int)>();
         (int x, int y)[] direction = new (int x,int y)[] {(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1),(1,0),(1,1) };
         for (int i = 0; i < direction.Length; i++)
         {
-            (int x, int y) tmpMove = (currentMove.x + direction[i].x, currentMove.y + direction[i].y);
-            bool row = tmpMove.x >= 0 && tmpMove.x < board.GetLength(0);
-            bool col = tmpMove.y >= 0 && tmpMove.y < board.GetLength(1);
-            if (row && col)
+            (int x, int y) tmpMove = (currentMove.x, currentMove.y);
+            
+            while (board[tmpMove.x,tmpMove.y] !=
+                   GameController.playerType.None)
             {
-                if (board[tmpMove.x, tmpMove.y] == GameController.playerType.None)
+                tmpMove = (tmpMove.x + direction[i].x, tmpMove.y + direction[i].y);
+                bool row = tmpMove.x >= 0 && tmpMove.x < board.GetLength(0);
+                bool col = tmpMove.y >= 0 && tmpMove.y < board.GetLength(1);
+                if (!row || !col) break;
+                if (row && col)
                 {
-                    moves.Add(tmpMove);
+                    if (board[tmpMove.x, tmpMove.y] == GameController.playerType.None)
+                    {
+                        moves.Add((tmpMove.x, tmpMove.y));
+                        board[tmpMove.x, tmpMove.y] = player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
+                        if (new RanjuRule(board).CheckFourInAllDirections(tmpMove.x * board.GetLength(0) + tmpMove.y, player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black)||
+                            new RanjuRule(board).CheckFiveInAllDirections(tmpMove.x * board.GetLength(0) + tmpMove.y, player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black))
+                        {
+                            defensiveMoves.Add((tmpMove.x, tmpMove.y));
+                        }
+                    
+                        board[tmpMove.x, tmpMove.y] = GameController.playerType.None;
+                    }
+                    
                 }
             }
-            
         }
-        return moves;
+        return  defensiveMoves.Count > 0 ? defensiveMoves : moves; //
     }
 
     private static GameController.playerType[,] CopyBoard(GameController.playerType[,] board)

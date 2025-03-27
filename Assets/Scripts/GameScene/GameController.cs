@@ -55,7 +55,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void AIPlayTurn((int x,int y) playerMove)
     {
         // AI 최적 수 계산
-        var bestMove = AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,100);
+        var bestMove = AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,5);
         if (bestMove != (-1, -1)) // 유효한 수가 있으면
         {
             SetTurn(playerType.White, bestMove.Item1 * 15 + bestMove.Item2);
