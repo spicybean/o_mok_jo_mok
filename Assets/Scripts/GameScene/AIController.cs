@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using Random = System.Random;
 
 // public static class AIController
 // {
@@ -260,215 +261,422 @@ using System.Diagnostics;
 // }
 //
 
+// public static class AIController
+// {
+//     private const int TIME_LIMIT_MS = 10000;
+//     // 평가 함수: 점수를 계산하여 게임 상태를 평가
+// public static int Evaluate(GameController.playerType[,] board, GameController.playerType player)
+// {
+//     int score = 0;
+//
+//     RanjuRule ruleChecker = new RanjuRule(board);
+//
+//     // 승리 조건에 대한 점수
+//     if (ruleChecker.CheckWin(GameController.playerType.Black)) 
+//         score += player == GameController.playerType.Black ? 1000 : -1000;
+//
+//     if (ruleChecker.CheckWin(GameController.playerType.White)) 
+//         score += player == GameController.playerType.White ? 1000 : -1000;
+//
+//     // 상대방 돌을 막는 점수 계산
+//     GameController.playerType opponent = player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
+//     var directions = new (int, int)[]
+//     {
+//         (-1, 0), (1, 0), (0, -1), (0, 1), // 상하좌우
+//         (-1, -1), (-1, 1), (1, -1), (1, 1) // 대각선
+//     };
+//
+//     for (int i = 0; i < board.GetLength(0); i++)
+//     {
+//         for (int j = 0; j < board.GetLength(1); j++)
+//         {
+//             if (board[i, j] == player || board[i, j] == opponent)
+//             {
+//                 foreach (var direction in directions)
+//                 {
+//                     int playerConnectedCount = 1;
+//                     int opponentConnectedCount = 1;
+//                     bool playerOpenStart = false, playerOpenEnd = false;
+//                     bool opponentOpenStart = false, opponentOpenEnd = false;
+//
+//                     // 플레이어 돌 계산
+//                     int ni = i + direction.Item1;
+//                     int nj = j + direction.Item2;
+//
+//                     while (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
+//                            && board[ni, nj] == player)
+//                     {
+//                         playerConnectedCount++;
+//                         ni += direction.Item1;
+//                         nj += direction.Item2;
+//                     }
+//
+//                     int si = i - direction.Item1;
+//                     int sj = j - direction.Item2;
+//
+//                     if (si >= 0 && si < board.GetLength(0) && sj >= 0 && sj < board.GetLength(1)
+//                         && board[si, sj] == GameController.playerType.None)
+//                     {
+//                         playerOpenStart = true;
+//                     }
+//
+//                     if (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
+//                         && board[ni, nj] == GameController.playerType.None)
+//                     {
+//                         playerOpenEnd = true;
+//                     }
+//
+//                     // 상대방 돌 계산
+//                     ni = i + direction.Item1;
+//                     nj = j + direction.Item2;
+//
+//                     while (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
+//                            && board[ni, nj] == opponent)
+//                     {
+//                         opponentConnectedCount++;
+//                         ni += direction.Item1;
+//                         nj += direction.Item2;
+//                     }
+//
+//                     si = i - direction.Item1;
+//                     sj = j - direction.Item2;
+//
+//                     if (si >= 0 && si < board.GetLength(0) && sj >= 0 && sj < board.GetLength(1)
+//                         && board[si, sj] == GameController.playerType.None)
+//                     {
+//                         opponentOpenStart = true;
+//                     }
+//
+//                     if (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
+//                         && board[ni, nj] == GameController.playerType.None)
+//                     {
+//                         opponentOpenEnd = true;
+//                     }
+//
+//                     // 공격 점수 계산
+//                     if (playerConnectedCount == 2) score += 10;
+//                     else if (playerConnectedCount == 3) score += 50;
+//                     else if (playerConnectedCount == 4 && playerOpenStart && playerOpenEnd) score += 200;
+//                     else if (playerConnectedCount >= 5) score += 1000;
+//
+//                     // 수비 점수 계산
+//                     if (opponentConnectedCount == 4 && opponentOpenStart && opponentOpenEnd) score += 950;
+//                     else if (opponentConnectedCount >= 5) score += 1000;
+//
+//                     // 공격과 수비가 동시에 가능한 경우 높은 점수 부여
+//                     if ((playerConnectedCount >= 4 && playerOpenStart && playerOpenEnd) &&
+//                         (opponentConnectedCount == 4 && opponentOpenStart && opponentOpenEnd))
+//                     {
+//                         score += 1200; // 두 조건이 충족되면 높은 점수 부여
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//
+//     return score;
+// }
+//
+//     // Alpha-Beta Pruning 알고리즘
+//     public static (int, int) AIBestMoveIterativeDeepening(GameController.playerType[,] board, GameController.playerType player, int maxTimeMs)
+//     {
+//         Stopwatch stopwatch = new Stopwatch(); // 타이머 초기화
+//         stopwatch.Start(); // 타이머 시작
+//
+//         int bestValue = int.MinValue;
+//         (int, int) bestMove = (-1, -1); // 최적의 움직임
+//         RanjuRule ruleChecker = new RanjuRule(board);
+//
+//         for (int depth = 1; ; depth++) // 무제한으로 깊이 증가
+//         {
+//             (int, int) currentBestMove = (-1, -1);
+//             int currentBestValue = int.MinValue;
+//
+//             foreach (var move in GetPossibleMoves(ruleChecker.Board))
+//             {
+//                 if (stopwatch.ElapsedMilliseconds > maxTimeMs)
+//                 {
+//                     Console.WriteLine("시간 초과! 현재까지 최적의 수를 반환합니다.");
+//                     stopwatch.Stop();
+//                     return bestMove; // 시간 초과 시 마지막 최적의 움직임 반환
+//                 }
+//
+//                 // 움직임 적용
+//                 ruleChecker.Board[move.Item1, move.Item2] = player;
+//
+//                 // Alpha-Beta Pruning 호출
+//                 int moveValue = AlphaBeta(ruleChecker.Board, depth, int.MinValue, int.MaxValue, false, player, ruleChecker);
+//
+//                 // 움직임 취소
+//                 ruleChecker.Board[move.Item1, move.Item2] = GameController.playerType.None;
+//
+//                 // 현재 깊이에서 최적의 움직임 갱신
+//                 if (moveValue > currentBestValue)
+//                 {
+//                     currentBestValue = moveValue;
+//                     currentBestMove = move;
+//                 }
+//             }
+//
+//             // 깊이 제한에 따른 최적의 수 갱신
+//             bestMove = currentBestMove;
+//             bestValue = currentBestValue;
+//
+//             Console.WriteLine($"깊이 {depth}, 최적 점수: {bestValue}, 위치: {bestMove}");
+//         }
+//     }
+//
+//     private static int AlphaBeta(GameController.playerType[,] board, int depth, int alpha, int beta, bool maximizingPlayer, GameController.playerType player, RanjuRule ruleChecker)
+//     {
+//         // 종료 조건: 깊이가 0이거나 승리 조건에 도달했을 경우
+//         if (depth == 0 || ruleChecker.CheckWin(GameController.playerType.Black) || ruleChecker.CheckWin(GameController.playerType.White))
+//         {
+//             return Evaluate(board, player);
+//         }
+//
+//         // 가능한 움직임 가져오기
+//         List<(int, int)> possibleMoves = GetPossibleMoves(board);
+//
+//         // 가능한 움직임이 없는 경우 종료
+//         if (possibleMoves.Count == 0)
+//         {
+//             return Evaluate(board, player);
+//         }
+//
+//         if (maximizingPlayer)
+//         {
+//             int maxEval = int.MinValue;
+//             foreach (var move in possibleMoves)
+//             {
+//                 board[move.Item1, move.Item2] = player; // 움직임 적용
+//                 int eval = AlphaBeta(board, depth - 1, alpha, beta, false, player, ruleChecker);
+//                 board[move.Item1, move.Item2] = GameController.playerType.None; // 움직임 취소
+//                 maxEval = Math.Max(maxEval, eval);
+//                 alpha = Math.Max(alpha, eval);
+//                 if (beta <= alpha) break; // 가지치기
+//             }
+//             return maxEval;
+//         }
+//         else
+//         {
+//             int minEval = int.MaxValue;
+//             GameController.playerType opponent = player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
+//             foreach (var move in possibleMoves)
+//             {
+//                 board[move.Item1, move.Item2] = opponent; // 움직임 적용
+//                 int eval = AlphaBeta(board, depth - 1, alpha, beta, true, player, ruleChecker);
+//                 board[move.Item1, move.Item2] = GameController.playerType.None; // 움직임 취소
+//                 minEval = Math.Min(minEval, eval);
+//                 beta = Math.Min(beta, eval);
+//                 if (beta <= alpha) break; // 가지치기
+//             }
+//             return minEval;
+//         }
+//     }
+//
+//     // 가능한 모든 움직임을 생성
+//     private static List<(int, int)> GetPossibleMoves(GameController.playerType[,] board)
+//     {
+//         var moves = new List<(int, int)>();
+//         var directions = new (int, int)[]
+//         {
+//             (-1, 0), (1, 0), (0, -1), (0, 1), // 상하좌우
+//             (-1, -1), (-1, 1), (1, -1), (1, 1) // 대각선
+//         };
+//
+//         // 이미 돌이 놓인 칸들 중심으로 탐색
+//         for (int i = 0; i < board.GetLength(0); i++)
+//         {
+//             for (int j = 0; j < board.GetLength(1); j++)
+//             {
+//                 if (board[i, j] != GameController.playerType.None) // 돌이 이미 놓여진 위치
+//                 {
+//                     foreach (var direction in directions)
+//                     {
+//                         int ni = i + direction.Item1;
+//                         int nj = j + direction.Item2;
+//
+//                         // 경계 값 검사
+//                         if (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1))
+//                         {
+//                             // 인접한 칸이 빈 칸이라면 후보에 추가
+//                             if (board[ni, nj] == GameController.playerType.None && !moves.Contains((ni, nj)))
+//                             {
+//                                 moves.Add((ni, nj));
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//
+//         return moves;
+//     }
+// }
 public static class AIController
 {
-    private const int TIME_LIMIT_MS = 10000;
-    // 평가 함수: 점수를 계산하여 게임 상태를 평가
-public static int Evaluate(GameController.playerType[,] board, GameController.playerType player)
-{
-    int score = 0;
-
-    RanjuRule ruleChecker = new RanjuRule(board);
-
-    // 승리 조건에 대한 점수
-    if (ruleChecker.CheckWin(GameController.playerType.Black)) 
-        score += player == GameController.playerType.Black ? 1000 : -1000;
-
-    if (ruleChecker.CheckWin(GameController.playerType.White)) 
-        score += player == GameController.playerType.White ? 1000 : -1000;
-
-    // 상대방 돌을 막는 점수 계산
-    GameController.playerType opponent = player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
-    var directions = new (int, int)[]
+    // MCTS 탐색을 위한 노드 정의
+    private class Node
     {
-        (-1, 0), (1, 0), (0, -1), (0, 1), // 상하좌우
-        (-1, -1), (-1, 1), (1, -1), (1, 1) // 대각선
-    };
+        public GameController.playerType[,] BoardState; // 현재 보드 상태
+        public (int x, int y) Move; // 현재 노드의 움직임
+        public int Wins; // 이긴 횟수
+        public int Simulations; // 시뮬레이션 횟수
+        public List<Node> Children; // 자식 노드
+        public Node Parent; // 부모 노드
 
-    for (int i = 0; i < board.GetLength(0); i++)
-    {
-        for (int j = 0; j < board.GetLength(1); j++)
+        public Node(GameController.playerType[,] boardState, (int x, int y) move, Node parent)
         {
-            if (board[i, j] == player || board[i, j] == opponent)
-            {
-                foreach (var direction in directions)
-                {
-                    int connectedCount = 1;
-                    bool openStart = false; // 연결 시작이 열려 있는지 확인
-                    bool openEnd = false;  // 연결 끝이 열려 있는지 확인
-
-                    int ni = i + direction.Item1;
-                    int nj = j + direction.Item2;
-
-                    // 연결된 상대방 돌 개수 계산
-                    while (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
-                           && board[ni, nj] == opponent)
-                    {
-                        connectedCount++;
-                        ni += direction.Item1;
-                        nj += direction.Item2;
-                    }
-
-                    // 연결 시작이 비어 있는지 확인
-                    int si = i - direction.Item1;
-                    int sj = j - direction.Item2;
-                    if (si >= 0 && si < board.GetLength(0) && sj >= 0 && sj < board.GetLength(1)
-                        && board[si, sj] == GameController.playerType.None)
-                    {
-                        openStart = true;
-                    }
-
-                    // 연결 끝이 비어 있는지 확인
-                    if (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1)
-                        && board[ni, nj] == GameController.playerType.None)
-                    {
-                        openEnd = true;
-                    }
-
-                    // 상대방 돌이 4개 연결되어 있고 열려 있는 경우 (막아야 하는 경우)
-                    if (connectedCount == 4 && (openStart || openEnd))
-                    {
-                        score += 800; // 높은 점수로 막기를 우선시
-                    }
-
-                    // 가중치 부여: 플레이어의 돌 점수
-                    if (board[i, j] == player)
-                    {
-                        if (connectedCount == 2) score += 10;
-                        else if (connectedCount == 3) score += 50;
-                        else if (connectedCount == 4) score += 200;
-                        else if (connectedCount >= 5) score += 1000;
-                    }
-                }
-            }
+            BoardState = boardState;
+            Move = move;
+            Parent = parent;
+            Wins = 0;
+            Simulations = 0;
+            Children = new List<Node>();
         }
+
+        // 승리 확률 계산
+        public double WinRate => Simulations > 0 ? (double)Wins / Simulations : 0;
     }
 
-    return score;
-}
-
-    // Alpha-Beta Pruning 알고리즘
-    public static (int, int) AIBestMove(GameController.playerType[,] board, GameController.playerType player, int maxDepth)
+    // MCTS를 통한 최적 수 계산
+    public static (int, int) AIBestMoveMCTS(GameController.playerType[,] board, GameController.playerType player,(int x,int y) currentMove ,int maxIterations)
     {
-        Stopwatch stopwatch = new Stopwatch(); // 타이머 초기화
-        stopwatch.Start();
+        Node root = new Node(board, currentMove, null);
+
+        for (int i = 0; i < maxIterations; i++)
+        {
+            Node selectedNode = Select(root); // 노드 선택
+            Node expandedNode = Expand(selectedNode, player); // 노드 확장
+            int result = Simulate(expandedNode, player); // 시뮬레이션 수행
+            Backpropagate(expandedNode, result, player); // 결과를 역전파
+        }
+
+        // 가장 높은 승리 확률을 가진 자식 노드 선택
+        Node bestChild = root.Children.Count > 0 ? root.Children[0] : null;
+        double bestWinRate = 0;
+        foreach (var child in root.Children)
+        {
+            if (child.WinRate > bestWinRate)
+            {
+                bestWinRate = child.WinRate;
+                bestChild = child;
+            }
+        }
+
+        return bestChild?.Move ?? (-1, -1); // 최적 수 반환
+    }
+
+    private static Node Select(Node root)
+    {
+        Node current = root;
+
+        while (current.Children.Count > 0) // Leaf 노드에 도달할 때까지 탐색
+        {
+            current = UCBSelect(current.Children); // UCB 기반으로 자식 노드 선택
+        }
+
+        return current;
+    }
+
+    private static Node Expand(Node node, GameController.playerType player)
+    {
+        List<(int x, int y)> possibleMoves = GetPossibleMoves(node.BoardState, node.Move);
+
+        foreach (var move in possibleMoves)
+        {
+            var newBoard = CopyBoard(node.BoardState);
+            newBoard[move.x, move.y] = player;
+            Node childNode = new Node(newBoard, move, node);
+            node.Children.Add(childNode);
+        }
+
+        return node.Children.Count > 0 ? node.Children[0] : node;
+    }
+
+    private static int Simulate(Node node, GameController.playerType player)
+    {
+        GameController.playerType currentPlayer = player;
         
-        int bestValue = int.MinValue;
-        (int, int) bestMove = (-1, -1);
-        RanjuRule ruleChecker = new RanjuRule(board);
-
-        foreach (var move in GetPossibleMoves(ruleChecker.Board))
+        var board = CopyBoard(node.BoardState);
+        while (true)
         {
-            if (stopwatch.ElapsedMilliseconds > TIME_LIMIT_MS)
-            {
-                Console.WriteLine("시간 초과! 현재까지 최적의 수를 반환합니다.");
-                break; // 시간이 초과되었으면 루프 중단
-            }
-            
-            // 움직임 적용
-            ruleChecker.Board[move.Item1, move.Item2] = player;
-            
-            // Alpha-Beta Pruning 호출
-            int moveValue = AlphaBeta(ruleChecker.Board, maxDepth - 1, int.MinValue, int.MaxValue, false, player, ruleChecker);
+            List<(int x, int y)> moves = GetPossibleMoves(board, node.Move);
+            if (moves.Count == 0) break; // 게임 종료 조건
 
-            // 움직임 취소
-            ruleChecker.Board[move.Item1, move.Item2] = GameController.playerType.None;
-
-            // 최적의 움직임 갱신
-            if (moveValue > bestValue)
-            {
-                bestValue = moveValue;
-                bestMove = move;
-            }
+            var randomMove = moves[new Random().Next(moves.Count)];
+            board[randomMove.x, randomMove.y] = currentPlayer;
+            currentPlayer = currentPlayer == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
+            if (new RanjuRule(board).RanJu(randomMove.x * board.GetLength(0) + randomMove.y, currentPlayer))
+                return player == currentPlayer ? 1 : -1;
         }
-        stopwatch.Stop();
-        return bestMove;
+
+        // 승리 여부 반환 (예: 1: 승리, 0: 무승부, -1: 패배)
+        
+        if (new RanjuRule(board).CheckWin(player)) return 1;
+        if (new RanjuRule(board).CheckWin(currentPlayer)) return -1;
+        return 0;
     }
 
-    private static int AlphaBeta(GameController.playerType[,] board, int depth, int alpha, int beta, bool maximizingPlayer, GameController.playerType player, RanjuRule ruleChecker)
+    private static void Backpropagate(Node node, int result, GameController.playerType player)
     {
-        // 종료 조건: 깊이가 0이거나 승리 조건에 도달했을 경우
-        if (depth == 0 || ruleChecker.CheckWin(GameController.playerType.Black) || ruleChecker.CheckWin(GameController.playerType.White))
+        Node current = node;
+        while (current != null)
         {
-            return Evaluate(board, player);
-        }
-
-        // 가능한 움직임 가져오기
-        List<(int, int)> possibleMoves = GetPossibleMoves(board);
-
-        // 가능한 움직임이 없는 경우 종료
-        if (possibleMoves.Count == 0)
-        {
-            return Evaluate(board, player);
-        }
-
-        if (maximizingPlayer)
-        {
-            int maxEval = int.MinValue;
-            foreach (var move in possibleMoves)
+            current.Simulations++;
+            if ((result == 1 && current.BoardState[current.Move.x, current.Move.y] == player) ||
+                (result == -1 && current.BoardState[current.Move.x, current.Move.y] != player))
             {
-                board[move.Item1, move.Item2] = player; // 움직임 적용
-                int eval = AlphaBeta(board, depth - 1, alpha, beta, false, player, ruleChecker);
-                board[move.Item1, move.Item2] = GameController.playerType.None; // 움직임 취소
-                maxEval = Math.Max(maxEval, eval);
-                alpha = Math.Max(alpha, eval);
-                if (beta <= alpha) break; // 가지치기
+                current.Wins++;
             }
-            return maxEval;
-        }
-        else
-        {
-            int minEval = int.MaxValue;
-            GameController.playerType opponent = player == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
-            foreach (var move in possibleMoves)
-            {
-                board[move.Item1, move.Item2] = opponent; // 움직임 적용
-                int eval = AlphaBeta(board, depth - 1, alpha, beta, true, player, ruleChecker);
-                board[move.Item1, move.Item2] = GameController.playerType.None; // 움직임 취소
-                minEval = Math.Min(minEval, eval);
-                beta = Math.Min(beta, eval);
-                if (beta <= alpha) break; // 가지치기
-            }
-            return minEval;
+
+            current = current.Parent;
         }
     }
 
-    // 가능한 모든 움직임을 생성
-    private static List<(int, int)> GetPossibleMoves(GameController.playerType[,] board)
+    private static Node UCBSelect(List<Node> children)
+    {
+        Node bestNode = null;
+        double bestValue = double.MinValue;
+
+        foreach (var child in children)
+        {
+            double ucbValue = child.WinRate + Math.Sqrt(2 * Math.Log(child.Parent.Simulations + 1) / (child.Simulations + 1));
+            if (ucbValue > bestValue)
+            {
+                bestValue = ucbValue;
+                bestNode = child;
+            }
+        }
+
+        return bestNode;
+    }
+
+    private static List<(int, int)> GetPossibleMoves(GameController.playerType[,] board, (int x,int y) currentMove)
     {
         var moves = new List<(int, int)>();
-        var directions = new (int, int)[]
+        (int x, int y)[] direction = new (int x,int y)[] {(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1),(1,0),(1,1) };
+        for (int i = 0; i < direction.Length; i++)
         {
-            (-1, 0), (1, 0), (0, -1), (0, 1), // 상하좌우
-            (-1, -1), (-1, 1), (1, -1), (1, 1) // 대각선
-        };
-
-        // 이미 돌이 놓인 칸들 중심으로 탐색
-        for (int i = 0; i < board.GetLength(0); i++)
-        {
-            for (int j = 0; j < board.GetLength(1); j++)
+            (int x, int y) tmpMove = (currentMove.x + direction[i].x, currentMove.y + direction[i].y);
+            bool row = tmpMove.x >= 0 && tmpMove.x < board.GetLength(0);
+            bool col = tmpMove.y >= 0 && tmpMove.y < board.GetLength(1);
+            if (row && col)
             {
-                if (board[i, j] != GameController.playerType.None) // 돌이 이미 놓여진 위치
+                if (board[tmpMove.x, tmpMove.y] == GameController.playerType.None)
                 {
-                    foreach (var direction in directions)
-                    {
-                        int ni = i + direction.Item1;
-                        int nj = j + direction.Item2;
-
-                        // 경계 값 검사
-                        if (ni >= 0 && ni < board.GetLength(0) && nj >= 0 && nj < board.GetLength(1))
-                        {
-                            // 인접한 칸이 빈 칸이라면 후보에 추가
-                            if (board[ni, nj] == GameController.playerType.None && !moves.Contains((ni, nj)))
-                            {
-                                moves.Add((ni, nj));
-                            }
-                        }
-                    }
+                    moves.Add(tmpMove);
                 }
             }
+            
         }
-
         return moves;
+    }
+
+    private static GameController.playerType[,] CopyBoard(GameController.playerType[,] board)
+    {
+        var newBoard = new GameController.playerType[board.GetLength(0), board.GetLength(1)];
+        Array.Copy(board, newBoard, board.Length);
+        return newBoard;
     }
 }
