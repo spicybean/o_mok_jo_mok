@@ -50,7 +50,7 @@ public class UserAccountData
     {
         if (totalmatch <= 0) return 0;
         return (float) winmatch + tiematch * 0.5f / (float)totalmatch;
-    }   
+    }
     //etc...
 }
 
@@ -102,6 +102,7 @@ public class DataManager : MonoBehaviour
         dataPath = Application.persistentDataPath;
        
     }
+    
     
     #region Account Save Load Functions
     /// <summary>

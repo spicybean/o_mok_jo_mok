@@ -4840,7 +4840,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 848112050}
         m_TargetAssemblyTypeName: ReplayScenePanelController, Assembly-CSharp
-        m_MethodName: OnClickBackButton
+        m_MethodName: OnClickBackToMainSceneButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5827,6 +5827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataPath: 
   replayPath: 
+  accountPath: 
   currentReplaySlotNum: 0
 --- !u!4 &1960546699
 Transform:
