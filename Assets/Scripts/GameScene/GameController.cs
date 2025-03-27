@@ -49,19 +49,16 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void Update()
     {
         // Single 플레이 모드에서 AI의 턴 처리
-        if (gameState == GameState.Single && turn == playerType.White)
-        {
-            AIPlayTurn();
-        }
+        
     }
 
-    void AIPlayTurn()
+    void AIPlayTurn((int x,int y) playerMove)
     {
         // AI 최적 수 계산
-        (int x, int y) aiMove = AIController.AIBestMove(omokBoard, playerType.White, 3); // 깊이 3
-        if (aiMove != (-1, -1)) // 유효한 수가 있으면
+        var bestMove = AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,100);
+        if (bestMove != (-1, -1)) // 유효한 수가 있으면
         {
-            SetTurn(playerType.White, aiMove.x * 15 + aiMove.y);
+            SetTurn(playerType.White, bestMove.Item1 * 15 + bestMove.Item2);
         }
     }
     void SelectStone()
@@ -246,6 +243,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 {
                     WinLose(tmp);
                 }
+                AIPlayTurn((cell.GetComponent<OmokCell>().index/15,cell.GetComponent<OmokCell>().index%15));
             }
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
             if(cell.GetComponent<OmokCell>().My_MarkerType != OmokCell.MarkerType.PlaceMark)

@@ -39,31 +39,22 @@ public class RanjuRule
         }
         return false;
     }
-    public bool RanJu(int index)
+    public bool RanJu(int index, GameController.playerType player = GameController.playerType.Black)
     {
         
-        if (CheckDoubleThree(index))
-        {
-            Debug.Log("RanjuThree");
-            return true;
-        }
+        bool isDoubleThree = CheckDoubleThree(index,player);
+        bool isDoubleFour = CheckDoubleFour(index,player);
+        bool isOverFive = CheckJangMok(index,player);
 
-        if (CheckDoubleFour(index))
+        if (isDoubleThree || isDoubleFour || isOverFive)
         {
-            Debug.Log("RanjuFour");
-            return true;
-        }
-
-        if (CheckJangMok(index))
-        {
-            Debug.Log("RanjuJang");
-            
+            Debug.Log(isDoubleThree ? "RanjuThree" : isDoubleFour ? "RanjuFour" : "RanjuJang");
             return true;
         }
         return false;
     }
     
-    bool CheckOutOfIndex(int row, int col)
+    public bool CheckOutOfIndex(int row, int col)
     {
         if (row < 0 || row >= Yrange || col < 0 || col >= Xrange)
         {
@@ -73,13 +64,13 @@ public class RanjuRule
         return false;
     }
     
-    bool CheckDoubleThree(int index)
+    bool CheckDoubleThree(int index, GameController.playerType player)
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
         int CountOpenThree = 0;
         for (int i = 0; i < directions.Length; i++)
         {
-            if (CheckThree(index, directions[i]))
+            if (CheckThree(index, directions[i], player))
             {
                 CountOpenThree++;
             }
@@ -228,11 +219,16 @@ public class RanjuRule
         }
         return false;
     }
+
+    private static readonly HashSet<string> FivePatterns = new HashSet<string>
+    {
+        "0111110", "2111110", "2111112", "1111120",
+        "0211111", "0011111", "1111100", "2211111",
+        "1111122", "1111102", "2011111"
+    };
     bool CheckFive(int index, (int, int) direction, GameController.playerType marker )
     {
-        string[] patternedFive = new string[] { "0111110","2111110","2111112","1111120",
-                                                "0211111","0011111","1111100","2211111",
-                                                "1111122","1111102","2011111" };
+       
 
         int Y = index / 15;
         int X = index % 15;
@@ -250,13 +246,12 @@ public class RanjuRule
                 
             }
             //Debug.Log($"{direction}, {index}: {pattern}");
-            for (int k = 0; k < patternedFive.Length; k++)
+           
+            if (FivePatterns.Contains(pattern))
             {
-                if (pattern.Equals(patternedFive[k]))
-                {
-                    return true;
-                }
+                return true;
             }
+            
             
             pattern = "";
         }
@@ -264,19 +259,19 @@ public class RanjuRule
         return false;
     }
 
-    bool CheckJangMok(int index)
+    bool CheckJangMok(int index, GameController.playerType marker)
     {
         (int,int)[] directions = new (int, int)[]{ (0, 1), (1, 0), (1, 1), (-1, 1)};
         for (int i = 0; i < directions.Length; i++)
         {
-            if (CheckMoreThanFive(index, directions[i]))
+            if (CheckMoreThanFive(index, directions[i], marker))
             {
                 return true;
             }
         }
         return false;
     }
-    bool CheckMoreThanFive(int index, (int, int) direction)
+    bool CheckMoreThanFive(int index, (int, int) direction, GameController.playerType marker)
     {
         string patternedSix = "111111";
         string pattern = "";
@@ -289,7 +284,7 @@ public class RanjuRule
                     pattern += j==0 ? '1' : 
                         Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.None ?
                             '0' :
-                            Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == GameController.playerType.Black? "1" : "2";
+                            Board[index/15 + j * direction.Item1,index%15 + j * direction.Item2] == marker? "1" : "2";
                 }
             }
             if (pattern.Equals(patternedSix))
@@ -304,23 +299,16 @@ public class RanjuRule
 
     public bool IsDraw()
     {
-        int maxIndex = Board.GetLength(0) * Board.GetLength(1);
-        int cellCount = 0;
         for (int i = 0; i < Board.GetLength(0); i++)
         {
             for (int j = 0; j < Board.GetLength(1); j++)
             {
                 if (Board[i, j] == GameController.playerType.None)
                 {
-                    return false;
-                }
-                else
-                {
-                    cellCount++;
+                    return false;  // 빈칸이 있으면 게임 계속 진행
                 }
             }
         }
-        
-        return false;
+        return true;  // 빈칸이 없으면 무승부
     }
 }
