@@ -69,12 +69,15 @@ public class MainScenePanelController : MonoBehaviour
     // Signup Panel
     public void OnClickSignupButton()
     {
+        
         PanelControl(3);
     }
     
     // Signup Panel - Login Button
     public void OnClickSignupLoginButton()
     {
+        DataManager.instance.SaveAccountsData();
+        Debug.Log(DataManager.instance.userAccountList.Count);
         CloseButton();
     }
 
