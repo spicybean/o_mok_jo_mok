@@ -109,16 +109,34 @@ public class MainScenePanelController : MonoBehaviour
     public void OnClickReplayButton()
     {
         CoinController.Instance.CoinTextChanged(-100);
-        // Replay Scene 넘어가기
-        SceneManager.LoadScene("ReplayScene");
+        if (CoinController.Instance.currentCoin < 0)
+        {
+            CoinController.Instance.CoinTextChanged(100);
+            PanelControl(12);
+        }
+        else
+        {
+            // Replay Scene 넘어가기
+            SceneManager.LoadScene("ReplayScene");
+        }
     }
 
     public void OnClickGamePlaySingleAndMultySceneButton()
     {
         CoinController.Instance.CoinTextChanged(-100);
-        CoinController.Instance.GamePlayCoinChanged();
-        // Game Scene 넘어가기
-        SceneManager.LoadScene("GameScene");
+        
+        if (CoinController.Instance.currentCoin < 0)
+        {
+            CoinController.Instance.CoinTextChanged(100);
+            CoinController.Instance.GamePlayCoinChanged();
+            PanelControl(12);
+        }
+        else
+        {
+            CoinController.Instance.GamePlayCoinChanged();
+            // Game Scene 넘어가기
+            SceneManager.LoadScene("GameScene");
+        }
     }
     
     // 랭킹 버튼
@@ -139,7 +157,24 @@ public class MainScenePanelController : MonoBehaviour
         PanelControl(8);
         CoinController.Instance.CoinTextChanged(300);
     }
+
+    public void OnClickGet3000CoinButton()
+    {
+        PanelControl(9);
+        CoinController.Instance.CoinTextChanged(3000);
+    }
     
+    public void OnClickGet6000CoinButton()
+    {
+        PanelControl(10);
+        CoinController.Instance.CoinTextChanged(6000);
+    }
+    
+    public void OnClickGet10000CoinButton()
+    {
+        PanelControl(11);
+        CoinController.Instance.CoinTextChanged(10000);
+    }
 
     // 셋팅 버튼
     public void OnClickSettingButton()

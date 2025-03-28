@@ -21,6 +21,4 @@ public class ReplayScenePanelController : MonoBehaviour
     {
         replayScenePanel.SetActive(false);
     }
-    
-    
 }
