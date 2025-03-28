@@ -70,8 +70,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         {
             // ToDo AI배틀 관련 Init하기
             DataManager.instance.currentReplay.enemyName = "AI봇";
+            DataManager.instance.currentReplay.enemyImage = Resources.Load<Sprite>("Images/profile icon/ai-icon");
             DataManager.instance.currentReplay.playerName = DataManager.instance.currentUserAccount.username;
-            DataManager.instance.currentReplay.playerTier = DataManager.instance.currentUserAccount.usertier;
+            DataManager.instance.currentReplay.playerTier = DataManager.instance.currentReplay.enemyTier = DataManager.instance.currentUserAccount.usertier;
             DataManager.instance.currentReplay.playerImage = DataManager.instance.currentUserAccount.image;
         }
         else if (gameState == GameState.Double)
@@ -79,10 +80,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             // ToDo 더블배틀 관련 Init하기
             DataManager.instance.currentReplay.playerName = "플레이어 1";
             DataManager.instance.currentReplay.enemyName = "플레이어 2";
-            DataManager.instance.currentReplay.playerTier = DataManager.instance.currentUserAccount.usertier;
+            DataManager.instance.currentReplay.playerTier = DataManager.instance.currentReplay.enemyTier = DataManager.instance.currentUserAccount.usertier;
             DataManager.instance.currentReplay.playerImage = DataManager.instance.currentUserAccount.image;
-            DataManager.instance.currentReplay.enemyTier = DataManager.instance.currentUserAccount.usertier;
-            DataManager.instance.currentReplay.enemyImage = DataManager.instance.currentUserAccount.image;
+            DataManager.instance.currentReplay.enemyImage = Resources.Load<Sprite>("Images/profile icon/1-icon");
         }
     }
 

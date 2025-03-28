@@ -2645,6 +2645,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1753249101}
     m_Modifications:
+    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -2652,6 +2668,10 @@ PrefabInstance:
     - target: {fileID: 6190294971882569905, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_Name
       value: '[Panel] Popup_Signup'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6190294971882569905, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6927688739275006894, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_Pivot.x
@@ -2731,6 +2751,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6927688739275006894, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
