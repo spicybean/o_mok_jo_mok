@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using Random = System.Random;
 
 public static class AIController
@@ -40,10 +42,11 @@ public static class AIController
         sw.Start();
         for (int i = 0; i < maxIterations; i++)
         {
+            if(sw.ElapsedMilliseconds > timeScale) break;
             Node selectedNode = Select(root); // 노드 선택
             Node expandedNode = Expand(selectedNode, player); // 노드 확장
-            double result = Simulate(expandedNode, player == GameController.playerType.White ? GameController.playerType.Black : GameController.playerType.White); // 시뮬레이션 수행
-            Backpropagate(expandedNode, result, player); // 결과를 역전파
+            var result = Task.Run(()=>Simulate(expandedNode, player == GameController.playerType.White ? GameController.playerType.Black : GameController.playerType.White)); // 시뮬레이션 수행
+            Backpropagate(expandedNode, result.Result, player); // 결과를 역전파
             
         }
 
@@ -80,7 +83,7 @@ public static class AIController
 
         foreach (var move in possibleMoves)
         {
-            var newBoard = CopyBoard(node.BoardState);
+            var newBoard = node.BoardState;
             newBoard[move.x, move.y] = player;
             Node childNode = new Node(newBoard, move, node);
             node.Children.Add(childNode);
@@ -93,24 +96,25 @@ public static class AIController
     {
         GameController.playerType currentPlayer = player;
         var prevMove = node.Move;
-        var board = CopyBoard(node.BoardState);
+        var board = node.BoardState;
+        RanjuRule ranju = new RanjuRule(board);
         while (true)
         {
             
-            double winRate = 0;
             List<(int x, int y)> moves = GetPossibleMoves(board,currentPlayer ,prevMove);
             if (moves.Count == 0) break; // 게임 종료 조건
             
             var randomMove = moves[new Random().Next(moves.Count)];
             prevMove = randomMove;
             board[randomMove.x, randomMove.y] = currentPlayer;
-            if(new RanjuRule(board).RanJu(randomMove.x * board.GetLength(0) + randomMove.y,currentPlayer)) return player == currentPlayer ?  1 :  -1;
-            if (new RanjuRule(board).CheckWin(currentPlayer)) return player == currentPlayer ?  1 :  -1;
+            ranju.UpdateBoardState(board);
+            if(ranju.RanJu(randomMove.x * board.GetLength(0) + randomMove.y,currentPlayer)) return player == currentPlayer ?  1 :  -1;
+            if (ranju.CheckWin(currentPlayer)) return player == currentPlayer ?  1 :  -1;
             
             currentPlayer = currentPlayer == GameController.playerType.Black ? GameController.playerType.White : GameController.playerType.Black;
         }
         
-        if(new RanjuRule(board).CheckWin(currentPlayer)) return player == currentPlayer ?  1 : -1;
+        if(ranju.CheckWin(currentPlayer)) return player == currentPlayer ?  1 : -1;
         // 승리 여부 반환 (예: 1: 승리, 0: 무승부, -1: 패배)
         
         
@@ -155,6 +159,8 @@ public static class AIController
     {
         var moves = new List<(int, int)>();
         var defensiveMoves =new List<(int, int)>();
+        var offensiveMoves = new List<(int, int)>();
+        var balancedMoves = new List<(int, int)>();
         (int x, int y)[] direction = new (int x,int y)[] {(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1),(1,0),(1,1) };
         for (int i = 0; i < direction.Length; i++)
         {
@@ -186,12 +192,5 @@ public static class AIController
             }
         }
         return  defensiveMoves.Count > 0 ? defensiveMoves : moves; //
-    }
-
-    private static GameController.playerType[,] CopyBoard(GameController.playerType[,] board)
-    {
-        var newBoard = new GameController.playerType[board.GetLength(0), board.GetLength(1)];
-        Array.Copy(board, newBoard, board.Length);
-        return newBoard;
     }
 }

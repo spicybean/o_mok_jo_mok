@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -54,9 +55,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     IEnumerator AIPlayTurn((int x,int y) playerMove)
     {
+        yield return new WaitForSeconds(0.1f);
         // AI 최적 수 계산
-        yield return new WaitForSeconds(0.5f);
-        var bestMove = AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,50);
+        var aiTask = Task.Run(() => AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White, playerMove, 10));
+        var bestMove = aiTask.Result;//AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,5);
         if (bestMove != (-1, -1)) // 유효한 수가 있으면
         {
             SetTurn(playerType.White, bestMove.Item1 * 15 + bestMove.Item2);
