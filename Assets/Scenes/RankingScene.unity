@@ -498,6 +498,7 @@ MonoBehaviour:
   replayPath: 
   accountPath: 
   currentReplaySlotNum: 0
+  userAccountList: []
 --- !u!4 &1960546699
 Transform:
   m_ObjectHideFlags: 0

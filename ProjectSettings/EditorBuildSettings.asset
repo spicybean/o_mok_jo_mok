@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ReplayScene.unity
     guid: f428397f1ec292d44969e3948b94c6ee
+  - enabled: 1
+    path: Assets/Scenes/RankingScene.unity
+    guid: 906a0065d988e8d4584f860fa2d54d8f
   m_configObjects: {}
