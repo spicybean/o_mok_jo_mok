@@ -209,6 +209,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             rankPanelController.rankSystem.LosePoints();
         }
         
+        
     }
     void WinLose(playerType player)
     {
@@ -224,7 +225,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             rankPanelController.LosePointsUI();
             rankPanelController.rankSystem.LosePoints();
         }
-        
+        DataManager.instance.SaveReplayData();
     }
     
    
