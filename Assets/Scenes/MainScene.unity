@@ -122,6 +122,28 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &1227928 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8461961044286703071, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
+  m_PrefabInstance: {fileID: 1389571977}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &38744614 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6881017684471493752, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
+  m_PrefabInstance: {fileID: 631250592}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &50819591
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,6 +586,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &474185869 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5015054730400031088, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
+  m_PrefabInstance: {fileID: 631250592}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &567047582
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,101 +739,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1753249101}
     m_Modifications:
-    - target: {fileID: 333966555573385406, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 333966555573385406, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 333966555573385406, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 333966555573385406, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -40
-      objectReference: {fileID: 0}
     - target: {fileID: 2291386729446450768, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1753249102}
-    - target: {fileID: 2291386729446450768, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickSignupButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 2291386729446450768, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainScenePanelController, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 2291386729446450768, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 2339044684484469241, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1753249102}
     - target: {fileID: 2339044684484469241, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickLoginFailedButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 2629054102302357307, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2629054102302357307, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2629054102302357307, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 2629054102302357307, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: OnClickLoginConfirmButton
       objectReference: {fileID: 0}
     - target: {fileID: 4147295849388084644, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
       propertyPath: m_Name
       value: '[Panel] Popup_Login'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4147295849388084644, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5600249734794826003, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5600249734794826003, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5600249734794826003, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 5600249734794826003, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -140
-      objectReference: {fileID: 0}
-    - target: {fileID: 7119178240329600902, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7119178240329600902, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7119178240329600902, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7119178240329600902, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -170
       objectReference: {fileID: 0}
     - target: {fileID: 7535008608251632915, guid: 60c2df8394da7554ca004975c75ee1ef, type: 3}
       propertyPath: m_Pivot.x
@@ -2333,73 +2286,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1753249101}
     m_Modifications:
-    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1238827416118940284, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3211195438804338134, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4011700932412063641, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_InputType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4011700932412063641, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_ContentType
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1753249102}
-    - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickSignupLoginButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainScenePanelController, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4249978247140233587, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 6190294971882569905, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_Name
       value: '[Panel] Popup_Signup'
-      objectReference: {fileID: 0}
-    - target: {fileID: 6190294971882569905, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6681374191101816986, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6927688739275006894, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_Pivot.x
@@ -2479,54 +2372,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6927688739275006894, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943077884379556373, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199801403571383013, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8979434430663294020, guid: c32a6ceabddd5d842875babdf5dd8abe, type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2781,6 +2626,19 @@ MonoBehaviour:
   accountPath: 
   currentReplaySlotNum: 0
   userAccountList: []
+  currentUserAccount:
+    userIndex: 0
+    username: 
+    email: 
+    password: 
+    usertier: 0
+    points: 0
+    totalmatch: 0
+    winmatch: 0
+    losematch: 0
+    tiematch: 0
+    image: {fileID: 0}
+    coin: 0
 --- !u!4 &1470493442
 Transform:
   m_ObjectHideFlags: 0
@@ -3125,14 +2983,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1431252935}
-  - {fileID: 665453134}
-  - {fileID: 1588471276}
   - {fileID: 293267288}
   - {fileID: 421116869}
-  - {fileID: 4902373592988272010}
-  - {fileID: 342639207}
-  - {fileID: 58346774}
+  - {fileID: 665453134}
   - {fileID: 788671930}
+  - {fileID: 342639207}
+  - {fileID: 1588471276}
+  - {fileID: 58346774}
+  - {fileID: 4902373592988272010}
   - {fileID: 1875932420}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3163,9 +3021,13 @@ MonoBehaviour:
   - {fileID: 58346773}
   - {fileID: 1875932419}
   - {fileID: 1016205114972884780}
-  usernameInputField: {fileID: 1352538482}
-  passwordInputField: {fileID: 1974883258}
-  emailInputField: {fileID: 1807588020}
+  logInEmail: {fileID: 38744614}
+  logInPassword: {fileID: 474185869}
+  signUpUsername: {fileID: 1352538482}
+  signUpPassword: {fileID: 1974883258}
+  signUpConfirmPassword: {fileID: 1227928}
+  signUpEmail: {fileID: 1807588020}
+  mainScenePanel: {fileID: 1431252934}
 --- !u!114 &1753249103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3218,7 +3080,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2067291918679201571, guid: 5e564275fe1e2094c9f92e72b1b3f7d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickLoginConfirmButton
+      value: OnClickLoginFailedButton
       objectReference: {fileID: 0}
     - target: {fileID: 2067291918679201571, guid: 5e564275fe1e2094c9f92e72b1b3f7d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

@@ -11,6 +11,7 @@ using UnityEditor;
 [Serializable]
 public class UserAccountData
 {
+    public int userIndex;
     public string username;
     public string email;
     public string password;
@@ -20,8 +21,8 @@ public class UserAccountData
     public int winmatch;
     public int losematch;
     public int tiematch;
-    public Image image;
-
+    public Sprite image;
+    public int coin;
 
     
     // ranking panel 로 보내기
@@ -69,6 +70,7 @@ public class DataManager : MonoBehaviour
     public int currentReplaySlotNum;
     public ReplayData currentReplay = new ReplayData();
     public List<UserAccountData> userAccountList = new List<UserAccountData>();
+    public UserAccountData currentUserAccount = new UserAccountData();
 
     // List 만들고
 
@@ -88,6 +90,11 @@ public class DataManager : MonoBehaviour
         
         dataPath = Application.persistentDataPath;
        
+    }
+
+    private void Start()
+    {
+        DataManager.instance.userAccountList = DataManager.instance.LoadAccountsData();
     }
 
     #region Account Save Load Functions
@@ -141,6 +148,35 @@ public class DataManager : MonoBehaviour
     {
         accountPath = Path.Combine(dataPath, "userAccount.json");
     }
+    
+    public UserAccountData SetCurrentUserAccountData(string email)
+    {
+        for (int i = 0; i < userAccountList.Count; i++)
+        {
+            if (userAccountList[i].email == email)
+            {
+                currentUserAccount = userAccountList[i];
+            }
+        }
+        return currentUserAccount;
+    }
+
+    public UserAccountData SaveCurrentUserAccountData(int userIndex)
+    {
+        return userAccountList[userIndex] = currentUserAccount;
+    }
+    
+    public bool CheckEmailAlreadyExists(string email)
+    {
+        foreach (var userData in DataManager.instance.userAccountList)
+        {
+            userData.email = email;
+            return true;
+        }
+
+        return false;
+    }
+    
     #endregion
 
     #region Replay Save Load Functions

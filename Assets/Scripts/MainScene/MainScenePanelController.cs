@@ -12,9 +12,13 @@ public class MainScenePanelController : MonoBehaviour
     [SerializeField] private GameObject[] panels;
 
     //InputFields
-    public TMP_InputField usernameInputField;
-    public TMP_InputField passwordInputField;
-    public TMP_InputField emailInputField;
+    [SerializeField] private TMP_InputField logInEmail;
+    [SerializeField] private TMP_InputField logInPassword;
+    [SerializeField] private TMP_InputField signUpUsername;
+    [SerializeField] private TMP_InputField signUpPassword;
+    [SerializeField] private TMP_InputField signUpConfirmPassword;
+    [SerializeField] private TMP_InputField signUpEmail;
+    [SerializeField] private GameObject mainScenePanel;
 
     private void Awake()
     {
@@ -64,40 +68,73 @@ public class MainScenePanelController : MonoBehaviour
     // Login Failed Panel
     public void OnClickLoginFailedButton()
     {
-        PanelControl(1);
+        PanelControl(0);
     }
 
     // Login Failed Confirm Button
     public void OnClickLoginConfirmButton()
     {
-        PanelControl(0);
+        if (DataManager.instance.CheckEmailAlreadyExists(logInEmail.text))
+        {
+            DataManager.instance.SetCurrentUserAccountData(logInEmail.text);
+            CloseButton();
+            InitMainScenePanel();
+        }
+        else
+        {
+            PanelControl(1);
+        }
     }
     
     // Signup Panel
     public void OnClickSignupButton()
     {
         
-        PanelControl(3);
+        PanelControl(4);
     }
     
     // Signup Panel - Login Button
     public void OnClickSignupLoginButton()
     {
-        DataManager.instance.userAccountList = DataManager.instance.LoadAccountsData();
-        UserAccountData userAccountData = new UserAccountData();
-        userAccountData.usertier = 18;
-        userAccountData.username = usernameInputField.text;
-        userAccountData.password = passwordInputField.text;
-        userAccountData.email = emailInputField.text;
-        DataManager.instance.userAccountList.Add(userAccountData);
-        DataManager.instance.SaveAccountsData();
-        Debug.Log(DataManager.instance.userAccountList.Count);
-        CloseButton();
+        if (!DataManager.instance.CheckEmailAlreadyExists(signUpEmail.text) && signUpConfirmPassword.text == signUpPassword.text)
+        {
+            DataManager.instance.currentUserAccount.userIndex = DataManager.instance.userAccountList.Count;
+            DataManager.instance.currentUserAccount.usertier = 18;
+            DataManager.instance.currentUserAccount.coin = 500;
+            DataManager.instance.currentUserAccount.username = signUpUsername.text;
+            DataManager.instance.currentUserAccount.password = signUpPassword.text;
+            DataManager.instance.currentUserAccount.email = signUpEmail.text;
+            DataManager.instance.userAccountList.Add(DataManager.instance.currentUserAccount);
+            DataManager.instance.SaveAccountsData();
+            CloseButton();
+            PanelControl(0);
+        }
+        else if (!DataManager.instance.CheckEmailAlreadyExists(signUpEmail.text) && signUpConfirmPassword.text != signUpPassword.text)
+        {
+            PanelControl(2);
+        }
+        else
+        {
+            PanelControl(4);
+        }
     }
+    
+   
 
     #endregion
 
     #region MainScenePanel
+
+    private void InitMainScenePanel()
+    {
+        mainScenePanel.transform.GetChild(0).GetComponent<TMP_Text>().text = 
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].coin.ToString();
+        mainScenePanel.transform.GetChild(1).GetComponent<Image>().sprite =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].image;
+        mainScenePanel.transform.GetChild(2).GetComponent<TMP_Text>().text =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].usertier + "급 "
+            + DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].username;
+    }
 
     // 게임 시작 버튼
     public void OnClickGamePlayButton()
@@ -113,7 +150,7 @@ public class MainScenePanelController : MonoBehaviour
         SceneManager.LoadScene("ReplayScene");
     }
 
-    public void OnClickGamePlaySingleAndMultySceneButton()
+    public void OnClickGamePlaySingleAndMultiSceneButton()
     {
         CoinController.Instance.CoinTextChanged(-100);
         CoinController.Instance.GamePlayCoinChanged();
