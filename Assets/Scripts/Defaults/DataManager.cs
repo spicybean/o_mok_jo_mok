@@ -6,6 +6,7 @@ using Unity.UI;
 using System.IO;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 //GameData(UserAccount)
 [Serializable]
@@ -73,7 +74,7 @@ public class DataManager : MonoBehaviour
     public UserAccountData currentUserAccount = new UserAccountData();
 
     // List 만들고
-
+    
     private void Awake()
     {
         #region Singleton
@@ -94,9 +95,15 @@ public class DataManager : MonoBehaviour
 
     private void Start()
     {
+        InitScene();
         DataManager.instance.userAccountList = DataManager.instance.LoadAccountsData();
     }
 
+    public void InitScene()
+    {
+        SceneManager.LoadScene("MainScene");
+    }
+    
     #region Account Save Load Functions
     /// <summary>
     /// 세이브 파일 저장 경로 : %appdata%/localLow/DefaultCompany/O_mok_jo_mok/userAccount.json
@@ -108,7 +115,6 @@ public class DataManager : MonoBehaviour
         {
             AccountsSavePath();
             string data = JsonUtility.ToJson(new UserAccountListWrapper { accounts = userAccountList }, true);
-           Debug.Log(data);
             File.WriteAllText(accountPath, data);
         }
         catch (Exception e)
@@ -170,8 +176,8 @@ public class DataManager : MonoBehaviour
     {
         foreach (var userData in DataManager.instance.userAccountList)
         {
-            userData.email = email;
-            return true;
+            if (userData.email == email) return true;
+            else continue;
         }
 
         return false;
@@ -208,9 +214,57 @@ public class DataManager : MonoBehaviour
     //리플레이 데이터를 저장함
     public void SaveReplayData()
     {
-        string data = JsonUtility.ToJson(currentReplay);
-        RefreshReplaySavePath();
-        File.WriteAllText(replayPath, data);
+        //저장 부분
+        ReplayData tempReplayData = currentReplay;
+        for (int i = Static._maxSaveCount; i >= 1; i--)
+        {
+            currentReplaySlotNum = i;
+            if (CheckReplayData())
+            {
+                //최대갯수 도달 시 가장 오래된 세이브 파일 삭제
+                if (i == Static._maxSaveCount)
+                {
+                    DeleteReplayData();
+                    continue;
+                }
+                //최신순 정렬
+                else
+                {
+                    for (int j = i; j >= 1; j--)
+                    {
+                        //파일명 다음슬롯으로 이름 변경
+                        currentReplaySlotNum = j;
+                        LoadReplayData();
+                        currentReplaySlotNum = j + 1;
+                        string data = JsonUtility.ToJson(currentReplay);
+                        RefreshReplaySavePath();
+                        File.WriteAllText(replayPath, data);
+
+                        // 1번 슬롯의 기존 세이브 지우고 새로운 세이브 추가
+                        if (j == 1)
+                        {
+                            currentReplaySlotNum = j;
+                            DeleteReplayData();
+                            currentReplay = tempReplayData;
+                            data = JsonUtility.ToJson(currentReplay);
+                            RefreshReplaySavePath();
+                            File.WriteAllText(replayPath, data);
+                            break;
+                        }
+                    }
+                }
+
+                break;
+            }
+            else
+            {
+                if (i == 1)
+                {
+                    SaveReplayData();
+                    break;
+                }
+            }
+        }
     }
 
     //리플레이 데이터를 불러옴
@@ -234,5 +288,6 @@ public class DataManager : MonoBehaviour
         RefreshReplaySavePath();
         File.Delete(replayPath);
     }
+    
     #endregion
 }

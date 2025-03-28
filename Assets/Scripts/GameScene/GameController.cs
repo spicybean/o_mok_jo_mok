@@ -38,12 +38,27 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         DataManager.instance.currentReplay.gamePlayData = new int[totalomokCells];
-        startTime = DateTime.Now;
+        Array.Fill(DataManager.instance.currentReplay.gamePlayData, -1);
+        DataManager.instance.currentReplay.dateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
         SetOmokBoard();
         ranjuRule = new RanjuRule(omokBoard);
         
         turn = playerType.Black;
         gameState = GameState.Single;
+        
+        if (gameState == GameState.Single)
+        {
+            // ToDo
+            //playerName, playerTier, enemyTier, playerprofile, enemyprofile 연동 
+            DataManager.instance.currentReplay.enemyName = "AI봇";
+        }
+        else if (gameState == GameState.Double)
+        {
+            // ToDo
+            // playerTier, enemyTier, playerprofile, enemyprofile 연동 
+            DataManager.instance.currentReplay.playerName = "플레이어 1";
+            DataManager.instance.currentReplay.enemyName = "플레이어 2";
+        }
     }
 
     void Update()
@@ -149,7 +164,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 //현재 셀에 현재 턴 바둑알 둔다
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
-                DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
+                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                 
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 
@@ -162,7 +177,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
-                DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
+                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                 
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 SetForbiddenCell();
@@ -183,49 +198,34 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                     count++;
                 }
             }
-        
             if (count == totalomokCells)
             {
                 rankPanelController.ShowRankPanel();
                 rankPanelController.DrawPointsUI();
             }
         }
-        
     }
 
-
-    void WinLose(GameObject player)
-    {
-        if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
-        {
-            rankPanelController.ShowRankPanel();
-            rankPanelController.GetPointsUI();
-            rankPanelController.rankSystem.AddPoints();
-        }
-        else if(player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.White)
-        {
-            rankPanelController.ShowRankPanel();
-            rankPanelController.LosePointsUI();
-            rankPanelController.rankSystem.LosePoints();
-        }
-        
-        
-    }
-    void WinLose(playerType player)
+    WinLoseType WinLose(playerType player)
     {
         if (player == playerType.Black)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.GetPointsUI();
             rankPanelController.rankSystem.AddPoints();
+            return WinLoseType.Win;
         }
         else if(player == playerType.White)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.LosePointsUI();
             rankPanelController.rankSystem.LosePoints();
+            return WinLoseType.Lose;
         }
-        DataManager.instance.SaveReplayData();
+        else
+        {
+            return WinLoseType.Draw;
+        }
     }
     
    
@@ -242,7 +242,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 SetTurn(turn,cell.GetComponent<OmokCell>().index);
                 if (ranjuRule.CheckWin(tmp))
                 {
-                    WinLose(tmp);
+                    DataManager.instance.currentReplay.winLoseType = WinLose(tmp);
+                    DataManager.instance.SaveReplayData();
                 }
                 AIPlayTurn((cell.GetComponent<OmokCell>().index/15,cell.GetComponent<OmokCell>().index%15));
             }

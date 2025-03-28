@@ -10,7 +10,7 @@ public class CoinController : Singleton<CoinController>
     [SerializeField] private TextMeshProUGUI mainCoinText;
     [SerializeField] private TextMeshProUGUI gameplayCoinText;
 
-    [SerializeField] public int currentCoin = 100;
+    public int currentCoin;
 
     private void Start()
     {
@@ -19,11 +19,16 @@ public class CoinController : Singleton<CoinController>
 
     public void CoinTextChanged(int coin)
     {
-        string[] strCoin = mainCoinText.text.Split(':');
-        int changeCoin = int.Parse(strCoin[1]);
-        currentCoin = changeCoin + coin;
+        currentCoin = DataManager.instance.currentUserAccount.coin;
+        Debug.Log("beforeCoin :" + currentCoin);
+        currentCoin += coin;
+        Debug.Log("afterCoin :" + currentCoin);
+        DataManager.instance.currentUserAccount.coin = currentCoin;
+        DataManager.instance.SaveCurrentUserAccountData(DataManager.instance.currentUserAccount.userIndex);
+        DataManager.instance.SaveAccountsData();
         
-        mainCoinText.text = strCoin[0] + ": " + currentCoin.ToString();
+        
+        mainCoinText.text = "코인 : " + currentCoin.ToString();
     }
 
     public void GamePlayCoinChanged()

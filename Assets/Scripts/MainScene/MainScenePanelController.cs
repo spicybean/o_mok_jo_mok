@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.VersionControl;
 
 public class MainScenePanelController : MonoBehaviour
 {
@@ -30,8 +31,8 @@ public class MainScenePanelController : MonoBehaviour
     {
         CloseButton();
         panels[0].SetActive(true);
+        RefreshProfile();
     }
-
     
     #region PanelControl
 
@@ -92,7 +93,7 @@ public class MainScenePanelController : MonoBehaviour
     public void OnClickSignupButton()
     {
         
-        PanelControl(4);
+        PanelControl(3);
     }
     
     // Signup Panel - Login Button
@@ -147,34 +148,24 @@ public class MainScenePanelController : MonoBehaviour
 
     public void OnClickReplayButton()
     {
-        CoinController.Instance.CoinTextChanged(-100);
-        if (CoinController.Instance.currentCoin < 0)
-        {
-            CoinController.Instance.CoinTextChanged(100);
-            PanelControl(12);
-        }
-        else
-        {
-            // Replay Scene 넘어가기
-            SceneManager.LoadScene("ReplayScene");
-        }
+        // Replay Scene 넘어가기
+        SceneManager.LoadScene("ReplayScene");
     }
 
     public void OnClickGamePlaySingleAndMultiSceneButton()
     {
-        CoinController.Instance.CoinTextChanged(-100);
-        
-        if (CoinController.Instance.currentCoin < 0)
+        Debug.Log("currentCoin :" + DataManager.instance.currentUserAccount.coin);
+        Debug.Log("currentName :" + DataManager.instance.currentUserAccount.username);
+        if (DataManager.instance.currentUserAccount.coin >= 100)
         {
-            CoinController.Instance.CoinTextChanged(100);
+            CoinController.Instance.CoinTextChanged(-100);
             CoinController.Instance.GamePlayCoinChanged();
-            PanelControl(12);
+            // Replay Scene 넘어가기
+            SceneManager.LoadScene("GameScene");
         }
         else
         {
-            CoinController.Instance.GamePlayCoinChanged();
-            // Game Scene 넘어가기
-            SceneManager.LoadScene("GameScene");
+            PanelControl(12);
         }
     }
     
@@ -215,10 +206,7 @@ public class MainScenePanelController : MonoBehaviour
         CoinController.Instance.CoinTextChanged(10000);
     }
 
-    // 셋팅 버튼
-    public void OnClickSettingButton()
-    {
-    }
+    
     
     // Main Scene Panel - Back Button
     public void OnClickMainScenePanelBackButton()
