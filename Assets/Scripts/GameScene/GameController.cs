@@ -52,10 +52,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         
     }
 
-    void AIPlayTurn((int x,int y) playerMove)
+    IEnumerator AIPlayTurn((int x,int y) playerMove)
     {
         // AI 최적 수 계산
-        var bestMove = AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,5);
+        yield return new WaitForSeconds(0.5f);
+        var bestMove = AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,50);
         if (bestMove != (-1, -1)) // 유효한 수가 있으면
         {
             SetTurn(playerType.White, bestMove.Item1 * 15 + bestMove.Item2);
@@ -244,7 +245,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 {
                     WinLose(tmp);
                 }
-                AIPlayTurn((cell.GetComponent<OmokCell>().index/15,cell.GetComponent<OmokCell>().index%15));
+                StartCoroutine(AIPlayTurn((cell.GetComponent<OmokCell>().index/15,cell.GetComponent<OmokCell>().index%15)));
             }
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
             if(cell.GetComponent<OmokCell>().My_MarkerType != OmokCell.MarkerType.PlaceMark)
