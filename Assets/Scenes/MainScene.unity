@@ -1897,19 +1897,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3306387233472325182, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3306387233472325182, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3306387233472325182, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3306387233472325182, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3541740746073856484, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -2005,23 +2005,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7731985946053221687, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8745161713154700812, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8745161713154700812, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8745161713154700812, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8745161713154700812, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -250
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8751116303414743526, guid: 42b623c5710024a4ba1a4185be7d00c3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3028,6 +3028,7 @@ MonoBehaviour:
   signUpConfirmPassword: {fileID: 1227928}
   signUpEmail: {fileID: 1807588020}
   mainScenePanel: {fileID: 1431252934}
+  gamePlayPanel: {fileID: 1588471275}
 --- !u!114 &1753249103
 MonoBehaviour:
   m_ObjectHideFlags: 0

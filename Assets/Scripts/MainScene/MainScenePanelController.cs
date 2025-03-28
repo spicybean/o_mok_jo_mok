@@ -19,6 +19,7 @@ public class MainScenePanelController : MonoBehaviour
     [SerializeField] private TMP_InputField signUpConfirmPassword;
     [SerializeField] private TMP_InputField signUpEmail;
     [SerializeField] private GameObject mainScenePanel;
+    [SerializeField] private GameObject gamePlayPanel;
 
     private void Awake()
     {
@@ -79,6 +80,7 @@ public class MainScenePanelController : MonoBehaviour
             DataManager.instance.SetCurrentUserAccountData(logInEmail.text);
             CloseButton();
             InitMainScenePanel();
+            InitGamePlayPanel();
         }
         else
         {
@@ -188,7 +190,26 @@ public class MainScenePanelController : MonoBehaviour
     {
         CloseButton();
     }
+
+    public void RefreshProfile()
+    {
+        InitMainScenePanel();
+        InitGamePlayPanel();
+    }
     
     #endregion
     
+    #region GamePlayPanel
+    private void InitGamePlayPanel()
+    {
+        gamePlayPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = 
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].coin.ToString();
+        gamePlayPanel.transform.GetChild(2).GetComponent<Image>().sprite =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].image;
+        gamePlayPanel.transform.GetChild(3).GetComponent<TMP_Text>().text =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].usertier + "급 "
+            + DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].username;
+    }
+    
+    #endregion
 }
