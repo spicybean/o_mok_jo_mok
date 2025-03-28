@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -33,7 +34,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     public int playerLife = 3;
     public int enemyLife = 3;
-    
+
+    private void Awake()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,18 +52,37 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         turn = playerType.Black;
         gameState = GameState.Single;
         
+    }
+
+    void OnDestroy() {
+        // 이벤트에서 함수를 제거해 리소스 누수 방지
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SetGameState(DataManager.instance.currentReplay.gameState);
+    }
+    
+    public void SetGameState(GameState gameState)
+    {
         if (gameState == GameState.Single)
         {
-            // ToDo
-            //playerName, playerTier, enemyTier, playerprofile, enemyprofile 연동 
+            // ToDo AI배틀 관련 Init하기
             DataManager.instance.currentReplay.enemyName = "AI봇";
+            DataManager.instance.currentReplay.playerName = DataManager.instance.currentUserAccount.username;
+            DataManager.instance.currentReplay.playerTier = DataManager.instance.currentUserAccount.usertier;
+            DataManager.instance.currentReplay.playerImage = DataManager.instance.currentUserAccount.image;
         }
         else if (gameState == GameState.Double)
         {
-            // ToDo
-            // playerTier, enemyTier, playerprofile, enemyprofile 연동 
+            // ToDo 더블배틀 관련 Init하기
             DataManager.instance.currentReplay.playerName = "플레이어 1";
             DataManager.instance.currentReplay.enemyName = "플레이어 2";
+            DataManager.instance.currentReplay.playerTier = DataManager.instance.currentUserAccount.usertier;
+            DataManager.instance.currentReplay.playerImage = DataManager.instance.currentUserAccount.image;
+            DataManager.instance.currentReplay.enemyTier = DataManager.instance.currentUserAccount.usertier;
+            DataManager.instance.currentReplay.enemyImage = DataManager.instance.currentUserAccount.image;
         }
     }
 

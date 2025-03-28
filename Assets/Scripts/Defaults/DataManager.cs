@@ -45,6 +45,7 @@ public enum WinLoseType
 //GameData(ReplayMode)
 public class ReplayData
 {
+    public GameController.GameState gameState;
     public WinLoseType winLoseType;
     public string playerName;
     public string enemyName;
@@ -72,6 +73,7 @@ public class DataManager : MonoBehaviour
     public ReplayData currentReplay = new ReplayData();
     public List<UserAccountData> userAccountList = new List<UserAccountData>();
     public UserAccountData currentUserAccount = new UserAccountData();
+    
 
     // List 만들고
     

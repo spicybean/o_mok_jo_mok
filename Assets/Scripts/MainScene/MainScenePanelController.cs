@@ -151,8 +151,8 @@ public class MainScenePanelController : MonoBehaviour
         // Replay Scene 넘어가기
         SceneManager.LoadScene("ReplayScene");
     }
-
-    public void OnClickGamePlaySingleAndMultiSceneButton()
+    
+    public void OnClickGameSinglePlayButton()
     {
         Debug.Log("currentCoin :" + DataManager.instance.currentUserAccount.coin);
         Debug.Log("currentName :" + DataManager.instance.currentUserAccount.username);
@@ -160,6 +160,25 @@ public class MainScenePanelController : MonoBehaviour
         {
             CoinController.Instance.CoinTextChanged(-100);
             CoinController.Instance.GamePlayCoinChanged();
+            DataManager.instance.currentReplay.gameState = GameController.GameState.Single;
+            // Replay Scene 넘어가기
+            SceneManager.LoadScene("GameScene");
+        }
+        else
+        {
+            PanelControl(12);
+        }
+    }
+    
+    public void OnClickGameDoublePlayButton()
+    {
+        Debug.Log("currentCoin :" + DataManager.instance.currentUserAccount.coin);
+        Debug.Log("currentName :" + DataManager.instance.currentUserAccount.username);
+        if (DataManager.instance.currentUserAccount.coin >= 100)
+        {
+            CoinController.Instance.CoinTextChanged(-100);
+            CoinController.Instance.GamePlayCoinChanged();
+            DataManager.instance.currentReplay.gameState = GameController.GameState.Double;
             // Replay Scene 넘어가기
             SceneManager.LoadScene("GameScene");
         }
