@@ -6,11 +6,13 @@ using Unity.UI;
 using System.IO;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 //GameData(UserAccount)
 [Serializable]
 public class UserAccountData
 {
+    public int userIndex;
     public string username;
     public string email;
     public string password;
@@ -20,8 +22,8 @@ public class UserAccountData
     public int winmatch;
     public int losematch;
     public int tiematch;
-    public Image image;
-
+    public Sprite image;
+    public int coin;
 
     
     // ranking panel 로 보내기
@@ -43,6 +45,7 @@ public enum WinLoseType
 //GameData(ReplayMode)
 public class ReplayData
 {
+    public GameController.GameState gameState;
     public WinLoseType winLoseType;
     public string playerName;
     public string enemyName;
@@ -69,9 +72,11 @@ public class DataManager : MonoBehaviour
     public int currentReplaySlotNum;
     public ReplayData currentReplay = new ReplayData();
     public List<UserAccountData> userAccountList = new List<UserAccountData>();
+    public UserAccountData currentUserAccount = new UserAccountData();
+    
 
     // List 만들고
-
+    
     private void Awake()
     {
         #region Singleton
@@ -90,6 +95,17 @@ public class DataManager : MonoBehaviour
        
     }
 
+    private void Start()
+    {
+        InitScene();
+        DataManager.instance.userAccountList = DataManager.instance.LoadAccountsData();
+    }
+
+    public void InitScene()
+    {
+        SceneManager.LoadScene("MainScene");
+    }
+    
     #region Account Save Load Functions
     /// <summary>
     /// 세이브 파일 저장 경로 : %appdata%/localLow/DefaultCompany/O_mok_jo_mok/userAccount.json
@@ -101,7 +117,6 @@ public class DataManager : MonoBehaviour
         {
             AccountsSavePath();
             string data = JsonUtility.ToJson(new UserAccountListWrapper { accounts = userAccountList }, true);
-           Debug.Log(data);
             File.WriteAllText(accountPath, data);
         }
         catch (Exception e)
@@ -141,6 +156,35 @@ public class DataManager : MonoBehaviour
     {
         accountPath = Path.Combine(dataPath, "userAccount.json");
     }
+    
+    public UserAccountData SetCurrentUserAccountData(string email)
+    {
+        for (int i = 0; i < userAccountList.Count; i++)
+        {
+            if (userAccountList[i].email == email)
+            {
+                currentUserAccount = userAccountList[i];
+            }
+        }
+        return currentUserAccount;
+    }
+
+    public UserAccountData SaveCurrentUserAccountData(int userIndex)
+    {
+        return userAccountList[userIndex] = currentUserAccount;
+    }
+    
+    public bool CheckEmailAlreadyExists(string email)
+    {
+        foreach (var userData in DataManager.instance.userAccountList)
+        {
+            if (userData.email == email) return true;
+            else continue;
+        }
+
+        return false;
+    }
+    
     #endregion
 
     #region Replay Save Load Functions
@@ -172,9 +216,57 @@ public class DataManager : MonoBehaviour
     //리플레이 데이터를 저장함
     public void SaveReplayData()
     {
-        string data = JsonUtility.ToJson(currentReplay);
-        RefreshReplaySavePath();
-        File.WriteAllText(replayPath, data);
+        //저장 부분
+        ReplayData tempReplayData = currentReplay;
+        for (int i = Static._maxSaveCount; i >= 1; i--)
+        {
+            currentReplaySlotNum = i;
+            if (CheckReplayData())
+            {
+                //최대갯수 도달 시 가장 오래된 세이브 파일 삭제
+                if (i == Static._maxSaveCount)
+                {
+                    DeleteReplayData();
+                    continue;
+                }
+                //최신순 정렬
+                else
+                {
+                    for (int j = i; j >= 1; j--)
+                    {
+                        //파일명 다음슬롯으로 이름 변경
+                        currentReplaySlotNum = j;
+                        LoadReplayData();
+                        currentReplaySlotNum = j + 1;
+                        string data = JsonUtility.ToJson(currentReplay);
+                        RefreshReplaySavePath();
+                        File.WriteAllText(replayPath, data);
+
+                        // 1번 슬롯의 기존 세이브 지우고 새로운 세이브 추가
+                        if (j == 1)
+                        {
+                            currentReplaySlotNum = j;
+                            DeleteReplayData();
+                            currentReplay = tempReplayData;
+                            data = JsonUtility.ToJson(currentReplay);
+                            RefreshReplaySavePath();
+                            File.WriteAllText(replayPath, data);
+                            break;
+                        }
+                    }
+                }
+
+                break;
+            }
+            else
+            {
+                if (i == 1)
+                {
+                    SaveReplayData();
+                    break;
+                }
+            }
+        }
     }
 
     //리플레이 데이터를 불러옴
@@ -198,5 +290,6 @@ public class DataManager : MonoBehaviour
         RefreshReplaySavePath();
         File.Delete(replayPath);
     }
+    
     #endregion
 }

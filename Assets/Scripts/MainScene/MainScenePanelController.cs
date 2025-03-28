@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.VersionControl;
 
 public class MainScenePanelController : MonoBehaviour
 {
@@ -12,9 +13,14 @@ public class MainScenePanelController : MonoBehaviour
     [SerializeField] private GameObject[] panels;
 
     //InputFields
-    public TMP_InputField usernameInputField;
-    public TMP_InputField passwordInputField;
-    public TMP_InputField emailInputField;
+    [SerializeField] private TMP_InputField logInEmail;
+    [SerializeField] private TMP_InputField logInPassword;
+    [SerializeField] private TMP_InputField signUpUsername;
+    [SerializeField] private TMP_InputField signUpPassword;
+    [SerializeField] private TMP_InputField signUpConfirmPassword;
+    [SerializeField] private TMP_InputField signUpEmail;
+    [SerializeField] private GameObject mainScenePanel;
+    [SerializeField] private GameObject gamePlayPanel;
 
     private void Awake()
     {
@@ -25,8 +31,8 @@ public class MainScenePanelController : MonoBehaviour
     {
         CloseButton();
         panels[0].SetActive(true);
+        RefreshProfile();
     }
-
     
     #region PanelControl
 
@@ -64,13 +70,23 @@ public class MainScenePanelController : MonoBehaviour
     // Login Failed Panel
     public void OnClickLoginFailedButton()
     {
-        PanelControl(1);
+        PanelControl(0);
     }
 
     // Login Failed Confirm Button
     public void OnClickLoginConfirmButton()
     {
-        PanelControl(0);
+        if (DataManager.instance.CheckEmailAlreadyExists(logInEmail.text))
+        {
+            DataManager.instance.SetCurrentUserAccountData(logInEmail.text);
+            CloseButton();
+            InitMainScenePanel();
+            InitGamePlayPanel();
+        }
+        else
+        {
+            PanelControl(1);
+        }
     }
     
     // Signup Panel
@@ -83,21 +99,45 @@ public class MainScenePanelController : MonoBehaviour
     // Signup Panel - Login Button
     public void OnClickSignupLoginButton()
     {
-        DataManager.instance.userAccountList = DataManager.instance.LoadAccountsData();
-        UserAccountData userAccountData = new UserAccountData();
-        userAccountData.usertier = 18;
-        userAccountData.username = usernameInputField.text;
-        userAccountData.password = passwordInputField.text;
-        userAccountData.email = emailInputField.text;
-        DataManager.instance.userAccountList.Add(userAccountData);
-        DataManager.instance.SaveAccountsData();
-        Debug.Log(DataManager.instance.userAccountList.Count);
-        CloseButton();
+        if (!DataManager.instance.CheckEmailAlreadyExists(signUpEmail.text) && signUpConfirmPassword.text == signUpPassword.text)
+        {
+            DataManager.instance.currentUserAccount.userIndex = DataManager.instance.userAccountList.Count;
+            DataManager.instance.currentUserAccount.usertier = 18;
+            DataManager.instance.currentUserAccount.coin = 500;
+            DataManager.instance.currentUserAccount.username = signUpUsername.text;
+            DataManager.instance.currentUserAccount.password = signUpPassword.text;
+            DataManager.instance.currentUserAccount.email = signUpEmail.text;
+            DataManager.instance.userAccountList.Add(DataManager.instance.currentUserAccount);
+            DataManager.instance.SaveAccountsData();
+            CloseButton();
+            PanelControl(0);
+        }
+        else if (!DataManager.instance.CheckEmailAlreadyExists(signUpEmail.text) && signUpConfirmPassword.text != signUpPassword.text)
+        {
+            PanelControl(2);
+        }
+        else
+        {
+            PanelControl(4);
+        }
     }
+    
+   
 
     #endregion
 
     #region MainScenePanel
+
+    private void InitMainScenePanel()
+    {
+        mainScenePanel.transform.GetChild(0).GetComponent<TMP_Text>().text = 
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].coin.ToString();
+        mainScenePanel.transform.GetChild(1).GetComponent<Image>().sprite =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].image;
+        mainScenePanel.transform.GetChild(2).GetComponent<TMP_Text>().text =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].usertier + "급 "
+            + DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].username;
+    }
 
     // 게임 시작 버튼
     public void OnClickGamePlayButton()
@@ -108,34 +148,43 @@ public class MainScenePanelController : MonoBehaviour
 
     public void OnClickReplayButton()
     {
-        CoinController.Instance.CoinTextChanged(-100);
-        if (CoinController.Instance.currentCoin < 0)
+        // Replay Scene 넘어가기
+        SceneManager.LoadScene("ReplayScene");
+    }
+    
+    public void OnClickGameSinglePlayButton()
+    {
+        Debug.Log("currentCoin :" + DataManager.instance.currentUserAccount.coin);
+        Debug.Log("currentName :" + DataManager.instance.currentUserAccount.username);
+        if (DataManager.instance.currentUserAccount.coin >= 100)
         {
-            CoinController.Instance.CoinTextChanged(100);
-            PanelControl(12);
+            CoinController.Instance.CoinTextChanged(-100);
+            CoinController.Instance.GamePlayCoinChanged();
+            DataManager.instance.currentReplay.gameState = GameController.GameState.Single;
+            // Replay Scene 넘어가기
+            SceneManager.LoadScene("GameScene");
         }
         else
         {
-            // Replay Scene 넘어가기
-            SceneManager.LoadScene("ReplayScene");
+            PanelControl(12);
         }
     }
-
-    public void OnClickGamePlaySingleAndMultySceneButton()
+    
+    public void OnClickGameDoublePlayButton()
     {
-        CoinController.Instance.CoinTextChanged(-100);
-        
-        if (CoinController.Instance.currentCoin < 0)
+        Debug.Log("currentCoin :" + DataManager.instance.currentUserAccount.coin);
+        Debug.Log("currentName :" + DataManager.instance.currentUserAccount.username);
+        if (DataManager.instance.currentUserAccount.coin >= 100)
         {
-            CoinController.Instance.CoinTextChanged(100);
+            CoinController.Instance.CoinTextChanged(-100);
             CoinController.Instance.GamePlayCoinChanged();
-            PanelControl(12);
+            DataManager.instance.currentReplay.gameState = GameController.GameState.Double;
+            // Replay Scene 넘어가기
+            SceneManager.LoadScene("GameScene");
         }
         else
         {
-            CoinController.Instance.GamePlayCoinChanged();
-            // Game Scene 넘어가기
-            SceneManager.LoadScene("GameScene");
+            PanelControl(12);
         }
     }
     
@@ -176,17 +225,33 @@ public class MainScenePanelController : MonoBehaviour
         CoinController.Instance.CoinTextChanged(10000);
     }
 
-    // 셋팅 버튼
-    public void OnClickSettingButton()
-    {
-    }
+    
     
     // Main Scene Panel - Back Button
     public void OnClickMainScenePanelBackButton()
     {
         CloseButton();
     }
+
+    public void RefreshProfile()
+    {
+        InitMainScenePanel();
+        InitGamePlayPanel();
+    }
     
     #endregion
     
+    #region GamePlayPanel
+    private void InitGamePlayPanel()
+    {
+        gamePlayPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = 
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].coin.ToString();
+        gamePlayPanel.transform.GetChild(2).GetComponent<Image>().sprite =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].image;
+        gamePlayPanel.transform.GetChild(3).GetComponent<TMP_Text>().text =
+            DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].usertier + "급 "
+            + DataManager.instance.userAccountList[DataManager.instance.currentUserAccount.userIndex].username;
+    }
+    
+    #endregion
 }
