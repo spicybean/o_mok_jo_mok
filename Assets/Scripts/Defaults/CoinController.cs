@@ -10,11 +10,11 @@ public class CoinController : Singleton<CoinController>
     [SerializeField] private TextMeshProUGUI mainCoinText;
     [SerializeField] private TextMeshProUGUI gameplayCoinText;
 
-    [SerializeField] private int currentCoin;
+    [SerializeField] public int currentCoin = 100;
 
     private void Start()
     {
-        currentCoin = 300;
+        CoinTextChanged(currentCoin);
     }
 
     public void CoinTextChanged(int coin)

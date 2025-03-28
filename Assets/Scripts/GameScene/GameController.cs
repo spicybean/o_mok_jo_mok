@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
+
 
 
 public class GameController : MonoBehaviour, IPointerClickHandler
@@ -38,54 +38,35 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         DataManager.instance.currentReplay.gamePlayData = new int[totalomokCells];
-        Array.Fill(DataManager.instance.currentReplay.gamePlayData, -1);
-        DataManager.instance.currentReplay.dateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+        startTime = DateTime.Now;
         SetOmokBoard();
         ranjuRule = new RanjuRule(omokBoard);
         
         turn = playerType.Black;
         gameState = GameState.Single;
-        if (gameState == GameState.Single)
-        {
-            // ToDo
-            //playerName, playerTier, enemyTier, playerprofile, enemyprofile 연동 
-            DataManager.instance.currentReplay.enemyName = "AI봇";
-        }
-        else if (gameState == GameState.Double)
-        {
-            // ToDo
-            // playerTier, enemyTier, playerprofile, enemyprofile 연동 
-            DataManager.instance.currentReplay.playerName = "플레이어 1";
-            DataManager.instance.currentReplay.enemyName = "플레이어 2";
-        }
     }
 
     void Update()
     {
-        /*if (gameState == GameState.Single)
+        // Single 플레이 모드에서 AI의 턴 처리
+        
+    }
+
+    void AIPlayTurn((int x,int y) playerMove)
+    {
+        // AI 최적 수 계산
+        var bestMove = AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,5);
+        if (bestMove != (-1, -1)) // 유효한 수가 있으면
         {
-            if (turn == playerType.White)
-            {
-                (int, int) aiBestMove = AIController.AIBestMove(omokBoard, turn);
-                SetTurn(turn, aiBestMove.Item1 * 15 + aiBestMove.Item2);
-            }
-            
-        }*/
+            SetTurn(playerType.White, bestMove.Item1 * 15 + bestMove.Item2);
+        }
     }
     void SelectStone()
     {
         //TODO: 돌 색 고르기
     }
 
-    // public void Update()
-    // {
-    //     for (int i = 0; i < omokButtons.Length; i++)
-    //     {
-    //         if (ranjuRule.Board[i/15,i%15] == playerType.Black)
-    //         {
-    //             Debug.Log($"{i/15},{i%15} black");
-    //         }
-    //     }
+   
     // }
     void SetOmokBoard()
     {
@@ -168,9 +149,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 //현재 셀에 현재 턴 바둑알 둔다
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
-                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
-                //턴 변경
+                DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
+                
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
+                
                 RemoveForbiddenCells();
                 
                 break;
@@ -180,23 +162,18 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 omokBoard[index / 15, index % 15] = player;
                 turncounter++;
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
-                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
+                DataManager.instance.currentReplay.gamePlayData[turncounter] = index;
+                
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 SetForbiddenCell();
                 SetForbiddenCell();
                 break;
         }
-
+        ranjuRule.UpdateBoardState(omokBoard);
         
         
-        if (ranjuRule.CheckFiveInAllDirections(index,omokBoard[index / 15, index % 15]))
-        {
-            //승패 알려주는 코드
-            //대국이 끝남
-            DataManager.instance.currentReplay.winLoseType = WinLose(omokButtons[index]);
-            SaveReplay();
-        }
-        else if (turncounter >= totalomokCells - 10)
+        
+        if (turncounter >= totalomokCells - 10)
         {
             int count = 0;
             for (int i = 0; i < omokButtons.Length; i++)
@@ -212,83 +189,27 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 rankPanelController.ShowRankPanel();
                 rankPanelController.DrawPointsUI();
             }
-
-            DataManager.instance.currentReplay.winLoseType =  WinLoseType.Draw;
-            SaveReplay();
         }
-    }
-
-    private void SaveReplay()
-    {
-        //저장 부분
-        ReplayData tempReplayData = DataManager.instance.currentReplay;
-        for (int i = Static._maxSaveCount; i >= 1; i--)
-        {
-            DataManager.instance.currentReplaySlotNum = i;
-            if (DataManager.instance.CheckReplayData())
-            {
-                //최대갯수 도달 시 가장 오래된 세이브 파일 삭제
-                if (i == Static._maxSaveCount)
-                {
-                    DataManager.instance.DeleteReplayData();
-                    continue;
-                }
-                //최신순 정렬
-                else
-                {
-                    for (int j = i; j >= 1; j--)
-                    {
-                        //파일명 다음슬롯으로 이름 변경
-                        DataManager.instance.currentReplaySlotNum = j;
-                        DataManager.instance.LoadReplayData();
-                        DataManager.instance.currentReplaySlotNum = j + 1;
-                        DataManager.instance.SaveReplayData();
-                        
-                        // 1번 슬롯의 기존 세이브 지우고 새로운 세이브 추가
-                        if (j == 1)
-                        {
-                            DataManager.instance.currentReplaySlotNum = j;
-                            DataManager.instance.DeleteReplayData();
-                            DataManager.instance.currentReplay = tempReplayData;
-                            DataManager.instance.SaveReplayData();
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
-            else
-            {
-                if (i == 1)
-                {
-                    DataManager.instance.SaveReplayData();
-                    break;
-                }
-            }
-        }
+        
     }
 
 
-    WinLoseType WinLose(GameObject player)
+    void WinLose(GameObject player)
     {
         if (player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.Black)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.GetPointsUI();
             rankPanelController.rankSystem.AddPoints();
-            return WinLoseType.Win;
         }
         else if(player.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.White)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.LosePointsUI();
             rankPanelController.rankSystem.LosePoints();
-            return WinLoseType.Lose;
         }
-        else
-        {
-            return WinLoseType.Draw;
-        }
+        
+        
     }
     void WinLose(playerType player)
     {
@@ -304,7 +225,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             rankPanelController.LosePointsUI();
             rankPanelController.rankSystem.LosePoints();
         }
-        
+        DataManager.instance.SaveReplayData();
     }
     
    
@@ -323,6 +244,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 {
                     WinLose(tmp);
                 }
+                AIPlayTurn((cell.GetComponent<OmokCell>().index/15,cell.GetComponent<OmokCell>().index%15));
             }
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
             if(cell.GetComponent<OmokCell>().My_MarkerType != OmokCell.MarkerType.PlaceMark)
