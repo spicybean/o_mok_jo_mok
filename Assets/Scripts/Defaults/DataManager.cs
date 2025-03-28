@@ -184,6 +184,22 @@ public class DataManager : MonoBehaviour
 
         return false;
     }
+
+    public bool ComparePassword(string email, string password)
+    {
+        foreach (var userData in DataManager.instance.userAccountList)
+        {
+            if (userData.email == email)
+            {
+                if (userData.password == password)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     
     #endregion
 
