@@ -36,6 +36,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
         }
         else
         {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
             Destroy(gameObject);
         }
 

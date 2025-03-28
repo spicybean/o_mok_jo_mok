@@ -149,9 +149,9 @@ public class ReplayManager : MonoBehaviour
             enemyInform.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = 
                 currentReplayData.enemyImage;
             playerInform.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = 
-                currentReplayData.playerTier + " " + currentReplayData.playerName;
+                currentReplayData.playerTier + "급 " + currentReplayData.playerName;
             enemyInform.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = 
-                currentReplayData.enemyTier + " " + currentReplayData.enemyName;
+                currentReplayData.enemyTier + "급 " + currentReplayData.enemyName;
         }
         
         for (int i = 0; i < currentReplayData.gamePlayData.Length; i++)
