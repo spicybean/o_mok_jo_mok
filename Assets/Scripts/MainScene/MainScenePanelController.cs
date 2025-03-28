@@ -76,7 +76,7 @@ public class MainScenePanelController : MonoBehaviour
     // Login Failed Confirm Button
     public void OnClickLoginConfirmButton()
     {
-        if (DataManager.instance.CheckEmailAlreadyExists(logInEmail.text))
+        if (DataManager.instance.CheckEmailAlreadyExists(logInEmail.text) && DataManager.instance.ComparePassword(logInEmail.text, logInPassword.text))
         {
             DataManager.instance.SetCurrentUserAccountData(logInEmail.text);
             CloseButton();
