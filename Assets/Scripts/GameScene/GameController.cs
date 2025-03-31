@@ -42,6 +42,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
    
     private int prevIndex;
     
+    //player index
+    [SerializeField] private TMP_Text playerName;
+    [SerializeField] private TMP_Text enemyName;
+    [SerializeField] private Image playerProfile;
+    [SerializeField] private Image enemyProfile;
+    
     private void Awake()
     {
         //SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -94,9 +100,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         SetGameState(DataManager.instance.currentReplay.gameState);
     }
     
-    public void SetGameState(GameState gameState)
+    public void SetGameState(GameState _gameState)
     {
-        if (gameState == GameState.Single)
+        if (_gameState == GameState.Single)
         {
             // ToDo AI배틀 관련 Init하기
             DataManager.instance.currentReplay.enemyName = "AI봇";
@@ -104,8 +110,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             DataManager.instance.currentReplay.playerName = DataManager.instance.currentUserAccount.username;
             DataManager.instance.currentReplay.playerTier = DataManager.instance.currentReplay.enemyTier = DataManager.instance.currentUserAccount.usertier;
             DataManager.instance.currentReplay.playerImage = DataManager.instance.currentUserAccount.image;
+            playerName.text = DataManager.instance.currentUserAccount.usertier + "급 " + DataManager.instance.currentUserAccount.username;
+            enemyName.text = DataManager.instance.currentUserAccount.usertier + "급 AI봇";
+            playerProfile.sprite = DataManager.instance.currentUserAccount.image;
+            enemyProfile.sprite = Resources.Load<Sprite>("Images/profile icon/ai-icon");
         }
-        else if (gameState == GameState.Double)
+        else if (_gameState == GameState.Double)
         {
             // ToDo 더블배틀 관련 Init하기
             DataManager.instance.currentReplay.playerName = "플레이어 1";
@@ -113,6 +123,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             DataManager.instance.currentReplay.playerTier = DataManager.instance.currentReplay.enemyTier = DataManager.instance.currentUserAccount.usertier;
             DataManager.instance.currentReplay.playerImage = DataManager.instance.currentUserAccount.image;
             DataManager.instance.currentReplay.enemyImage = Resources.Load<Sprite>("Images/profile icon/1-icon");
+            playerName.text = "플레이어 1";
+            enemyName.text = "플레이어 2";
+            playerProfile.sprite = DataManager.instance.currentUserAccount.image;
+            enemyProfile.sprite = Resources.Load<Sprite>("Images/profile icon/1-icon");
         }
     }
 
