@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
@@ -17,8 +18,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public enum playerType{None,Black, White}
     public playerType[,] omokBoard;
     public playerType turn;
-    public playerType player;
-    public playerType opponent;
+    public playerType playerStone;
+    public playerType opponentStone;
     public enum GameState{Single, Double, Multi}
     
     public GameState gameState;
@@ -53,9 +54,16 @@ public class GameController : MonoBehaviour, IPointerClickHandler
        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void LoseLife(int player)
+    void LoseLife(playerType player)
     {
-        player--;
+        if (player == playerStone)
+        {
+            playerLife--;
+        }
+        else
+        {
+            enemyLife--;
+        }
     }
 
     
@@ -67,19 +75,21 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         DataManager.instance.currentReplay.dateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
         SetOmokBoard();
         ranjuRule = new RanjuRule(omokBoard);
-        player = playerType.Black;
-        opponent = playerType.White;
-        turn = player;
-        gameState = GameState.Single;
+        playerStone = playerType.Black;
+        opponentStone = playerType.White;
+        turn = playerStone;
+        gameState = DataManager.instance.currentReplay.gameState;
         timer.timerType = Timer.TimerType.Decrease;
         timer.timeLimit = 15;
        
     }
-    
-    void TaskRunTest()
+
+    void FixedUpdate()
     {
-        Debug.Log("Task Run Test");
-    }
+        timer.OnTimerEndDelegate = () => LoseLife(turn);
+        Debug.Log($"player: {playerLife}, opponent: {enemyLife}");
+    } 
+   
     void OnDestroy() {
         // 이벤트에서 함수를 제거해 리소스 누수 방지
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -211,6 +221,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     
     void SetTurn(playerType player, int index)
     {
+        playerType prevPlayer = player;
         selectedCell = null;
         prevIndex = index;
         switch (player)
@@ -224,9 +235,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 //현재 셀에 현재 턴 바둑알 둔다
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
+                
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                
-               DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
+                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                 RemoveForbiddenCells();
                 break;
             case playerType.White:
@@ -240,7 +252,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
                 
-               DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
+                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                
                 SetForbiddenCell();
                 SetForbiddenCell();
@@ -250,7 +262,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         
         timer.ResetTimer();
         timer.ResumeTimer();
-       
+        if (ranjuRule.CheckWin(prevPlayer))
+        {
+            DataManager.instance.currentReplay.winLoseType = WinLose(prevPlayer);
+            DataManager.instance.SaveReplayData();
+        }
         
         if (turncounter >= totalomokCells - 10)
         {
@@ -302,21 +318,38 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             var cell = eventData.pointerCurrentRaycast.gameObject;
             var previousCellSelected = selectedCell != null ? selectedCell : cell;
             //눌렀던 셀을 한번더 누르면 바둑알을 놓는다
-            if (cell.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.PlaceMark && turn == player)
+            if (gameState == GameState.Double)
             {
-                playerType tmp = turn;
-                prevIndex = cell.GetComponent<OmokCell>().index;
-                SetTurn(turn,cell.GetComponent<OmokCell>().index);
-                if (ranjuRule.CheckWin(tmp))
+                if (cell.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.PlaceMark)
                 {
-                    DataManager.instance.currentReplay.winLoseType = WinLose(tmp);
-                    DataManager.instance.SaveReplayData();
+                    playerType tmp = turn;
+                    prevIndex = cell.GetComponent<OmokCell>().index;
+                    SetTurn(turn,cell.GetComponent<OmokCell>().index);
                 }
+            }
+
+            if (gameState == GameState.Single)
+            {
+                if (cell.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.PlaceMark && turn == playerStone)
+                {
+                    playerType tmp = turn;
+                    prevIndex = cell.GetComponent<OmokCell>().index;
+                    SetTurn(turn,cell.GetComponent<OmokCell>().index);
+                    if (ranjuRule.CheckWin(tmp))
+                    {
+                        DataManager.instance.currentReplay.winLoseType = WinLose(tmp);
+                        DataManager.instance.SaveReplayData();
+                    }
+                    
+                   
+                    AIPlayTurn((prevIndex / 15, prevIndex % 15));
+                    
                 
-                AIPlayTurn((prevIndex / 15, prevIndex % 15));
              
                 
+                }
             }
+            
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
             if(cell.GetComponent<OmokCell>().My_MarkerType != OmokCell.MarkerType.PlaceMark)
             {
