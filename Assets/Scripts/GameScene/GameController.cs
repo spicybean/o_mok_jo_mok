@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public GameState gameState;
     public RanjuRule ranjuRule;
     
-    public RankPanelController rankPanelController;
+    public TierPanelController rankPanelController;
     public GameObject[] omokButtons;
 
     public GameObject omokPrefab;
@@ -295,14 +295,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.GetPointsUI();
-            rankPanelController.rankSystem.AddPoints();
             return WinLoseType.Win;
         }
         else if(player == playerType.White)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.LosePointsUI();
-            rankPanelController.rankSystem.LosePoints();
             return WinLoseType.Lose;
         }
         else
