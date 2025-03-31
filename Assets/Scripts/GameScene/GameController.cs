@@ -296,6 +296,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             rankPanelController.ShowRankPanel();
             rankPanelController.GetPointsUI();
             DataManager.instance.currentUserAccount.winmatch++;
+            Debug.Log(DataManager.instance.currentUserAccount.totalmatch);
+            Debug.Log(DataManager.instance.currentUserAccount.winmatch);
             DataManager.instance.SaveAccountsData();
             return WinLoseType.Win;
         }
