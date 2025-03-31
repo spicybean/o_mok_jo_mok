@@ -500,6 +500,10 @@ MonoBehaviour:
   timer: {fileID: 690234848}
   playerLife: 3
   enemyLife: 3
+  playerName: {fileID: 56373264}
+  enemyName: {fileID: 761297637}
+  playerProfile: {fileID: 1477727045}
+  enemyProfile: {fileID: 1672293517}
 --- !u!114 &168106116
 MonoBehaviour:
   m_ObjectHideFlags: 0
