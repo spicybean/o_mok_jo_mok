@@ -239,6 +239,7 @@ public class MainScenePanelController : MonoBehaviour
 
     public void OnClickSignUpProfileButton()
     {
+        ShowPanel(14);
         ShowPanel(13);
     }
 
