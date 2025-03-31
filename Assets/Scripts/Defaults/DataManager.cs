@@ -30,7 +30,7 @@ public class UserAccountData
     public float GetWinRate()
     {
         if (totalmatch <= 0) return 0;
-        return (float) winmatch + tiematch * 0.5f / (float)totalmatch;
+        return ((float) winmatch + tiematch * 0.5f) / (float)totalmatch;
     }   
     //etc...
 }

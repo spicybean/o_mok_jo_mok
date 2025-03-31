@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public GameState gameState;
     public RanjuRule ranjuRule;
     
-    public RankPanelController rankPanelController;
+    public TierPanelController rankPanelController;
     public GameObject[] omokButtons;
 
     public GameObject omokPrefab;
@@ -290,24 +290,33 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     WinLoseType WinLose(playerType player)
     {
+        DataManager.instance.currentUserAccount.totalmatch++;
         if (player == playerType.Black)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.GetPointsUI();
-            rankPanelController.rankSystem.AddPoints();
+            DataManager.instance.currentUserAccount.winmatch++;
+            Debug.Log(DataManager.instance.currentUserAccount.totalmatch);
+            Debug.Log(DataManager.instance.currentUserAccount.winmatch);
+            DataManager.instance.SaveAccountsData();
             return WinLoseType.Win;
         }
         else if(player == playerType.White)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.LosePointsUI();
-            rankPanelController.rankSystem.LosePoints();
+            DataManager.instance.currentUserAccount.losematch++;
+            DataManager.instance.SaveAccountsData();
             return WinLoseType.Lose;
         }
         else
         {
-            return WinLoseType.Draw;
+            DataManager.instance.currentUserAccount.tiematch++;
+            DataManager.instance.SaveAccountsData();
+            return WinLoseType.Draw;            
+            
         }
+        
     }
     
    
