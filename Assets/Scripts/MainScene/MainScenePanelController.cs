@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 using UnityEditor.VersionControl;
 
 public class MainScenePanelController : MonoBehaviour
@@ -15,6 +16,7 @@ public class MainScenePanelController : MonoBehaviour
     //InputFields
     [SerializeField] private TMP_InputField logInEmail;
     [SerializeField] private TMP_InputField logInPassword;
+    [SerializeField] private Image signUpImage;
     [SerializeField] private TMP_InputField signUpUsername;
     [SerializeField] private TMP_InputField signUpPassword;
     [SerializeField] private TMP_InputField signUpConfirmPassword;
@@ -107,6 +109,7 @@ public class MainScenePanelController : MonoBehaviour
             DataManager.instance.currentUserAccount.username = signUpUsername.text;
             DataManager.instance.currentUserAccount.password = signUpPassword.text;
             DataManager.instance.currentUserAccount.email = signUpEmail.text;
+            DataManager.instance.currentUserAccount.image = signUpImage.sprite;
             DataManager.instance.userAccountList.Add(DataManager.instance.currentUserAccount);
             DataManager.instance.SaveAccountsData();
             CloseButton();
@@ -231,6 +234,17 @@ public class MainScenePanelController : MonoBehaviour
     public void OnClickMainScenePanelBackButton()
     {
         CloseButton();
+    }
+
+    public void OnClickSignUpProfileButton()
+    {
+        ShowPanel(13);
+    }
+
+    public void OnClickSignUpProfileImageButton()
+    {
+        signUpImage.sprite = EventSystem.current.currentSelectedGameObject.GetComponent<Image>().sprite;
+        PanelControl(3);
     }
 
     public void RefreshProfile()
