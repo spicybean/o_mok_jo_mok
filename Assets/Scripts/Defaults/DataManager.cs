@@ -301,7 +301,7 @@ public class DataManager : MonoBehaviour
     public void ClearReplayData()
     {
         currentReplaySlotNum = -1;
-        currentReplay = null ; 
+        currentReplay = new ReplayData(); ; 
     }
 
     public void DeleteReplayData()
