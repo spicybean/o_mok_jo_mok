@@ -598,16 +598,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5775172945432523247}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 397b1d97beb19a14d9191d04b42216c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ceeb77304723a84694b775918466fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rankSystem: {fileID: 0}
   pointPrefab: {fileID: 2601108533231004920, guid: 198ab1b5bd781394c972b010eb5cecd0, type: 3}
   pointBox: {fileID: 7771697690936940425}
   pointObjects: []
   rankText: {fileID: 2877497826595401291}
   currentPointText: {fileID: 2908639552910623250}
   leftToRankUPText: {fileID: 5400442105104644532}
+  VictoryText: {fileID: 1264662835509320540}
 --- !u!1 &6910948004406199003
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class TierPanelController : MonoBehaviour
 {
-    public TierSystem tierSystem = new TierSystem();
+    public TierSystem tierSystem;
     public GameObject pointPrefab;
     public Transform pointBox;
     public List<GameObject> pointObjects = new List<GameObject>();
@@ -21,9 +22,16 @@ public class TierPanelController : MonoBehaviour
     private string DrawMessage = "비겼습니다.";
     private void Start()
     {
-        tierSystem = new TierSystem();
+        //tierSystem = new TierSystem();
+        
         UpdateUI();
         
+    }
+
+    private void OnEnable()
+    {
+        tierSystem = new TierSystem();
+        UpdateUI();
     }
 
     private void Update()
@@ -45,8 +53,11 @@ public class TierPanelController : MonoBehaviour
     
     public void GetPointsUI()
     {
+        //TierSystem tierSystem = new TierSystem();
+        Debug.Log("GetPointsUI");
         tierSystem.AddPoints();
-
+        Debug.Log(pointObjects.Count);
+        Debug.Log(tierSystem.currentPoint);
         if (pointObjects.Count <= tierSystem.currentPoint)
         {
             GameObject newPoint = Instantiate(pointPrefab, pointBox);
@@ -74,6 +85,7 @@ public class TierPanelController : MonoBehaviour
 
     public void LosePointsUI()
     {
+        //TierSystem tierSystem = new TierSystem();
         tierSystem.LosePoints();
         if (pointObjects.Count > 0)
         {
@@ -105,6 +117,7 @@ public class TierPanelController : MonoBehaviour
    
     public void UpdateUI()
     {
+        //TierSystem tierSystem = new TierSystem();
         rankText.text = $"Rank: {tierSystem.omockTier}";
         currentPointText.text = $"Points: {tierSystem.currentPoint}";
         leftToRankUPText.text = $"Left to RankUP: {tierSystem.GetRequiredPoints() - tierSystem.currentPoint}";
