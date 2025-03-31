@@ -7,9 +7,9 @@ public class RankSystem
     //PlayerPref 저장용
     //사용자 정보
     //제일 낮은 등급 18등급
-    public int omockTier = 18;
+    public int omockTier = DataManager.instance.currentUserAccount.usertier;
     //현재 승점
-    public int currentPoint = 0;
+    public int currentPoint = DataManager.instance.currentUserAccount.points;
 
     public RankSystem()
     {
@@ -33,6 +33,7 @@ public class RankSystem
         else 
         {
             currentPoint ++;
+            DataManager.instance.SaveAccountsData();
         }
         
     }
@@ -48,7 +49,8 @@ public class RankSystem
 
         omockTier--;
         currentPoint = 0;
-    
+        DataManager.instance.SaveAccountsData();
+
     }
 
     public void LosePoints()
@@ -60,7 +62,8 @@ public class RankSystem
         else
         {
             currentPoint --;
-            
+            DataManager.instance.SaveAccountsData();
+
         }
     }
 
@@ -74,6 +77,7 @@ public class RankSystem
 
         omockTier++;
         currentPoint = GetRequiredPoints() - 1;
-     
+        DataManager.instance.SaveAccountsData();
+
     }
 }
