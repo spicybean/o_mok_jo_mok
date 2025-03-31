@@ -50,7 +50,10 @@ public class TierSystem
 
         omockTier--;
         currentPoint = 0;
-       
+        DataManager.instance.currentUserAccount.usertier = omockTier;
+        DataManager.instance.currentUserAccount.points = currentPoint;
+        DataManager.instance.SaveAccountsData();
+
 
     }
 
@@ -63,8 +66,8 @@ public class TierSystem
         else
         {
             currentPoint --;
-            
-
+            DataManager.instance.currentUserAccount.points = currentPoint;
+            DataManager.instance.SaveAccountsData();
         }
     }
 
@@ -78,7 +81,9 @@ public class TierSystem
 
         omockTier++;
         currentPoint = GetRequiredPoints() - 1;
-        
+        DataManager.instance.currentUserAccount.usertier = omockTier;
+        DataManager.instance.currentUserAccount.points = currentPoint;
+        DataManager.instance.SaveAccountsData();
 
     }
 }

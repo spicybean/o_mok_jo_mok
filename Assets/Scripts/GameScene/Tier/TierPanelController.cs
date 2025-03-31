@@ -45,7 +45,8 @@ public class TierPanelController : MonoBehaviour
     
     public void GetPointsUI()
     {
-        
+        tierSystem.AddPoints();
+
         if (pointObjects.Count <= tierSystem.currentPoint)
         {
             GameObject newPoint = Instantiate(pointPrefab, pointBox);
@@ -73,6 +74,7 @@ public class TierPanelController : MonoBehaviour
 
     public void LosePointsUI()
     {
+        tierSystem.LosePoints();
         if (pointObjects.Count > 0)
         {
             GameObject lastPoint = pointObjects[pointObjects.Count - 1];
