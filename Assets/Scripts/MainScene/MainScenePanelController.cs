@@ -194,7 +194,8 @@ public class MainScenePanelController : MonoBehaviour
     // 랭킹 버튼
     public void OnClickRankingButton()
     {
-        PanelControl(6);
+        //PanelControl(6);
+        SceneManager.LoadScene("RankingScene");
     }
 
     // 상점 버튼

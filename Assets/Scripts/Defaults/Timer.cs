@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,7 @@ public class Timer : MonoBehaviour
     public enum TimerType{Decrease, Increase}
     public TimerType timerType;
     public float timeLimit;
-    private float currentTime;
+    public float currentTime;
 
     private bool _isPaused;
     // Start is called before the first frame update
@@ -29,6 +30,7 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
+        
         if(_isPaused) return;
         if (timerType == TimerType.Decrease)
         {
@@ -36,7 +38,8 @@ public class Timer : MonoBehaviour
             if (currentTime <= 0)
             {
                 OnTimerEndDelegate?.Invoke();
-                _isPaused= true;
+                ResetTimer();
+                //_isPaused= true;
             }
         }
         if (timerType == TimerType.Increase)
@@ -52,7 +55,7 @@ public class Timer : MonoBehaviour
         timer.fillAmount = currentTime/timeLimit;
         text.text = ((int)currentTime).ToString();
     }
-    void ResetTimer()
+    public void ResetTimer()
     {
         if (timerType == TimerType.Decrease)
         {
@@ -64,7 +67,12 @@ public class Timer : MonoBehaviour
         }
         _isPaused= true;
     }
-    
+
+    public void ResumeTimer()
+    {
+        _isPaused = false;
+        
+    }
     
 }
 
