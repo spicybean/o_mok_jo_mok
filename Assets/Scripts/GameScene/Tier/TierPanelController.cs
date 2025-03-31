@@ -65,11 +65,12 @@ public class TierPanelController : MonoBehaviour
             pointObjects.Add(newPoint);
         }
        
-        if (pointObjects.Count >= tierSystem.GetRequiredPoints())
+        if (tierSystem.currentPoint >= tierSystem.GetRequiredPoints())
         {
             
-            ClearPoints();
+            ClearPoints();           
             tierSystem.RankUp();
+            Debug.Log(tierSystem.omockTier);
         }
     }
 
