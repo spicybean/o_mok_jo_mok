@@ -102,6 +102,7 @@ public class MainScenePanelController : MonoBehaviour
     {
         if (!DataManager.instance.CheckEmailAlreadyExists(signUpEmail.text) && signUpConfirmPassword.text == signUpPassword.text)
         {
+            DataManager.instance.currentUserAccount = new UserAccountData();
             DataManager.instance.currentUserAccount.userIndex = DataManager.instance.userAccountList.Count;
             DataManager.instance.currentUserAccount.usertier = 18;
             DataManager.instance.currentUserAccount.coin = 500;
@@ -109,7 +110,7 @@ public class MainScenePanelController : MonoBehaviour
             DataManager.instance.currentUserAccount.password = signUpPassword.text;
             DataManager.instance.currentUserAccount.email = signUpEmail.text;
             DataManager.instance.currentUserAccount.image = signUpImage.sprite;
-            DataManager.instance.userAccountList.Add(DataManager.instance.currentUserAccount);
+            DataManager.instance.userAccountList.Insert(DataManager.instance.currentUserAccount.userIndex, DataManager.instance.currentUserAccount);
             DataManager.instance.SaveAccountsData();
             CloseButton();
             PanelControl(0);

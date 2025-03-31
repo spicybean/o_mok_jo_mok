@@ -71,7 +71,7 @@ public class DataManager : MonoBehaviour
     public int currentReplaySlotNum;
     public ReplayData currentReplay = new ReplayData();
     public List<UserAccountData> userAccountList = new List<UserAccountData>();
-    public UserAccountData currentUserAccount = new UserAccountData();
+    public UserAccountData currentUserAccount;
     
 
     // List 만들고
@@ -135,7 +135,6 @@ public class DataManager : MonoBehaviour
         AccountsSavePath();
         if (!File.Exists(accountPath))
         {
-            Debug.LogWarning("Account data file not found. Creating a new one.");
             return new List<UserAccountData>();
         }
         try
