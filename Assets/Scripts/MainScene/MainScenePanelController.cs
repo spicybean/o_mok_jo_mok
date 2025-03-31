@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using UnityEditor.VersionControl;
 
 public class MainScenePanelController : MonoBehaviour
 {
