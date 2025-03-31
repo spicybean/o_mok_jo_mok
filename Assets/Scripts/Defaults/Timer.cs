@@ -48,7 +48,7 @@ public class Timer : MonoBehaviour
             if (currentTime >= timeLimit)
             {
                 OnTimerEndDelegate?.Invoke();
-                _isPaused= true;
+                //_isPaused= true;
             }
             
         }
@@ -65,9 +65,14 @@ public class Timer : MonoBehaviour
         {
             currentTime = 0;
         }
-        _isPaused= true;
+        //_isPaused= true;
     }
 
+    public void PauseTimer()
+    {
+        _isPaused = true;
+    }
+    
     public void ResumeTimer()
     {
         _isPaused = false;
