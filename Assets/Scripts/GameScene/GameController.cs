@@ -290,6 +290,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     WinLoseType WinLose(playerType player)
     {
+        timer.PauseTimer();
         DataManager.instance.currentUserAccount.totalmatch++;
         if (player == playerType.Black)
         {
