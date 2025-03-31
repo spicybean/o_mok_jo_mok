@@ -278,7 +278,10 @@ public class DataManager : MonoBehaviour
             {
                 if (i == 1)
                 {
-                    SaveReplayData();
+                    string data = JsonUtility.ToJson(currentReplay);
+                    data = JsonUtility.ToJson(currentReplay);
+                    RefreshReplaySavePath();
+                    File.WriteAllText(replayPath, data);
                     break;
                 }
             }
