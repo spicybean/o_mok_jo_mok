@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public GameState gameState;
     public RanjuRule ranjuRule;
     
-    public RankPanelController rankPanelController;
+    public TierPanelController rankPanelController;
     public GameObject[] omokButtons;
 
     public GameObject omokPrefab;

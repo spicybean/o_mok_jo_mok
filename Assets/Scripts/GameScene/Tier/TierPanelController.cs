@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class RankPanelController : MonoBehaviour
+public class TierPanelController : MonoBehaviour
 {
-    public RankSystem rankSystem = new RankSystem();
+    public TierSystem rankSystem = new TierSystem();
     public GameObject pointPrefab;
     public Transform pointBox;
     public List<GameObject> pointObjects = new List<GameObject>();
@@ -21,7 +21,7 @@ public class RankPanelController : MonoBehaviour
     private string DrawMessage = "비겼습니다.";
     private void Start()
     {
-        rankSystem = new RankSystem();
+        rankSystem = new TierSystem();
         UpdateUI();
         
     }

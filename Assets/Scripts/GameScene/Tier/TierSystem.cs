@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RankSystem
+public class TierSystem
 {
     //PlayerPref 저장용
     //사용자 정보
     //제일 낮은 등급 18등급
-    public int omockTier = DataManager.instance.currentUserAccount.usertier;
+    public int omockTier= 18;
     //현재 승점
-    public int currentPoint = DataManager.instance.currentUserAccount.points;
+    public int currentPoint = 0;
 
-    public RankSystem()
+    public TierSystem()
     {
         ;
     }
@@ -33,7 +33,7 @@ public class RankSystem
         else 
         {
             currentPoint ++;
-            DataManager.instance.SaveAccountsData();
+            
         }
         
     }
@@ -49,7 +49,7 @@ public class RankSystem
 
         omockTier--;
         currentPoint = 0;
-        DataManager.instance.SaveAccountsData();
+       
 
     }
 
@@ -62,7 +62,7 @@ public class RankSystem
         else
         {
             currentPoint --;
-            DataManager.instance.SaveAccountsData();
+            
 
         }
     }
@@ -77,7 +77,7 @@ public class RankSystem
 
         omockTier++;
         currentPoint = GetRequiredPoints() - 1;
-        DataManager.instance.SaveAccountsData();
+        
 
     }
 }
