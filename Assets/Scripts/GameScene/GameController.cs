@@ -207,6 +207,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     
     void SetTurn(playerType player, int index)
     {
+        playerType prevPlayer = player;
         selectedCell = null;
         prevIndex = index;
         switch (player)
@@ -247,7 +248,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         
         timer.ResetTimer();
         timer.ResumeTimer();
-       
+        if (ranjuRule.CheckWin(prevPlayer))
+        {
+            DataManager.instance.currentReplay.winLoseType = WinLose(prevPlayer);
+            DataManager.instance.SaveReplayData();
+        }
         
         if (turncounter >= totalomokCells - 10)
         {
@@ -306,12 +311,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                     playerType tmp = turn;
                     prevIndex = cell.GetComponent<OmokCell>().index;
                     SetTurn(turn,cell.GetComponent<OmokCell>().index);
-                    if (ranjuRule.CheckWin(tmp))
-                    {
-                        DataManager.instance.currentReplay.winLoseType = WinLose(tmp);
-                        DataManager.instance.SaveReplayData();
-                    }
-
                 }
             }
 
