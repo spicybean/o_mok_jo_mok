@@ -263,14 +263,14 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         if (player == playerType.Black)
         {
             rankPanelController.ShowRankPanel();
-            rankPanelController.rankSystem.AddPoints();
+            rankPanelController.tierSystem.AddPoints();
             rankPanelController.GetPointsUI();
             return WinLoseType.Win;
         }
         else if(player == playerType.White)
         {
             rankPanelController.ShowRankPanel();
-            rankPanelController.rankSystem.LosePoints();
+            rankPanelController.tierSystem.LosePoints();
             rankPanelController.LosePointsUI();
             return WinLoseType.Lose;
         }

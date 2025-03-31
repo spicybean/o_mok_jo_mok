@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class TierPanelController : MonoBehaviour
 {
-    public TierSystem rankSystem = new TierSystem();
+    public TierSystem tierSystem = new TierSystem();
     public GameObject pointPrefab;
     public Transform pointBox;
     public List<GameObject> pointObjects = new List<GameObject>();
@@ -21,7 +21,7 @@ public class TierPanelController : MonoBehaviour
     private string DrawMessage = "비겼습니다.";
     private void Start()
     {
-        rankSystem = new TierSystem();
+        tierSystem = new TierSystem();
         UpdateUI();
         
     }
@@ -46,18 +46,18 @@ public class TierPanelController : MonoBehaviour
     public void GetPointsUI()
     {
         
-        if (pointObjects.Count <= rankSystem.currentPoint)
+        if (pointObjects.Count <= tierSystem.currentPoint)
         {
             GameObject newPoint = Instantiate(pointPrefab, pointBox);
             VictoryText.text = winMessage;
             pointObjects.Add(newPoint);
         }
        
-        if (pointObjects.Count >= rankSystem.GetRequiredPoints())
+        if (pointObjects.Count >= tierSystem.GetRequiredPoints())
         {
             
             ClearPoints();
-            rankSystem.RankUp();
+            tierSystem.RankUp();
         }
     }
 
@@ -80,11 +80,11 @@ public class TierPanelController : MonoBehaviour
             Destroy(lastPoint);   
         }
 
-        if (rankSystem.currentPoint < 0)
+        if (tierSystem.currentPoint < 0)
         {
-            rankSystem.RankDown();
+            tierSystem.RankDown();
 
-            int pointsToCreate = rankSystem.GetRequiredPoints() - 1;
+            int pointsToCreate = tierSystem.GetRequiredPoints() - 1;
 
             for (int i = 0; i < pointsToCreate; i++)
             {
@@ -103,8 +103,8 @@ public class TierPanelController : MonoBehaviour
    
     public void UpdateUI()
     {
-        rankText.text = $"Rank: {rankSystem.omockTier}";
-        currentPointText.text = $"Points: {rankSystem.currentPoint}";
-        leftToRankUPText.text = $"Left to RankUP: {rankSystem.GetRequiredPoints() - rankSystem.currentPoint}";
+        rankText.text = $"Rank: {tierSystem.omockTier}";
+        currentPointText.text = $"Points: {tierSystem.currentPoint}";
+        leftToRankUPText.text = $"Left to RankUP: {tierSystem.GetRequiredPoints() - tierSystem.currentPoint}";
     }
 }

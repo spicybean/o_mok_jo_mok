@@ -7,9 +7,9 @@ public class TierSystem
     //PlayerPref 저장용
     //사용자 정보
     //제일 낮은 등급 18등급
-    public int omockTier= 18;
+    public int omockTier= DataManager.instance.currentUserAccount.usertier;
     //현재 승점
-    public int currentPoint = 0;
+    public int currentPoint = DataManager.instance.currentUserAccount.points;
 
     public TierSystem()
     {
@@ -33,7 +33,8 @@ public class TierSystem
         else 
         {
             currentPoint ++;
-            
+            DataManager.instance.currentUserAccount.points = currentPoint;
+            DataManager.instance.SaveAccountsData();
         }
         
     }
