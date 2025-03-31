@@ -550,8 +550,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 77d3c62c476ec1b4a8057b7591ff68d1, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -628,7 +628,7 @@ GameObject:
   - component: {fileID: 5536259660714511936}
   - component: {fileID: 8948139866275191033}
   m_Layer: 5
-  m_Name: '[Imgae] IsEnemyWinOrLose'
+  m_Name: '[Image] IsEnemyWinOrLose'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -703,7 +703,7 @@ GameObject:
   - component: {fileID: 5486798697896575301}
   - component: {fileID: 763922061768578030}
   m_Layer: 5
-  m_Name: '[Imgae] IsUserWinOrLose'
+  m_Name: '[Image] IsUserWinOrLose'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
