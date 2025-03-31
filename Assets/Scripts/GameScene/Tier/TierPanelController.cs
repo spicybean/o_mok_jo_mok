@@ -53,11 +53,8 @@ public class TierPanelController : MonoBehaviour
     
     public void GetPointsUI()
     {
-        //TierSystem tierSystem = new TierSystem();
-        Debug.Log("GetPointsUI");
+          
         tierSystem.AddPoints();
-        Debug.Log(pointObjects.Count);
-        Debug.Log(tierSystem.currentPoint);
         if (pointObjects.Count <= tierSystem.currentPoint)
         {
             GameObject newPoint = Instantiate(pointPrefab, pointBox);
@@ -65,11 +62,12 @@ public class TierPanelController : MonoBehaviour
             pointObjects.Add(newPoint);
         }
        
-        if (pointObjects.Count >= tierSystem.GetRequiredPoints())
+        if (tierSystem.currentPoint >= tierSystem.GetRequiredPoints())
         {
             
-            ClearPoints();
+            ClearPoints();           
             tierSystem.RankUp();
+            Debug.Log(tierSystem.omockTier);
         }
     }
 

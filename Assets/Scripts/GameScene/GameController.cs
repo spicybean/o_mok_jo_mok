@@ -290,23 +290,33 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     WinLoseType WinLose(playerType player)
     {
-        timer.PauseTimer();
+        DataManager.instance.currentUserAccount.totalmatch++;
         if (player == playerType.Black)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.GetPointsUI();
+            DataManager.instance.currentUserAccount.winmatch++;
+            Debug.Log(DataManager.instance.currentUserAccount.totalmatch);
+            Debug.Log(DataManager.instance.currentUserAccount.winmatch);
+            DataManager.instance.SaveAccountsData();
             return WinLoseType.Win;
         }
         else if(player == playerType.White)
         {
             rankPanelController.ShowRankPanel();
             rankPanelController.LosePointsUI();
+            DataManager.instance.currentUserAccount.losematch++;
+            DataManager.instance.SaveAccountsData();
             return WinLoseType.Lose;
         }
         else
         {
-            return WinLoseType.Draw;
+            DataManager.instance.currentUserAccount.tiematch++;
+            DataManager.instance.SaveAccountsData();
+            return WinLoseType.Draw;            
+            
         }
+        
     }
     
    
