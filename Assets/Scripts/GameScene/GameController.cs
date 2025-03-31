@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,13 +17,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public enum playerType{None,Black, White}
     public playerType[,] omokBoard;
     public playerType turn;
-    
+    public playerType player;
+    public playerType opponent;
     public enum GameState{Single, Double, Multi}
     
     public GameState gameState;
     public RanjuRule ranjuRule;
-    
-
     
     public RankPanelController rankPanelController;
     public GameObject[] omokButtons;
@@ -30,17 +31,28 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     public GameObject selectedCell;
     
     public DateTime startTime;
+    public Timer timer;
+    
     private int totalomokCells = 15 * 15;
     private int turncounter = 0;
 
     public int playerLife = 3;
     public int enemyLife = 3;
-
+   
+    private int prevIndex;
+    
     private void Awake()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
+       SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    void LoseLife(int player)
+    {
+        player--;
+    }
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -49,12 +61,19 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         DataManager.instance.currentReplay.dateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
         SetOmokBoard();
         ranjuRule = new RanjuRule(omokBoard);
-        
-        turn = playerType.Black;
+        player = playerType.Black;
+        opponent = playerType.White;
+        turn = player;
         gameState = GameState.Single;
-        
+        timer.timerType = Timer.TimerType.Decrease;
+        timer.timeLimit = 15;
+       
     }
-
+    
+    void TaskRunTest()
+    {
+        Debug.Log("Task Run Test");
+    }
     void OnDestroy() {
         // 이벤트에서 함수를 제거해 리소스 누수 방지
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -87,22 +106,21 @@ public class GameController : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    void Update()
+    
+       
+    
+    async void AIPlayTurn((int x,int y) playerMove)
     {
-        // Single 플레이 모드에서 AI의 턴 처리
-        
-    }
-
-    IEnumerator AIPlayTurn((int x,int y) playerMove)
-    {
-        yield return new WaitForSeconds(0.1f);
-        // AI 최적 수 계산
-        var aiTask = Task.Run(() => AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White, playerMove, 10));
-        var bestMove = aiTask.Result;//AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,5);
-        if (bestMove != (-1, -1)) // 유효한 수가 있으면
+        var bestMove =  await Task.Run(() =>AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,(playerMove.x,playerMove.y),5));//AIController.AIBestMoveMCTS(omokBoard, GameController.playerType.White,playerMove ,5);
+        Debug.Log(bestMove);
+        if (bestMove != (-1, -1))
         {
-            SetTurn(playerType.White, bestMove.Item1 * 15 + bestMove.Item2);
+            
+            SetTurn(turn, bestMove.Item1 * 15 + bestMove.Item2);
+            Debug.Log(bestMove.Item1 * 15 + bestMove.Item2);
         }
+        
+        
     }
     void SelectStone()
     {
@@ -180,7 +198,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
     void SetTurn(playerType player, int index)
     {
         selectedCell = null;
-        
+        prevIndex = index;
         switch (player)
         {
             case playerType.Black:
@@ -192,29 +210,33 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 turncounter++;
                 //현재 셀에 현재 턴 바둑알 둔다
                 omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.Black);
-                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
-                
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
-                
+               
+               DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                 RemoveForbiddenCells();
-                
                 break;
             case playerType.White:
                 if (omokBoard[index / 15, index % 15] != playerType.None) return;
-               
+             
                 omokBoard[index / 15, index % 15] = player;
+              
                 turncounter++;
-                omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
-                DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
                 
+                omokButtons[index].GetComponent<OmokCell>().PlaceMark(turncounter, OmokCell.MarkerType.White);
+               
                 turn = turn == playerType.Black ? playerType.White : playerType.Black;
+                
+               DataManager.instance.currentReplay.gamePlayData[turncounter - 1] = index;
+               
                 SetForbiddenCell();
                 SetForbiddenCell();
                 break;
         }
         ranjuRule.UpdateBoardState(omokBoard);
         
-        
+        timer.ResetTimer();
+        timer.ResumeTimer();
+       
         
         if (turncounter >= totalomokCells - 10)
         {
@@ -232,6 +254,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
                 rankPanelController.DrawPointsUI();
             }
         }
+        
+        
     }
 
     WinLoseType WinLose(playerType player)
@@ -264,16 +288,20 @@ public class GameController : MonoBehaviour, IPointerClickHandler
             var cell = eventData.pointerCurrentRaycast.gameObject;
             var previousCellSelected = selectedCell != null ? selectedCell : cell;
             //눌렀던 셀을 한번더 누르면 바둑알을 놓는다
-            if (cell.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.PlaceMark)
+            if (cell.GetComponent<OmokCell>().My_MarkerType == OmokCell.MarkerType.PlaceMark && turn == player)
             {
                 playerType tmp = turn;
+                prevIndex = cell.GetComponent<OmokCell>().index;
                 SetTurn(turn,cell.GetComponent<OmokCell>().index);
                 if (ranjuRule.CheckWin(tmp))
                 {
                     DataManager.instance.currentReplay.winLoseType = WinLose(tmp);
                     DataManager.instance.SaveReplayData();
                 }
-                StartCoroutine(AIPlayTurn((cell.GetComponent<OmokCell>().index/15,cell.GetComponent<OmokCell>().index%15)));
+                
+                AIPlayTurn((prevIndex / 15, prevIndex % 15));
+             
+                
             }
             //전에 선택되었던 셀의 선택을 취소하고 새롭게 선택된 셀에 이미지를 변경한다.
             if(cell.GetComponent<OmokCell>().My_MarkerType != OmokCell.MarkerType.PlaceMark)
