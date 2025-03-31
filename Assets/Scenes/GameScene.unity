@@ -490,11 +490,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turn: 0
+  player: 0
+  opponent: 0
   gameState: 0
   rankPanelController: {fileID: 1985963450}
   omokButtons: []
   omokPrefab: {fileID: 4224315161120724941, guid: 004214539f33e214284710b97dcbe37a, type: 3}
   selectedCell: {fileID: 0}
+  timer: {fileID: 690234848}
   playerLife: 3
   enemyLife: 3
 --- !u!114 &168106116
@@ -736,6 +739,7 @@ MonoBehaviour:
   text: {fileID: 1630299558}
   timerType: 1
   timeLimit: 5
+  currentTime: 0
 --- !u!1 &705309053
 GameObject:
   m_ObjectHideFlags: 0
