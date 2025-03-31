@@ -290,7 +290,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
     WinLoseType WinLose(playerType player)
     {
-        
+        timer.PauseTimer();
         if (player == playerType.Black)
         {
             rankPanelController.ShowRankPanel();
